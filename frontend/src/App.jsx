@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 function App() {
   return (
     <div className="App">
+        <Home />
         <Navbar />
         <h1>rth</h1>
     </div>
