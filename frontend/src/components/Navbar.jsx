@@ -10,20 +10,20 @@ const Navbar = styled.div `
     width: 100%;
 `
 
-const Navbar_list = styled.ul `
+const NavbarList = styled.ul `
     display: flex;
     list-style-type: none;
     justify-content: space-around;
     padding: 0;
     position: relative;
 `
-const Navbar_list_item = styled.li `
+const NavbarListItem = styled.li `
 
 `
-const Navbar_list_item_link = styled.a `
+const NavbarListItemLink = styled.a `
 
 `
-const Link_icon = styled.i `
+const LinkIcon = styled.i `
     font-size: 32px;
     color: #fff;
 `
@@ -33,13 +33,13 @@ const Link_icon = styled.i `
 function navbar() {
     return (
         <Navbar>
-            <Navbar_list>
-            <Navbar_list_item><Navbar_list_item_link to='/'><Link_icon className='material-icons'>home</Link_icon></Navbar_list_item_link></Navbar_list_item> 
-            <Navbar_list_item><Navbar_list_item_link to='/'><Link_icon className='material-icons'>search</Link_icon></Navbar_list_item_link></Navbar_list_item> 
-            <Navbar_list_item><Navbar_list_item_link to='/'><Link_icon className='material-icons'>photo_camera</Link_icon></Navbar_list_item_link></Navbar_list_item> 
-            <Navbar_list_item><Navbar_list_item_link to='/'><Link_icon className='material-icons'>chat_bubble</Link_icon></Navbar_list_item_link></Navbar_list_item> 
-            <Navbar_list_item><Navbar_list_item_link to='/'><Link_icon className='material-icons'>account_circle</Link_icon></Navbar_list_item_link></Navbar_list_item> 
-            </Navbar_list>
+            <NavbarList>
+            <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>home</LinkIcon></NavbarListItemLink></NavbarListItem> 
+            <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>search</LinkIcon></NavbarListItemLink></NavbarListItem> 
+            <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>photo_camera</LinkIcon></NavbarListItemLink></NavbarListItem> 
+            <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>chat_bubble</LinkIcon></NavbarListItemLink></NavbarListItem> 
+            <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>account_circle</LinkIcon></NavbarListItemLink></NavbarListItem> 
+            </NavbarList>
         </Navbar>
     )
 }
