@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "framer-motion": "^4.1.16",
+    "materialize-css": "^1.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-easier": "^1.0.11",
