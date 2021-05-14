@@ -15,6 +15,17 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { withContext } from 'react-easier';
+
+//global store/variables
+export default withContext(
+  'global',
+  {
+    apiUrl: 'http://localhost:4000'
+  },
+  App
+);
+//-----------------------
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -39,4 +50,3 @@ function App() {
     </Router>
   );
 }
-export default App;
