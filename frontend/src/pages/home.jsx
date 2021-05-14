@@ -8,18 +8,18 @@ export default function Home() {
             <section>
                 <Div>
                     <p>Kevin</p>
-                    <p>Geo Location</p>
+                    <p>Geo Location <Location className='material-icons'>location_on</Location></p>
                 </Div>
-                <img scr={test} alt='' />
+                <img scr={test} alt=''/>
                 <TextTags>
                     <TitleCon>
                         <Title>Cool Nature</Title>
-
                         <IconCon>
                             <i className='material-icons'>favorite_border</i>
                             <i className='material-icons'>chat_bubble_outline</i>
                         </IconCon>
                     </TitleCon>
+                        <Time>2021-05-11</Time>
                     <Tags>
                         <Tag>nature</Tag>
                         <Tag>cool</Tag>
@@ -37,6 +37,7 @@ const Div = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     margin: 20px;
+    color: #F8F8F8;
 `
 const TitleCon = styled.div`
     display: flex;
@@ -58,6 +59,7 @@ const Title = styled.h3`
     margin: 0;
     padding-bottom: 7px;
     font-size: 30px;
+    color: #F8F8F8;
 `
 const Tags = styled.div`
     margin-left: 20px;
@@ -74,6 +76,11 @@ const Tag = styled.p`
    border-radius: 50px;
 `
 
+const Time = styled.p`
+    margin-left: 20px;
+    color: #F8F8F8;
+`
 
-
-
+const Location = styled.i`
+    font-size: 15px;
+`
