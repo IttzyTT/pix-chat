@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import wolf from '/wolf.jpg';
 import { useNamedContext } from 'react-easier';
+import Postcard from '../components/Postcard';
 
 const Div = styled.div`
     display: flex;
@@ -37,7 +38,7 @@ const Title = styled.h3`
     color: #F3F3F3;
 `
 const Tags = styled.div`
-    margin-left: 20;px;
+    margin-left: 20px;
     display: flex;
     margin-left: 20px;
 `
@@ -94,11 +95,28 @@ function Home() {
     console.log(apiUrl);
     
     const [toggle, setToggle] = useState(false);
+    const [posts, setPosts] = useState();
 
     const toggleTrueFalse = () => setToggle(!toggle);
 
+    const fetchAllPosts = async () => {
+        let response = await fetch(`${apiUrl}/posts`);
+        let data = await response.json();
+        return data;
+    }
+
+    useEffect(() => {
+        fetchAllPosts().then((data) => setPosts(data));
+    }, []);
+    
     return (
         <ContentWrapper>
+            {posts?.map(post => {
+                return <Postcard 
+                    key={ post['_id'] } 
+                    post={ post } 
+                />
+            })}
             <Section>
                 <Div>
                     <p>Kevin</p>
