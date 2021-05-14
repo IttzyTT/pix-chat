@@ -1,16 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import wolf from '/wolf.jpg';
+import { Link } from "react-router-dom";
 
 const Con = styled.div` 
     display: flex;
-    justify-content: space-between;
-    margin: 0 50px 40px 50px;
+    justify-content: flex-start;
+    margin: 0px 0px 40px 40px;
 `
 const Icon = styled.i`
     color: white;
     font-size: 100px;
     padding-top: 100px;
+    margin-right: 20px;
 `
 const InfoEdit = styled.div` 
     display: flex;
@@ -25,7 +27,7 @@ const Btn = styled.button`
     background-color: #434343; 
     color: white;
     width: 120px;
-    height: 34px;
+    height: 32px;
     padding-bottom: 4px;
     border: 1px solid white;
     border-radius: 4px;
@@ -72,7 +74,7 @@ function Profile() {
                 <Icon className='material-icons'>account_circle</Icon>
                 <InfoEdit>
                     <Name>Kevin</Name>
-                    <Btn>Edit Profile</Btn>
+                    <Link to='/editProfile'><Btn>Edit Profile</Btn></Link>
                 </InfoEdit>
             </Con>
             <InfoNumber>

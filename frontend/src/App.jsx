@@ -8,6 +8,7 @@ import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import EditProfile from './pages/EditProfile';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
 import {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/chats" component={Chats} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
+          <Route path="/editProfile" component={EditProfile} />
         </Switch>
         <Navbar />
       </Wrapper>
