@@ -2,36 +2,6 @@ import React, { useState } from 'react'
 import styled from 'styled-components';
 import wolf from '/wolf.jpg';
 
-export default function Home() {
-    return (
-        <div>
-            <section>
-                <Div>
-                    <p>Kevin</p>
-                    <p>Geo Location <Location className='material-icons'>location_on</Location></p>
-                </Div>
-                <img scr={test} alt=''/>
-                <TextTags>
-                    <TitleCon>
-                        <Title>Cool Nature</Title>
-                        <IconCon>
-                            <i className='material-icons'>favorite_border</i>
-                            <i className='material-icons'>chat_bubble_outline</i>
-                        </IconCon>
-                    </TitleCon>
-                        <Time>2021-05-11</Time>
-                    <Tags>
-                        <Tag>nature</Tag>
-                        <Tag>cool</Tag>
-                    </Tags>
-                </TextTags>
-
-            </section>
-        </div>
-    )
-}
-
-
 const Div = styled.div`
     display: flex;
     flex-direction: row;
