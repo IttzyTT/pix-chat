@@ -10,12 +10,12 @@ const Con = styled.div`
 const Icon = styled.i`
     color: white;
     font-size: 100px;
-    margin-top: 100px;
+    padding-top: 100px;
 `
 const InfoEdit = styled.div` 
     display: flex;
     flex-direction: column;
-    margin-top: 88px;
+    padding-top: 88px;
 `
 const Name = styled.p` 
     color: white;
@@ -26,8 +26,9 @@ const Btn = styled.button`
     color: white;
     width: 120px;
     height: 34px;
+    padding-bottom: 4px;
     border: 1px solid white;
-    border-radius: 3px;
+    border-radius: 4px;
     text-align: center;
     font-size: 16px; 
 `
@@ -42,10 +43,11 @@ const Pictures = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%; 
-    height: 450px;
+    height: 430px;
     flex-wrap: wrap;
     border-top: 1px solid white; 
     overflow-y: scroll;
+    padding-bottom: 2px;
 `
 const Posts = styled.div` 
     text-align: center;
@@ -108,7 +110,6 @@ function Profile() {
                 <ImgCon>
                     <Wolf src={wolf} alt='' />
                 </ImgCon>
-
             </Pictures>
         </div>
     )
