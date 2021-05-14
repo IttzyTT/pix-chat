@@ -1,6 +1,8 @@
 import React from 'react'
 import logo from '/logga-light.svg';
+import { useLocation, useHistory, Link } from "react-router-dom";
 import styled from 'styled-components';
+
 
 const TopbarWrapper = styled.div`
     background-color: #434343;
@@ -9,6 +11,7 @@ const TopbarWrapper = styled.div`
     min-height: 70px;
     align-items: center;
     width: 100%;
+    position: fixed;
 `
 
 const Con = styled.div`
@@ -27,20 +30,40 @@ const LogoText = styled.p`
     padding-left: 5px;
 `
 
-const Settings = styled.i`
+const Settings = styled(Link)`
     position: absolute;
     right: 25px;
+    color: #fff;
+`
+
+const SettingsIcon = styled.i`
     font-size: 32px;
 `
 
+const BackButton = styled.i`
+    position: absolute;
+    left: 25px;
+    color: #fff;
+`
+
 function topbar() {
+    const loc = useLocation()
+    const history = useHistory()
+
     return (
         <div>
             <TopbarWrapper>
+                {loc.pathname == '/settings' || loc.pathname == '/camera' ? (
+                    <BackButton onClick={history.goBack} className='material-icons'>arrow_back_ios</BackButton>
+                ) : ''}
                 <Con>
                     <LogoImg src={logo} />
                 </Con>
-                <Settings className='material-icons'>settings</Settings>
+                {loc.pathname != '/settings' ? (
+                    <Settings to='/settings'>
+                        <SettingsIcon className='material-icons'>settings</SettingsIcon>
+                    </Settings>
+                ) : ''}
             </TopbarWrapper>
         </div>
     )
