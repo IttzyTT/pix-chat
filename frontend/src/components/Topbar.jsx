@@ -51,8 +51,9 @@ function topbar() {
     const history = useHistory()
 
     return (
-        <div>
-            <TopbarWrapper>
+        <>
+        {loc.pathname == '/camera' ? '' : (
+                <TopbarWrapper>
                 {loc.pathname == '/settings' || loc.pathname == '/camera' ? (
                     <BackButton onClick={history.goBack} className='material-icons'>arrow_back_ios</BackButton>
                 ) : ''}
@@ -65,7 +66,8 @@ function topbar() {
                     </Settings>
                 ) : ''}
             </TopbarWrapper>
-        </div>
+            )}
+        </>
     )
 }
 

@@ -7,6 +7,7 @@ import Search from './pages/Search';
 import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
 import {
@@ -18,6 +19,7 @@ import {
 const Wrapper = styled.div`
   min-height: 100vh;
   background-color: #434343;
+`
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
           <Route path="/camera" component={CapturePage} />
           <Route path="/chats" component={Chats} />
           <Route path="/profile" component={Profile} />
+          <Route path="/settings" component={Settings} />
         </Switch>
         <Navbar />
       </Wrapper>
