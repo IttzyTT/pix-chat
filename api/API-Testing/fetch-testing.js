@@ -14,6 +14,21 @@ const getAllUsers = async () => {
     }
 };
 
-getAllUsers().then(() => { console.log(allUsers) });
+
+
+// get all messages
+
+let allPostMessages;
+
+const allPostMessages = async () => {
+    try {
+        const response = await fetch('http://localhost:4000/postMessages');
+        allPostMessages = await response.json();
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+getallPostMessages().then(() => { console.log(allPostMessages) });
 
 //=====================================================================
