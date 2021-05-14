@@ -14,8 +14,7 @@ mongoose.connect(
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => {
         console.log('DB connected');
+        const port = 4000;
+        app.listen(port, () => console.log(`api started on port: ${port}`));
     }
 )
-
-const port = 4000;
-app.listen(port, () => console.log(`api started on port: ${port}`));
