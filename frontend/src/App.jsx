@@ -9,7 +9,6 @@ import Chats from './pages/Chats';
 import Profile from './pages/Profile';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,7 +18,6 @@ import {
 const Wrapper = styled.div`
   min-height: 100vh;
   background-color: #434343;
-`
 
 function App() {
   return (
