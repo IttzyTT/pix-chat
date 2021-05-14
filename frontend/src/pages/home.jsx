@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
 import wolf from '/wolf.jpg';
+import { useNamedContext } from 'react-easier';
 
 const Div = styled.div`
     display: flex;
@@ -89,6 +90,9 @@ const Section = styled.section`
 
 
 function Home() {
+    let apiUrl = useNamedContext('global').apiUrl;
+    console.log(apiUrl);
+    
     const [toggle, setToggle] = useState(false);
 
     const toggleTrueFalse = () => setToggle(!toggle);
