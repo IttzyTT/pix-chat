@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './normalize.css';
 import Topbar from './components/Topbar';
 import Navbar from './components/Navbar';
@@ -16,13 +16,17 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import { withContext } from 'react-easier';
+import { withContext, useNamedContext } from 'react-easier';
+import fetchAllUsers from './reusable-functions/fetchAllUsers';
 
 //global store/variables
 export default withContext(
   'global',
   {
-    apiUrl: 'http://localhost:4000'
+    apiUrl: 'http://localhost:4000',
+    allUsers: [],
+    allPosts: [],
+    currentUserId: '609d18eea634629d77501077'
   },
   App
 );
@@ -34,6 +38,13 @@ const Wrapper = styled.div`
 `
 
 function App() {
+  const globalStore = useNamedContext('global');
+  
+  useEffect(() => {
+    fetchAllUsers(globalStore.apiUrl)
+      .then(data => globalStore.allUsers = data);
+  }, [])
+
   return (
     <Router>
       <Wrapper className="App">
