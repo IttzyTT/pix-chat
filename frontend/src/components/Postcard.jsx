@@ -1,29 +1,79 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
+import displayCreatorName from '../reusable-functions/displayCreatorName';
 
 function Postcard({ post }) {
+    const globalStore = useNamedContext('global');
     const [toggle, setToggle] = useState(false);
-    const toggleTrueFalse = () => setToggle(!toggle);
-
-    console.log(post);
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
+    
+    const isLiked = ({ likedBy }, currentUserId) => {
+        if (!likedBy) return false;
+        for (let likeId of likedBy) {
+            if (likeId === currentUserId) {
+                return true;
+            }
+        }
+    }
+    
+    const likeToggle = async () => {
+        if (toggle) {
+            try {
+                await fetch(`${globalStore.apiUrl}/posts/${post['_id']}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({...post, 
+                        'likedBy': 
+                            [...post.likedBy
+                                .filter(id => id !== globalStore.currentUserId)]
+                    })
+                });
+            } catch (error) {
+                console.log(error);
+            }
+            setToggle(false);
+        } else {
+            try {
+                await fetch(`${globalStore.apiUrl}/posts/${post['_id']}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({...post, 
+                        'likedBy': 
+                            [...post.likedBy, globalStore.currentUserId]
+                    })
+                });
+            } catch (error) {
+                console.log(error);
+            }
+            setToggle(true);
+        }
+    }
+
+    useEffect(() => {
+        setToggle(isLiked(post, globalStore.currentUserId));
+    }, [post])
 
     return (
         <Section>
                 <Div>
-                    <p>Kevin</p>{/* replace with name from users-collection, match post.createdById with user.['_id'] */}
+                    <p>{displayCreatorName(post, globalStore.allUsers)}</p>
                     <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
                 </Div>
                 <TextTags>
                     <ImgCon>
-                        <Wolf src={post.imageUrl} alt='' />
+                        <Image src={post.imageUrl} alt='' />
                     </ImgCon>
                     <TitleCon>
                         <Title>{post.caption}</Title>
 
                         <IconCon>
-                            <div onClick={toggleTrueFalse}>
+                            <div onClick={likeToggle}>
                                 {
                                     !toggle ?
                                         <i className='material-icons'>favorite_border</i>
@@ -37,7 +87,7 @@ function Postcard({ post }) {
                     <Date>{createdAt}</Date>
                     <Tags>
                         {post.tags.map((tag, index) => (
-                            <Tag id={index}>
+                            <Tag key={index}>
                                 <TagText>{tag}</TagText>
                             </Tag>
                         ))}
@@ -116,7 +166,7 @@ const Date = styled.p`
     font-size: 10px;
 `
 
-const Wolf = styled.img`
+const Image = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
