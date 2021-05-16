@@ -5,58 +5,54 @@ import displayCreatorName from '../reusable-functions/displayCreatorName';
 
 function Postcard({ post }) {
     const globalStore = useNamedContext('global');
-    const [toggle, setToggle] = useState(false);
+    const [likeToggle, setLikeToggle] = useState(false);
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
     
-    const isLiked = ({ likedBy }, currentUserId) => {
-        if (!likedBy) return false;
-        for (let likeId of likedBy) {
-            if (likeId === currentUserId) {
-                return true;
-            }
-        }
-    }
+    const isLiked = ({ likedBy }, currentUserId) => (
+        Boolean(likedBy.filter(v => v === currentUserId).length)
+    )
     
-    const likeToggle = async () => {
-        if (toggle) {
+    const patchThisPost = (patchBodyObject) => (
+        fetch(`${globalStore.apiUrl}/posts/${post['_id']}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(patchBodyObject)
+        })
+    )
+
+    const likeHandler = async () => {
+        let patchedPost;
+        if (likeToggle) {
+            patchedPost = {...post, 
+                'likedBy': 
+                    [...post.likedBy
+                        .filter(id => id !== globalStore.currentUserId)]
+            };
             try {
-                await fetch(`${globalStore.apiUrl}/posts/${post['_id']}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({...post, 
-                        'likedBy': 
-                            [...post.likedBy
-                                .filter(id => id !== globalStore.currentUserId)]
-                    })
-                });
+                await patchThisPost(patchedPost);
             } catch (error) {
                 console.log(error);
             }
-            setToggle(false);
+            setLikeToggle(false);
         } else {
+            patchedPost = {...post, 
+                'likedBy': 
+                    [...post.likedBy, globalStore.currentUserId]
+            };
             try {
-                await fetch(`${globalStore.apiUrl}/posts/${post['_id']}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({...post, 
-                        'likedBy': 
-                            [...post.likedBy, globalStore.currentUserId]
-                    })
-                });
+                await patchThisPost(patchedPost);
             } catch (error) {
                 console.log(error);
             }
-            setToggle(true);
+            setLikeToggle(true);
         }
     }
 
     useEffect(() => {
-        setToggle(isLiked(post, globalStore.currentUserId));
+        setLikeToggle(isLiked(post, globalStore.currentUserId));
     }, [post])
 
     return (
@@ -67,15 +63,15 @@ function Postcard({ post }) {
                 </Div>
                 <TextTags>
                     <ImgCon>
-                        <Image src={post.imageUrl} alt='' />
+                        <Image src={post.imageUrl} alt={post.caption} />
                     </ImgCon>
                     <TitleCon>
                         <Title>{post.caption}</Title>
 
                         <IconCon>
-                            <div onClick={likeToggle}>
+                            <div onClick={likeHandler}>
                                 {
-                                    !toggle ?
+                                    !likeToggle ?
                                         <i className='material-icons'>favorite_border</i>
                                         :
                                         <i className='material-icons'>favorite</i>
