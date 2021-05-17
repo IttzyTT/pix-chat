@@ -1,6 +1,30 @@
 import React from 'react'
 import styled from 'styled-components'
 
+
+function EditProfile() {
+    return (
+        <div>
+        <ChangePicture>
+            <Icon className='material-icons'>account_circle</Icon>
+            <Btn>Change profile picture</Btn>
+        </ChangePicture>
+        <Con>
+            <Con2>
+                <ChangeInfoText type="text" placeholder="Username" />
+                <ChangeInfoText type="text" placeholder='Password' />
+            </Con2>
+            <Con3>
+                <SaveBtn>Save</SaveBtn>
+                <SaveBtn>Save</SaveBtn>
+            </Con3>
+        </Con>
+        </div>
+    )
+}
+
+export default EditProfile
+
 const ChangePicture = styled.div`
    display: flex;
    justify-content: space-between;
@@ -58,26 +82,3 @@ const SaveBtn = styled.button`
     border: 1px solid white;
     border-radius: 4px;
 `
-
-function EditProfile() {
-    return (
-        <div>
-        <ChangePicture>
-            <Icon className='material-icons'>account_circle</Icon>
-            <Btn>Change profile picture</Btn>
-        </ChangePicture>
-        <Con>
-            <Con2>
-                <ChangeInfoText type="text" placeholder="Username" />
-                <ChangeInfoText type="text" placeholder='Password' />
-            </Con2>
-            <Con3>
-                <SaveBtn>Save</SaveBtn>
-                <SaveBtn>Save</SaveBtn>
-            </Con3>
-        </Con>
-        </div>
-    )
-}
-
-export default EditProfile
