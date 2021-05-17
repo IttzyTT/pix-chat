@@ -59,7 +59,7 @@ function App() {
           <Route path="/chat/:id" component={PostChat} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
-          <Route path="/editProfile" component={EditProfile} />
+          <Route path="/editProfile/:id" component={EditProfile} />
         </Switch>
         <Navbar />
       </Wrapper>

@@ -8,7 +8,7 @@ function navbar() {
 
     return (
         <>
-            {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == '/editProfile' ? '' : (
+            {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == '/editProfile/' ? '' : (
                 <Navbar>
                     <NavbarList>
                     <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>home</LinkIcon></NavbarListItemLink></NavbarListItem> 
