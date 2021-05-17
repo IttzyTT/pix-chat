@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
+import {Link} from "react-router-dom";
 import displayCreatorName from '../reusable-functions/displayCreatorName';
 
 function Postcard({ post }) {
@@ -57,6 +58,7 @@ function Postcard({ post }) {
 
     return (
         <Section>
+            <Link to={`/chat/${post['_id']}`}>
                 <Div>
                     <p>{displayCreatorName(post, globalStore.allUsers)}</p>
                     <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
@@ -89,7 +91,7 @@ function Postcard({ post }) {
                         ))}
                     </Tags>
                 </TextTags>
-
+            </Link>
             </Section>
     )
 }
