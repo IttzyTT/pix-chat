@@ -10,16 +10,12 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 const Wrapper = styled.div`
   min-height: 100vh;
   background-color: #434343;
-`
+`;
 
 function App() {
   return (
