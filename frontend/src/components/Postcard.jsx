@@ -58,6 +58,7 @@ function Postcard({ post }) {
 
     return (
         <Section>
+            <Link to={`/chat/${post['_id']}`}>
                 <Div>
                 <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
                     <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
@@ -90,7 +91,7 @@ function Postcard({ post }) {
                         ))}
                     </Tags>
                 </TextTags>
-
+            </Link>
             </Section>
     )
 }
