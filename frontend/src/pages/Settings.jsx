@@ -2,24 +2,6 @@ import React from 'react'
 import styled from 'styled-components';
 import SettingsStyle from '../settings.module.css';
 
-const Wrapper = styled.div `
-    padding: 100px 20px;
-`
-
-const Toggler = styled.div `
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`
-
-const TogglerSettingText = styled.p `
-    font-size: 22px;
-    color: #fff;
-`
-
-const SettingTitle = styled.h1 `
-    color: #fff;
-`
 
 function Settings() {
     return (
@@ -79,3 +61,22 @@ function Settings() {
 }
 
 export default Settings
+
+const Wrapper = styled.div `
+    padding: 100px 20px;
+`
+
+const Toggler = styled.div `
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const TogglerSettingText = styled.p `
+    font-size: 22px;
+    color: #fff;
+`
+
+const SettingTitle = styled.h1 `
+    color: #fff;
+`
