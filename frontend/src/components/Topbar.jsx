@@ -4,6 +4,33 @@ import { useLocation, useHistory, Link } from "react-router-dom";
 import styled from 'styled-components';
 
 
+function topbar() {
+    const loc = useLocation()
+    const history = useHistory()
+
+    return (
+        <>
+        {loc.pathname == '/camera' ? '' : (
+                <TopbarWrapper>
+                {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == '/editProfile' ? (
+                    <BackButton onClick={history.goBack} className='material-icons'>arrow_back_ios</BackButton>
+                ) : ''}
+                <Con>
+                    <LogoImg src={logo} />
+                </Con>
+                {loc.pathname != '/settings' && loc.pathname != '/editProfile' ? (
+                    <Settings to='/settings'>
+                        <SettingsIcon className='material-icons'>settings</SettingsIcon>
+                    </Settings>
+                ) : ''}
+            </TopbarWrapper>
+            )}
+        </>
+    )
+}
+
+export default topbar
+
 const TopbarWrapper = styled.div`
     background-color: #434343;
     display: flex;
@@ -45,30 +72,3 @@ const BackButton = styled.i`
     left: 25px;
     color: #fff;
 `
-
-function topbar() {
-    const loc = useLocation()
-    const history = useHistory()
-
-    return (
-        <>
-        {loc.pathname == '/camera' ? '' : (
-                <TopbarWrapper>
-                {loc.pathname == '/settings' || loc.pathname == '/camera' ? (
-                    <BackButton onClick={history.goBack} className='material-icons'>arrow_back_ios</BackButton>
-                ) : ''}
-                <Con>
-                    <LogoImg src={logo} />
-                </Con>
-                {loc.pathname != '/settings' ? (
-                    <Settings to='/settings'>
-                        <SettingsIcon className='material-icons'>settings</SettingsIcon>
-                    </Settings>
-                ) : ''}
-            </TopbarWrapper>
-            )}
-        </>
-    )
-}
-
-export default topbar
