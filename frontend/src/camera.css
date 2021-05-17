@@ -43,8 +43,5 @@
   position: absolute;
   bottom: 0;
   left: 0;
-}
-
-.download-btn {
-  margin-left: 25px;
+  width: 100%;
 }

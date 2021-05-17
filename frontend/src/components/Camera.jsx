@@ -1,12 +1,15 @@
-import React, { Component } from 'react';
-
+import React, { Component, useRef } from 'react';
 import '../camera.css';
 
 class Camera extends Component {
-  state = {
-    imageURL: '',
-    facingMode: 'user',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageURL: '',
+      facingMode: 'user',
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   videoEle = React.createRef();
   canvasEle = React.createRef();
@@ -74,6 +77,14 @@ class Camera extends Component {
     );
   };
 
+  // load image from file-picker
+  handleChange(e) {
+    let imagePickerURL = URL.createObjectURL(e.target.files[0]);
+    this.setState({
+      imageURL: imagePickerURL,
+    });
+  }
+
   // Toogle Camera
   rotateCamera = () => {
     const camera = this.state.facingMode;
@@ -91,12 +102,11 @@ class Camera extends Component {
         {this.state.imageURL === '' && (
           <div className="cam">
             <video width="100%" height="100%" className="video-player" autoPlay={true} ref={this.videoEle}></video>
-
             <div className="camera-btn-container">
-              <button className="btn gallery-btn">
+              <label className="btn gallery-btn" htmlFor="fileUpload">
                 <i class="fa fa-picture-o" aria-hidden="true"></i>
-              </button>
-
+              </label>
+              <input id="fileUpload" type="file" accept="image/*" onChange={this.handleChange} style={{ display: 'none' }}></input>
               <button className="btn capture-btn" onClick={this.takePicture}>
                 <i class="fa fa-camera" aria-hidden="true"></i>
               </button>
@@ -114,9 +124,12 @@ class Camera extends Component {
 
             <div className="btn-container">
               <button className="btn back-btn" onClick={this.backToCam}>
-                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                <i class="fa fa-camera" aria-hidden="true"></i>
               </button>
-              <a href={this.state.imageURL} download="selfie.png" className="btn download-btn">
+              <button className="btn post-btn">
+                <i class="fa fa-plus-circle"></i>
+              </button>
+              <a href={this.state.imageURL} download="pixchat.png" className="btn download-btn">
                 <i class="fa fa-download" aria-hidden="true"></i>
               </a>
             </div>
