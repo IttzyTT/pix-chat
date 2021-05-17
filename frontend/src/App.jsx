@@ -11,6 +11,7 @@ import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -30,12 +31,12 @@ export default withContext(
   },
   App
 );
-//-----------------------
+
 
 const Wrapper = styled.div`
   min-height: 100vh;
   background-color: #434343;
-`
+`;
 
 function App() {
   const globalStore = useNamedContext('global');
