@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Camera from '../components/Camera';
 
 function CapturePage() {
-    return (
-        <div>
-            <h1>camera</h1>
-        </div>
-    )
+  return (
+    <div>
+      <Camera />
+    </div>
+  );
 }
 
-export default CapturePage
+export default CapturePage;
