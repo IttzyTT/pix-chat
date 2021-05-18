@@ -1,10 +1,9 @@
 import React from 'react'
-import { useLocation, useHistory, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import styled from 'styled-components'
 
 function navbar() {
     const loc = useLocation();
-    const history = useHistory();
 
     return (
         <>

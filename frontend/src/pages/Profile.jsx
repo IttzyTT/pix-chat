@@ -39,7 +39,7 @@ function Profile() {
             <Pictures>
                 {globalStore.allPosts.map( posts => (
                     <ProfilePostInfo 
-                        key={ posts.createdById }
+                        key={ posts['_id']  }
                         posts={ posts }
                     />
                 ))}
