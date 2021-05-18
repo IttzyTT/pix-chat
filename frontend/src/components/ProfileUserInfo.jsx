@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useNamedContext } from 'react-easier';
 
 function ProfileUserInfo({ user }) {
-    console.log(user)
+    const loc = useLocation();
 
     let globalStore = useNamedContext('global');
 
