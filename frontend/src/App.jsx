@@ -3,7 +3,6 @@ import './normalize.css';
 import Topbar from './components/Topbar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Search from './pages/Search';
 import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
 import PostChat from './pages/PostChat';
@@ -58,7 +57,7 @@ function App() {
         <Topbar />
         <Switch>
           <Route path="/" exact component={loginCheck(Home)} />
-          <Route path="/search" component={loginCheck(Search)} />
+          <Route path="/search/:showSearch" component={loginCheck(Home)} />
           <Route path="/camera" component={loginCheck(CapturePage)} />
           <Route path="/chats" component={loginCheck(Chats)} />
           <Route path="/chat/:id" component={loginCheck(PostChat)} />
