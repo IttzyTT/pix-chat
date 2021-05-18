@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
+import { Link } from "react-router-dom";
 import displayCreatorName from '../reusable-functions/displayCreatorName';
 
 function Postcard({ post }) {
@@ -8,11 +9,11 @@ function Postcard({ post }) {
     const [likeToggle, setLikeToggle] = useState(false);
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
-    
+
     const isLiked = ({ likedBy }, currentUserId) => (
         Boolean(likedBy.filter(v => v === currentUserId).length)
     )
-    
+
     const patchThisPost = (patchBodyObject) => (
         fetch(`${globalStore.apiUrl}/posts/${post['_id']}`, {
             method: 'PATCH',
@@ -26,8 +27,9 @@ function Postcard({ post }) {
     const likeHandler = async () => {
         let patchedPost;
         if (likeToggle) {
-            patchedPost = {...post, 
-                'likedBy': 
+            patchedPost = {
+                ...post,
+                'likedBy':
                     [...post.likedBy
                         .filter(id => id !== globalStore.currentUserId)]
             };
@@ -38,8 +40,9 @@ function Postcard({ post }) {
             }
             setLikeToggle(false);
         } else {
-            patchedPost = {...post, 
-                'likedBy': 
+            patchedPost = {
+                ...post,
+                'likedBy':
                     [...post.likedBy, globalStore.currentUserId]
             };
             try {
@@ -57,40 +60,43 @@ function Postcard({ post }) {
 
     return (
         <Section>
-                <Div>
-                    <p>{displayCreatorName(post, globalStore.allUsers)}</p>
-                    <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
-                </Div>
-                <TextTags>
+            <Div>
+                <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
+                <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
+            </Div>
+            <TextTags>
+                <Link to={`/chat/${post['_id']}`}>
                     <ImgCon>
                         <Image src={post.imageUrl} alt={post.caption} />
                     </ImgCon>
-                    <TitleCon>
+                </Link>
+                <TitleCon>
+                    <Link to={`/chat/${post['_id']}`}>
                         <Title>{post.caption}</Title>
+                    </Link>
 
-                        <IconCon>
-                            <div onClick={likeHandler}>
-                                {
-                                    !likeToggle ?
-                                        <i className='material-icons'>favorite_border</i>
-                                        :
-                                        <i className='material-icons'>favorite</i>
-                                }
-                            </div>
-                            <i className='material-icons'>chat_bubble_outline</i>
-                        </IconCon>
-                    </TitleCon>
-                    <Date>{createdAt}</Date>
-                    <Tags>
-                        {post.tags.map((tag, index) => (
-                            <Tag key={index}>
-                                <TagText>{tag}</TagText>
-                            </Tag>
-                        ))}
-                    </Tags>
-                </TextTags>
-
-            </Section>
+                    <IconCon>
+                        <div onClick={likeHandler}>
+                            {
+                                !likeToggle ?
+                                    <i className='material-icons'>favorite_border</i>
+                                    :
+                                    <i className='material-icons'>favorite</i>
+                            }
+                        </div>
+                        <i className='material-icons'>chat_bubble_outline</i>
+                    </IconCon>
+                </TitleCon>
+                <Date>{createdAt}</Date>
+                <Tags>
+                    {post.tags.map((tag, index) => (
+                        <Tag key={index}>
+                            <TagText>{tag}</TagText>
+                        </Tag>
+                    ))}
+                </Tags>
+            </TextTags>
+        </Section>
     )
 }
 

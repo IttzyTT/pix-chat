@@ -6,11 +6,13 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
+import PostChat from './pages/PostChat';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -31,12 +33,12 @@ export default withContext(
   },
   App
 );
-//-----------------------
+
 
 const Wrapper = styled.div`
   min-height: 100vh;
   background-color: #434343;
-`
+`;
 
 function App() {
   const globalStore = useNamedContext('global');
@@ -77,9 +79,10 @@ function App() {
           <Route path="/search" component={loginCheck(Search)} />
           <Route path="/camera" component={loginCheck(CapturePage)} />
           <Route path="/chats" component={loginCheck(Chats)} />
+          <Route path="/chat/:id" component={loginCheck(PostChat)} />
           <Route path="/profile" component={loginCheck(Profile)} />
           <Route path="/settings" component={loginCheck(Settings)} />
-          <Route path="/editProfile" component={loginCheck(EditProfile)} />
+          <Route path="/editProfile/:id" component={loginCheck(EditProfile)} />
         </Switch>
         <Navbar />
       </Wrapper>

@@ -1,39 +1,55 @@
-import React from 'react'
-import styled from 'styled-components'
-import wolf from '/wolf.jpg';
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import fetchAllPosts from '../reusable-functions/fetchAllPosts';
+import fetchAllUsers from '../reusable-functions/fetchAllUsers';
+import { useNamedContext } from 'react-easier';
+import styled from 'styled-components';
+import ProfilePostInfo from '../components/ProfilePostInfo';
+import ProfileUserInfo from '../components/ProfileUserInfo';
 
-const Con = styled.div` 
-    display: flex;
-    justify-content: flex-start;
-    margin: 0px 0px 40px 40px;
-`
-const Icon = styled.i`
-    color: white;
-    font-size: 100px;
-    padding-top: 100px;
-    margin-right: 20px;
-`
-const InfoEdit = styled.div` 
-    display: flex;
-    flex-direction: column;
-    padding-top: 88px;
-`
-const Name = styled.p` 
-    color: white;
-    font-size: 20px; 
-`
-const Btn = styled.button`
-    background-color: #434343; 
-    color: white;
-    width: 120px;
-    height: 32px;
-    padding-bottom: 4px;
-    border: 1px solid white;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 16px; 
-`
+function Profile() {
+
+    let globalStore = useNamedContext('global');
+
+    useEffect(() => {
+        fetchAllPosts(globalStore.apiUrl)
+            .then(data => globalStore.allPosts = data);
+        fetchAllUsers(globalStore.apiUrl)
+            .then(data => globalStore.allUsers = data);
+    }, []);
+
+    return (
+        <div>
+            {globalStore.allUsers.map( user => (
+                <ProfileUserInfo 
+                    key={ user['_id'] }
+                    user={ user }
+                />
+            ))}
+
+            <InfoNumber>
+                <Posts>
+                    <p>Posts</p>
+                    <p>{globalStore.allPosts.length}</p>
+                </Posts>
+                <Favorites>
+                    <p>Favorites</p>
+                    <p>4</p>
+                </Favorites>
+            </InfoNumber>
+            <Pictures>
+                {globalStore.allPosts.map( posts => (
+                    <ProfilePostInfo 
+                        key={ posts.createdById }
+                        posts={ posts }
+                    />
+                ))}
+            </Pictures>
+        </div>
+    )
+}
+
+export default Profile
+
 const InfoNumber = styled.div`
     display: flex;
     justify-content: space-between;
@@ -41,80 +57,18 @@ const InfoNumber = styled.div`
     font-size: 16px; 
     color: white; 
 `
-const Pictures = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 100%; 
-    height: 430px;
-    flex-wrap: wrap;
-    border-top: 1px solid white; 
-    overflow-y: scroll;
-    padding-bottom: 2px;
-`
 const Posts = styled.div` 
     text-align: center;
 `
 const Favorites = styled.div` 
     text-align: center;
 `
-const ImgCon = styled.div`
-    width: 49.5%;
-    margin-bottom: 4.8px;
-`
-const Wolf = styled.img` 
+const Pictures = styled.div`
+    display: flex;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    border-top: 1px solid white;
+    padding-bottom: 2px;
+    flex-wrap: wrap;
+    justify-content: space-between
 `
-
-function Profile() {
-    return (
-        <div>
-            <Con>
-                <Icon className='material-icons'>account_circle</Icon>
-                <InfoEdit>
-                    <Name>Kevin</Name>
-                    <Link to='/editProfile'><Btn>Edit Profile</Btn></Link>
-                </InfoEdit>
-            </Con>
-            <InfoNumber>
-                <Posts>
-                    <p>Posts</p>
-                    <p>13</p>
-                </Posts>
-                <Favorites>
-                    <p>Favorites</p>
-                    <p>20</p>
-                </Favorites>
-            </InfoNumber>
-            <Pictures>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-                <ImgCon>
-                    <Wolf src={wolf} alt='' />
-                </ImgCon>
-            </Pictures>
-        </div>
-    )
-}
-
-export default Profile

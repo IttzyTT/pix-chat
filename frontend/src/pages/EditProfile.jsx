@@ -1,5 +1,69 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
+
+
+function EditProfile({ match }) {
+    const [user, setUser] = useState({});
+    const history = useHistory();
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+    
+    const fetchUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/users/${match.params.id}`);
+            const data = await response.json();
+            setUser(data)
+        } catch(error) {
+            console.log(error)
+        }
+    }
+    const updateUser = async (e) => {
+        e.preventDefault()
+        try {
+            await fetch(`http://localhost:4000/users/${user['_id']}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+            history.push('/profile')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleUpdate = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setUser({  
+            ...user,
+            [name]: value            
+        })
+    }
+
+    return (
+        <form onSubmit={updateUser}>
+            <ChangePicture>
+                <Icon className='material-icons'>account_circle</Icon>
+                <Btn>Change profile picture</Btn>
+            </ChangePicture>
+            <Con>
+                <Con2>
+                    <ChangeInfoText type="text" name='name' onChange={handleUpdate} value={user.name} placeholder="Username" />
+                    <ChangeInfoText type="password" name='password' onChange={handleUpdate} value={user.password} placeholder='Password' />
+                </Con2>
+                <Con3>
+                    <SaveBtn>Save</SaveBtn>
+                </Con3>
+            </Con>
+        </form>
+    )
+}
+
+export default EditProfile
 
 const ChangePicture = styled.div`
    display: flex;
@@ -19,7 +83,6 @@ const Icon = styled.i`
 
 const ChangeInfoText = styled.input`
     color: white;
-    opacity: 50%;
     margin: 0 0 40px 40px;
 `
 const Btn = styled.button`
@@ -36,7 +99,7 @@ const Btn = styled.button`
 const Con = styled.div`
     display: flex;
     justify-content: space-around;
-    flex-direction: row;
+    flex-direction: column;
     width: 80%;
     margin: 0 auto;
 `
@@ -47,8 +110,9 @@ const Con2 = styled.div`
 `
 const Con3 = styled.div`
     display: flex;
-    justify-content: space-around;
-    flex-direction: column;
+    justify-content: flex-end;
+    flex-direction: row;
+    margin-top 20px;
 `
 const SaveBtn = styled.button`
     background-color: #434343; 
@@ -58,26 +122,3 @@ const SaveBtn = styled.button`
     border: 1px solid white;
     border-radius: 4px;
 `
-
-function EditProfile() {
-    return (
-        <div>
-        <ChangePicture>
-            <Icon className='material-icons'>account_circle</Icon>
-            <Btn>Change profile picture</Btn>
-        </ChangePicture>
-        <Con>
-            <Con2>
-                <ChangeInfoText type="text" placeholder="Username" />
-                <ChangeInfoText type="text" placeholder='Password' />
-            </Con2>
-            <Con3>
-                <SaveBtn>Save</SaveBtn>
-                <SaveBtn>Save</SaveBtn>
-            </Con3>
-        </Con>
-        </div>
-    )
-}
-
-export default EditProfile
