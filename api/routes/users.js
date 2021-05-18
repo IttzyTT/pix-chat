@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 
 // Get all Users
 router.get('/', async (req, res) => {
@@ -17,16 +17,18 @@ router.get('/', async (req, res) => {
 router.post("/", async (req, res) => {
 
     const plainTextPassword = req.body.password;
+    console.log(plainTextPassword);
     const saltRounds = 10;
 
     try {
-        const hash = await bcrypt.hash(plainTextPassword, saltRounds);
+        const hash = await bcryptjs.hash(plainTextPassword, saltRounds);
         
         const user = new User ({
             name:       req.body.name,
             password:   hash,
             isLoggedIn: true   
         })
+
         res.send(await user.save());
     } catch (error) {
         res.send({ message: error });
@@ -35,17 +37,21 @@ router.post("/", async (req, res) => {
 })
 
 // Login / Compare passwords
-router.get("/login/:name%26:password", async (request, response) => {
+router.get("/login/:name/:password", async (request, response) => {
 
     const inputPassword = request.params.password;
-
+    console.log(inputPassword);
+    
     try {
         const user = await User.findOne({ name: request.params.name });
-        const match = await bcrypt.compare(inputPassword, user.password);
+        console.log(user);
+        const match = await bcryptjs.compare(inputPassword, user.password);
+        console.log(match);
         const resObject = {
             isMatch: match,
             ...user
         }
+        console.log(resObject.isMatch);
         response.send(JSON.stringify(resObject));  
     } catch(error) {
         response.send({message: error});
@@ -69,7 +75,7 @@ router.patch("/:userID", async (req, res) => {
     const saltRounds = 10;
 
     try {
-        const hash = await bcrypt.hash(plainTextPassword, saltRounds);
+        const hash = await bcryptjs.hash(plainTextPassword, saltRounds);
         
         const updateUser = await User.updateOne(
             {_id: req.params.userID},
