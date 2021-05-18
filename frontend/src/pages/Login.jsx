@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
 
@@ -17,10 +17,17 @@ export default function Login() {
         })
     }
 
+    let loginName, loginPassword;
+    useEffect(() => {
+        loginName       = loginCred.name;
+        loginPassword   = loginCred.password;
+    }, [loginCred]);
+
     const signInHandler = async (e) => {
         if (e) e.preventDefault();
+
         try {
-            let res = await fetch(`${globalStore.apiUrl}/users/login/${loginCred.name}%26${loginCred.password}`);
+            let res = await fetch(`${globalStore.apiUrl}/users/login/${loginName}/${loginPassword}`);
             let loginResponse = await res.json();
 
             if (loginResponse.isMatch) {
