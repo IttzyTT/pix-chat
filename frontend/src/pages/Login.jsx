@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
+import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
 
 
 export default function Login() {
+    const globalStore = useNamedContext('global');
     const [loginCred, setLoginCred] = useState({
         name: '',
         password: ''
     });
-
-    const apiUrl = 'http://localhost:4000'; // CHANGE LATER ON, somehow get from globalStore
 
     const changeHandler = (e) => {
         setLoginCred({
@@ -18,14 +18,17 @@ export default function Login() {
     }
 
     const signInHandler = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         try {
-            let res = await fetch(`${apiUrl}/users/login/${loginCred.name}%26${loginCred.password}`);
+            let res = await fetch(`${globalStore.apiUrl}/users/login/${loginCred.name}%26${loginCred.password}`);
             let loginResponse = await res.json();
 
-            loginResponse.isMatch ?
-                alert('yey, correct password') :
+            if (loginResponse.isMatch) {
+                loginResponse['_doc'].isLoggedIn = true;
+                globalStore.currentUserId = loginResponse['_doc']['_id'];
+            } else {
                 alert('darn it, wrong password or no account') ;
+            }
 
         } catch (error) {
             console.log(error);
@@ -34,7 +37,7 @@ export default function Login() {
 
     const createAccountHandler = async () => {
         try {
-            await fetch(`${apiUrl}/users`, {
+            await fetch(`${globalStore.apiUrl}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,6 +45,7 @@ export default function Login() {
                 body: JSON.stringify(loginCred)
             })
             alert('account created');
+            await signInHandler();
         } catch (error) {
             console.log(error);
         }
@@ -60,24 +64,22 @@ export default function Login() {
                 </LogoDiv>
                 <FormContainer>
                     <form onSubmit={signInHandler}>
-                        <FormPart1>
-                            <div className="input-field-container">
-                                <i className="material-icons">person_outline</i>
-                                <span>
-                                    <input value={loginCred.name} onChange={changeHandler} type="text" placeholder="Username" name="name" id="login-input-name" className="login-input-field" required />
-                                </span>
-                            </div>
-                            <div className="input-field-container">
-                                <i className="material-icons">lock</i>
-                                <span>
-                                    <input value={loginCred.password} onChange={changeHandler} type="password" placeholder="Password" name="password" id="login-input-password" className="login-input-field" required />
-                                </span>
-                            </div>
-                            <br />
-                            <br />
-                            <button type="submit" id="btn-sign-in" className="btn-round">Sign In</button>
-                            <p>Forgot password?</p>
-                        </FormPart1>
+                        <div className="input-field-container">
+                            <i className="material-icons">person_outline</i>
+                            <span>
+                                <input value={loginCred.name} onChange={changeHandler} type="text" placeholder="Username" name="name" id="login-input-name" className="login-input-field" required />
+                            </span>
+                        </div>
+                        <div className="input-field-container">
+                            <i className="material-icons">lock</i>
+                            <span>
+                                <input value={loginCred.password} onChange={changeHandler} type="password" placeholder="Password" name="password" id="login-input-password" className="login-input-field" required />
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <button type="submit" id="btn-sign-in" className="btn-round">Sign In</button>
+                        <p>Forgot password?</p>
                     </form>
                 </FormContainer>
                 <CreateAccountContainer>
@@ -90,6 +92,9 @@ export default function Login() {
 }
 
 const Flexwrapper = styled.div`
+    background-color: #434343;
+    position: relative;
+    z-index: 10000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,6 +153,7 @@ const FormContainer = styled.div`
         height: 100%;
     }
     input[type=text], input[type=password] {
+        box-sizing: border-box;
         border-bottom: 0;
         height: initial;
         margin: 0;
@@ -169,12 +175,6 @@ const FormContainer = styled.div`
     .input-field-container > span {
         flex-grow: 1;
     }
-`
-const FormPart1 = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
 `
 
 const CreateAccountContainer = styled.div`

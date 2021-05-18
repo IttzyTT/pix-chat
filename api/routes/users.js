@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
         const user = new User ({
             name:       req.body.name,
             password:   hash,
-            isLoggedIn: req.body.isLoggedIn   
+            isLoggedIn: true   
         })
         res.send(await user.save());
     } catch (error) {
@@ -43,7 +43,8 @@ router.get("/login/:name%26:password", async (request, response) => {
         const user = await User.findOne({ name: request.params.name });
         const match = await bcrypt.compare(inputPassword, user.password);
         const resObject = {
-            isMatch: match
+            isMatch: match,
+            ...user
         }
         response.send(JSON.stringify(resObject));  
     } catch(error) {
@@ -63,13 +64,18 @@ router.get("/:userId", async (request, response) => {
 
 // Update User 
 router.patch("/:userID", async (req, res) => {
+    
+    const plainTextPassword = req.body.password;
+    const saltRounds = 10;
 
-    try{
+    try {
+        const hash = await bcrypt.hash(plainTextPassword, saltRounds);
+        
         const updateUser = await User.updateOne(
             {_id: req.params.userID},
             {$set: {
                     name:       req.body.name,
-                    password:   req.body.password,
+                    password:   hash,
                     isLoggedIn: req.body.isLoggedIn
                 }
             }
