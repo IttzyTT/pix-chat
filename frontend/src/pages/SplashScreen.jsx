@@ -4,12 +4,14 @@ import styled from 'styled-components';
 export default function SplashScreen() {
   return (
     <Container>
-      <div className="cirkel1">
-        <div className="cirkel2">
-          <div className="cirkel3">
-            <div className="cirkel4">
-              <div className="cirkel5">
-                <div className="logo"></div>
+      <div className="circle1">
+        <div className="circle2">
+          <div className="circle3">
+            <div className="circle4">
+              <div className="circle5">
+                <div className="logo">
+                  <img src="./logo.png" alt="app logo" />
+                </div>
               </div>
             </div>
           </div>

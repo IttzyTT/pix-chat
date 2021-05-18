@@ -48,24 +48,6 @@ function App() {
       .then(data => globalStore.allUsers = data);
   }, [])
 
-  useEffect(async () => {
-      if (globalStore.currentUserId) {
-        let currentUserResponse = await fetch(`${globalStore.apiUrl}/users/${globalStore.currentUserId}`);
-        let currentUser = await currentUserResponse.json();
-
-        await fetch(`${globalStore.apiUrl}/users/${globalStore.currentUserId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...currentUser, 
-            'isLoggedIn': true
-            })
-        })
-      }
-  }, [globalStore.currentUserId])
-
   const loginCheck = (component) => (
     globalStore.currentUserId ? component : Login
   )
