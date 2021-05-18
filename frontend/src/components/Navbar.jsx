@@ -1,20 +1,22 @@
 import React from 'react'
 import { useLocation, Link } from "react-router-dom";
 import styled from 'styled-components'
+import { useNamedContext } from 'react-easier';
 
 function navbar() {
+    const globalStore = useNamedContext('global');
     const loc = useLocation();
 
     return (
         <>
-            {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == '/editProfile/' ? '' : (
+            {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == `/editProfile/${globalStore.currentUserId}` ? '' : (
                 <Navbar>
                     <NavbarList>
                     <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>home</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     <NavbarListItem><NavbarListItemLink to='/search'><LinkIcon className='material-icons'>search</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     <NavbarListItem><NavbarListItemLink to='/camera'><LinkIcon className='material-icons'>photo_camera</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     <NavbarListItem><NavbarListItemLink to='/chats'><LinkIcon className='material-icons'>chat_bubble</LinkIcon></NavbarListItemLink></NavbarListItem> 
-                    <NavbarListItem><NavbarListItemLink to='/profile'><LinkIcon className='material-icons'>account_circle</LinkIcon></NavbarListItemLink></NavbarListItem> 
+                    <NavbarListItem><NavbarListItemLink to={`/profile/${globalStore.currentUserId}`}><LinkIcon className='material-icons'>account_circle</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     </NavbarList>
                 </Navbar>
             )}

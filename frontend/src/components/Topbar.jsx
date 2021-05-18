@@ -2,15 +2,17 @@ import React from 'react';
 import logo from '/logga-light.svg';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNamedContext } from 'react-easier';
 
 function topbar() {
   const loc = useLocation();
   const history = useHistory();
+  const globalStore = useNamedContext('global');
 
   return (
     <>
       <TopbarWrapper>
-        {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == '/editProfile' ? (
+        {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == `/editProfile/${globalStore.currentUserId}` ? (
           <BackButton onClick={history.goBack} className="material-icons">
             arrow_back_ios
           </BackButton>
