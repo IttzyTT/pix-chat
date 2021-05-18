@@ -62,7 +62,7 @@ function App() {
           <Route path="/camera" component={loginCheck(CapturePage)} />
           <Route path="/chats" component={loginCheck(Chats)} />
           <Route path="/chat/:id" component={loginCheck(PostChat)} />
-          <Route path="/profile" component={loginCheck(Profile)} />
+          <Route path="/profile/:id" component={loginCheck(Profile)} />
           <Route path="/settings" component={loginCheck(Settings)} />
           <Route path="/editProfile/:id" component={loginCheck(EditProfile)} />
         </Switch>

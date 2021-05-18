@@ -1,35 +1,65 @@
-import React, { useEffect } from 'react';
-import fetchAllPosts from '../reusable-functions/fetchAllPosts';
-import fetchAllUsers from '../reusable-functions/fetchAllUsers';
+import React, { useEffect, useState } from 'react';
+// import fetchAllPosts from '../reusable-functions/fetchAllPosts';
+// import fetchAllUsers from '../reusable-functions/fetchAllUsers';
 import { useNamedContext } from 'react-easier';
+import { useLocation, Link } from "react-router-dom";
 import styled from 'styled-components';
-import ProfilePostInfo from '../components/ProfilePostInfo';
-import ProfileUserInfo from '../components/ProfileUserInfo';
+// import ProfilePostInfo from '../components/ProfilePostInfo';
+// import ProfileUserInfo from '../components/ProfileUserInfo';
 
-function Profile() {
-
+function Profile({ match }) {
+    const [user, setUser] = useState({});
+    const [posts, setPosts] = useState([]);
+    const loc = useLocation();
     let globalStore = useNamedContext('global');
 
     useEffect(() => {
-        fetchAllPosts(globalStore.apiUrl)
-            .then(data => globalStore.allPosts = data);
-        fetchAllUsers(globalStore.apiUrl)
-            .then(data => globalStore.allUsers = data);
+        fetchUser();
+        fetchPosts();
     }, []);
+
+    const fetchUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/users/${match.params.id}`);
+            const data = await response.json();
+            setUser(data)
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
+    const fetchPosts = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/posts/${match.params.id}`);
+            const data = await response.json();
+            setPosts(data)
+        } catch(error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
-            {globalStore.allUsers.map( user => (
+            {/* {globalStore.allUsers.map( user => (
                 <ProfileUserInfo 
                     key={ user['_id'] }
                     user={ user }
                 />
-            ))}
+            ))} */}
+            <Con>
+                <Icon className='material-icons'>account_circle</Icon>
+                <InfoEdit>
+                    <Name>{ user.name }</Name>
+                    {loc.pathname !== `/profile/${globalStore.currentUserId}` ? '' : (
+                        <Link to={`/editProfile/${user['_id']}`}><Btn>Edit Profile</Btn></Link>
+                    )}
+                </InfoEdit>
+            </Con>
 
             <InfoNumber>
                 <Posts>
                     <p>Posts</p>
-                    <p>{globalStore.allPosts.length}</p>
+                    <p>{posts.length}</p>
                 </Posts>
                 <Favorites>
                     <p>Favorites</p>
@@ -37,18 +67,53 @@ function Profile() {
                 </Favorites>
             </InfoNumber>
             <Pictures>
-                {globalStore.allPosts.map( posts => (
-                    <ProfilePostInfo 
-                        key={ posts['_id']  }
-                        posts={ posts }
-                    />
-                ))}
+            <Post key={posts['_id']} src={posts.imageUrl} alt='' />
+                {/* {posts.map( post => {
+                    return <Post key={post['_id']} src={post.imageUrl} alt='' />
+                    
+                    // <ProfilePostInfo 
+                    //     key={ posts['_id']  }
+                    //     posts={ posts }
+                    // />
+                })} */}
             </Pictures>
         </div>
     )
 }
 
 export default Profile
+
+const Con = styled.div` 
+    display: flex;
+    justify-content: flex-start;
+    margin: 0px 0px 40px 40px;
+`
+const Icon = styled.i`
+    color: white;
+    font-size: 100px;
+    padding-top: 100px;
+    margin-right: 20px;
+`
+const InfoEdit = styled.div` 
+    display: flex;
+    flex-direction: column;
+    padding-top: 88px;
+`
+const Name = styled.p` 
+    color: white;
+    font-size: 20px; 
+`
+const Btn = styled.button`
+    background-color: #434343; 
+    color: white;
+    width: 120px;
+    height: 32px;
+    padding-bottom: 4px;
+    border: 1px solid white;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px; 
+`
 
 const InfoNumber = styled.div`
     display: flex;
@@ -71,4 +136,9 @@ const Pictures = styled.div`
     padding-bottom: 2px;
     flex-wrap: wrap;
     justify-content: space-between
+`
+const Post = styled.img` 
+    width: 49.5%;
+    margin-bottom: 5px;
+    height: auto;
 `
