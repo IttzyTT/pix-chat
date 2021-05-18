@@ -13,7 +13,7 @@ function navbar() {
                 <Navbar>
                     <NavbarList>
                     <NavbarListItem><NavbarListItemLink to='/'><LinkIcon className='material-icons'>home</LinkIcon></NavbarListItemLink></NavbarListItem> 
-                    <NavbarListItem><NavbarListItemLink to='/search'><LinkIcon className='material-icons'>search</LinkIcon></NavbarListItemLink></NavbarListItem> 
+                    <NavbarListItem><NavbarListItemLink to='/search/true'><LinkIcon className='material-icons'>search</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     <NavbarListItem><NavbarListItemLink to='/camera'><LinkIcon className='material-icons'>photo_camera</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     <NavbarListItem><NavbarListItemLink to='/chats'><LinkIcon className='material-icons'>chat_bubble</LinkIcon></NavbarListItemLink></NavbarListItem> 
                     <NavbarListItem><NavbarListItemLink to={`/profile/${globalStore.currentUserId}`}><LinkIcon className='material-icons'>account_circle</LinkIcon></NavbarListItemLink></NavbarListItem> 
