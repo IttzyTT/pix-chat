@@ -104,14 +104,14 @@ class Camera extends Component {
             <video width="100%" height="100%" className="video-player" autoPlay={true} ref={this.videoEle}></video>
             <div className="camera-btn-container">
               <label className="btn gallery-btn" htmlFor="fileUpload">
-                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                <i className="fa fa-picture-o" aria-hidden="true"></i>
               </label>
               <input id="fileUpload" type="file" accept="image/*" onChange={this.handleChange} style={{ display: 'none' }}></input>
               <button className="btn capture-btn" onClick={this.takePicture}>
-                <i class="fa fa-camera" aria-hidden="true"></i>
+                <i className="fa fa-camera" aria-hidden="true"></i>
               </button>
               <button className="btn rotate-btn" onClick={this.rotateCamera}>
-                <i class="fa fa-refresh" aria-hidden="true"></i>
+                <i className="fa fa-refresh" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -124,13 +124,13 @@ class Camera extends Component {
 
             <div className="btn-container">
               <button className="btn back-btn" onClick={this.backToCam}>
-                <i class="fa fa-camera" aria-hidden="true"></i>
+                <i className="fa fa-camera" aria-hidden="true"></i>
               </button>
               <button className="btn post-btn">
-                <i class="fa fa-plus-circle"></i>
+                <i className="fa fa-plus-circle"></i>
               </button>
               <a href={this.state.imageURL} download="pixchat.png" className="btn download-btn">
-                <i class="fa fa-download" aria-hidden="true"></i>
+                <i className="fa fa-download" aria-hidden="true"></i>
               </a>
             </div>
           </div>
