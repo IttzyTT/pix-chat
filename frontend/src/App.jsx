@@ -3,7 +3,6 @@ import './normalize.css';
 import Topbar from './components/Topbar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Search from './pages/Search';
 import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
 import PostChat from './pages/PostChat';
