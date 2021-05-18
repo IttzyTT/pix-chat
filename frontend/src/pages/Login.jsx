@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
 
@@ -9,6 +9,13 @@ export default function Login() {
         name: '',
         password: ''
     });
+
+    useEffect(() => {
+        let currentUserId = localStorage.getItem('pixChatCurrentUserId');
+        currentUserId ?
+        globalStore.currentUserId = currentUserId :
+        globalStore.currentUserId = '';
+    },[]);
 
     const changeHandler = (e) => {
         setLoginCred({
@@ -24,8 +31,9 @@ export default function Login() {
             let loginResponse = await res.json();
 
             if (loginResponse.isMatch) {
-                loginResponse['_doc'].isLoggedIn = true;
+                loginResponse['_doc'].isLoggedIn = true; //kanske skippa isLoggedIn helt?
                 globalStore.currentUserId = loginResponse['_doc']['_id'];
+                localStorage.setItem('pixChatCurrentUserId', loginResponse['_doc']['_id']);
             } else {
                 alert('darn it, wrong password or no account') ;
             }

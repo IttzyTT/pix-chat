@@ -48,6 +48,8 @@ function App() {
       .then(data => globalStore.allUsers = data);
   }, [])
 
+  //=============================================
+  //ta bort om vi skippar isLoggedIn i databasen
   useEffect(async () => {
       if (globalStore.currentUserId) {
         let currentUserResponse = await fetch(`${globalStore.apiUrl}/users/${globalStore.currentUserId}`);
@@ -65,6 +67,7 @@ function App() {
         })
       }
   }, [globalStore.currentUserId])
+  //=============================================
 
   const loginCheck = (component) => (
     globalStore.currentUserId ? component : Login
