@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
+import ChatFunction from '../components/ChatFunction';
 
 const Content = styled.div`
     height: 150px;
@@ -42,36 +43,6 @@ const Caption = styled.h1`
 
 const MessageSection = styled.section`
 
-`
-
-const InputSection = styled.section`
-    background-color: #F3F3F3;
-    position: absolute;
-    width: 100%;
-    height: 40px;
-    bottom: 64px;
-    padding-left: 20px;
-    display: flex;
-    align-items: center;
-`
-
-const InputConCon = styled.div`
-    width: 80%;
-    height: 70%;
-    background-color: #EAE8E8;
-    position: relative;
-`
-
-const InputCon = styled.div`
-    width: 80%;
-    margin: 0 auto;
-    position: relative;
-`
-
-const Input = styled.input`
-    padding: 40px;
-    height: 70%;
-    color: black;
 `
 
 const ChatCon = styled.div`
@@ -118,6 +89,7 @@ function PostChat({ match }) {
         }
     }
 
+
     // const getUsers = async () => {
     //     try {
     //         const response = await fetch(`http://localhost:4000/users`);
@@ -158,13 +130,9 @@ function PostChat({ match }) {
                 })} */}
             </MessageSection>
 
-            <InputSection>
-                <InputConCon>
-                    <InputCon>
-                        <Input type="text" placeholder='write a message!' />
-                    </InputCon>
-                </InputConCon>
-            </InputSection>
+            <div>
+                <ChatFunction />
+            </div>
         </Wrapper>
     )
 }
