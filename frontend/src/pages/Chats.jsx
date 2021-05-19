@@ -1,7 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
-import fetchAllPosts from '../reusable-functions/fetchAllPosts';
-import fetchAllUsers from '../reusable-functions/fetchAllUsers';
 
 
 const Wrapper = styled.div`
@@ -19,11 +17,18 @@ color: #5590e7;
 
 
 function Chats() {
+    const [user, setUser] = useState ({})
+    const [messages, setMessage] = useState ([])
 
-    const getAllPosts = async () => {
+    useEffect(() => {
+       fetchAllUsers
+       fetchAllPosts
+    }, [])
+
+    const fetchAllPosts = async () => {
        
         try {
-                const response = await fetch(`http://localhost:4000/postsmessages/`);
+                const response = await fetch(`http://localhost:4000/postsMessages`);
                 const data = await response.json(); 
                 console.log(data)
             } catch (error) {
@@ -31,18 +36,26 @@ function Chats() {
         }
     }
 
+    const fetchAllUsers = async () => {
+
+        try {
+            const response = await fetch(`http://localhost:4000/users`);
+            const data = await response.json(); 
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Wrapper>
             <Title>Chats</Title>
-            
-        <Date>{createdAt}</Date>
-        <Caption>{post.caption}</Caption>
-
-        <MessageList>
-            <p> Her comes a message list!</p>
-        </MessageList>
-
+                <Date>{createdAt}</Date>
+                    <Caption>{post.caption}</Caption>
+                    
+                    <MessageList>
+                        <p> Her comes a message list!</p>
+                    </MessageList>
         </Wrapper>
         
         
