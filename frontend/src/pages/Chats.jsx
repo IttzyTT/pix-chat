@@ -20,15 +20,15 @@ color: #5590e7;
 
 function Chats() {
 
-    const getAllPosts = async () = {
+    const getAllPosts = async () => {
        
-    }
-    try {
-            const response = await fetch(`http://localhost:4000/postsmessages/`);
-            const data = await response.json(); 
-            console.log(data)
-        } catch (error) {
-            console.log(error)
+        try {
+                const response = await fetch(`http://localhost:4000/postsmessages/`);
+                const data = await response.json(); 
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+        }
     }
 
 
