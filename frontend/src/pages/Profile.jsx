@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
-// import fetchAllPosts from '../reusable-functions/fetchAllPosts';
-// import fetchAllUsers from '../reusable-functions/fetchAllUsers';
 import { useNamedContext } from 'react-easier';
 import { useLocation, Link } from "react-router-dom";
+import { useParams } from 'react-router';
 import styled from 'styled-components';
-// import ProfilePostInfo from '../components/ProfilePostInfo';
-// import ProfileUserInfo from '../components/ProfileUserInfo';
 
 function Profile({ match }) {
     const [user, setUser] = useState({});
     const [posts, setPosts] = useState([]);
     const loc = useLocation();
     let globalStore = useNamedContext('global');
-
+    
     useEffect(() => {
         fetchUser();
         fetchPosts();
     }, []);
+
+    const filterPosts = (posts) => (
+        posts.filter((post) => (
+            post.createdById === match.params.id
+        ))
+    )
 
     const fetchUser = async () => {
         try {
@@ -30,22 +33,18 @@ function Profile({ match }) {
 
     const fetchPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/posts/${match.params.id}`);
+            const response = await fetch(`http://localhost:4000/posts/`);
             const data = await response.json();
-            setPosts(data)
+            setPosts(data);
         } catch(error) {
             console.log(error)
         }
     }
 
+
+
     return (
         <div>
-            {/* {globalStore.allUsers.map( user => (
-                <ProfileUserInfo 
-                    key={ user['_id'] }
-                    user={ user }
-                />
-            ))} */}
             <Con>
                 <Icon className='material-icons'>account_circle</Icon>
                 <InfoEdit>
@@ -59,23 +58,19 @@ function Profile({ match }) {
             <InfoNumber>
                 <Posts>
                     <p>Posts</p>
-                    <p>{posts.length}</p>
+                    <p>{filterPosts(posts).length}</p>
                 </Posts>
                 <Favorites>
                     <p>Favorites</p>
-                    <p>4</p>
+                    <p>{posts.filter((post) => (
+                        post.likedBy.includes(match.params.id)
+                    )).length}</p>
                 </Favorites>
             </InfoNumber>
             <Pictures>
-            <Post key={posts['_id']} src={posts.imageUrl} alt='' />
-                {/* {posts.map( post => {
-                    return <Post key={post['_id']} src={post.imageUrl} alt='' />
-                    
-                    // <ProfilePostInfo 
-                    //     key={ posts['_id']  }
-                    //     posts={ posts }
-                    // />
-                })} */}
+                {filterPosts(posts).map((post) => (
+                    <Post key={post['_id']} src={post.imageUrl} alt='' />
+                ))}
             </Pictures>
         </div>
     )
