@@ -48,8 +48,8 @@ class Camera extends Component {
     // Draw the current frame from the video on the canvas.
     ctx.drawImage(this.videoEle.current, 0, 0, width, height);
 
-    // Get an image dataURL from the canvas.
-    const imageDataURL = this.canvasEle.current.toDataURL('image/png');
+    // Get an image dataURL from the canvas and set quality to 50%
+    const imageDataURL = this.canvasEle.current.toDataURL('image/png', 0.5);
     this.stopCam();
 
     this.setState({
