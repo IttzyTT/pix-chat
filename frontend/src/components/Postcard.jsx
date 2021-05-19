@@ -57,11 +57,11 @@ function Postcard({ post }) {
     useEffect(() => {
         setLikeToggle(isLiked(post, globalStore.currentUserId));
     }, [post])
-
+    
     return (
         <Section>
             <Div>
-                <Link to={`/profile/${post['_id']}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
+                <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
                 <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
             </Div>
             <TextTags>

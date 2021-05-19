@@ -62,6 +62,7 @@ router.get("/login/:name/:password", async (request, response) => {
 router.get("/:userId", async (request, response) => {
     try {
         const user = await User.findById(request.params.userId);
+        console.log(user);
         response.send(user);  
     } catch(error) {
         response.send({message: error});
