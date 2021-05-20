@@ -7,25 +7,32 @@ import styled from 'styled-components';
 function Profile({ match }) {
     const [user, setUser] = useState({});
     const [posts, setPosts] = useState([]);
+    //const [toggle, setToggle] = useState([]);
     const loc = useLocation();
     let globalStore = useNamedContext('global');
     
     useEffect(() => {
         fetchUser();
         fetchPosts();
-    }, []);
+    }, [match.params.id]);
 
-    const filterPosts = (posts) => (
-        posts.filter((post) => (
+    const filterPosts = (posts) => {
+        return ( posts.filter((post) => (
             post.createdById === match.params.id
-        ))
-    )
+        )))
+    };
+
+    // const favoriteToggle = (toggle) => {
+    //      toggle.filter((togg) => (
+    //         posy.likedBy === match.params.id
+    //     ))
+    // }
 
     const fetchUser = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/users/${match.params.id}`);
+            const response = await fetch(`${globalStore.apiUrl}/users/${match.params.id}`);
             const data = await response.json();
-            setUser(data)
+            setUser(data);
         } catch(error) {
             console.log(error)
         }
@@ -33,14 +40,13 @@ function Profile({ match }) {
 
     const fetchPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/posts/`);
+            const response = await fetch(`${globalStore.apiUrl}/posts/`);
             const data = await response.json();
             setPosts(data);
         } catch(error) {
             console.log(error)
         }
     }
-
 
 
     return (
@@ -56,6 +62,7 @@ function Profile({ match }) {
             </Con>
 
             <InfoNumber>
+          
                 <Posts>
                     <p>Posts</p>
                     <p>{filterPosts(posts).length}</p>
@@ -66,6 +73,7 @@ function Profile({ match }) {
                         post.likedBy.includes(match.params.id)
                     )).length}</p>
                 </Favorites>
+           
             </InfoNumber>
             <Pictures>
                 {filterPosts(posts).map((post) => (
