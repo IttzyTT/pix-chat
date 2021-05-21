@@ -94,7 +94,7 @@ export default function Login() {
                         <br />
                         <br />
                         <button type="submit" id="btn-sign-in" className="btn-round">Sign In</button>
-                        <p>Forgot password?</p>
+                        {/* <p>Forgot password?</p> */}
                     </form>
                 </FormContainer>
                 <CreateAccountContainer>
