@@ -7,7 +7,7 @@ import styled from 'styled-components';
 function Profile({ match }) {
     const [user, setUser] = useState({});
     const [posts, setPosts] = useState([]);
-    //const [toggle, setToggle] = useState([]);
+    const [toggle, setToggle] = useState(false);
     const loc = useLocation();
     let globalStore = useNamedContext('global');
     
@@ -21,7 +21,19 @@ function Profile({ match }) {
             post.createdById === match.params.id
         )))
     };
+    
+    // switch (toggle) {
+    //     case showHide1:
+    //         setToggle({ showHide1: !showHide1})
+    //         break;
+    //     case showHide2:
+    //         setToggle({ showHide2: !showHide2})
+    //         break;
+    //     default:
+    //         break;
+    // }
 
+    
     // const favoriteToggle = (toggle) => {
     //      toggle.filter((togg) => (
     //         posy.likedBy === match.params.id
@@ -55,19 +67,19 @@ function Profile({ match }) {
                 <Icon className='material-icons'>account_circle</Icon>
                 <InfoEdit>
                     <Name>{ user.name }</Name>
-                    {loc.pathname !== `/profile/${globalStore.currentUserId}` ? '' : (
+                    {/* {loc.pathname !== `/profile/${globalStore.currentUserId}` ? '' : (
                         <Link to={`/editProfile/${user['_id']}`}><Btn>Edit Profile</Btn></Link>
-                    )}
+                    )} */}
                 </InfoEdit>
             </Con>
 
             <InfoNumber>
           
-                <Posts>
+                <Posts onClick={() => setToggle(false)}>
                     <p>Posts</p>
                     <p>{filterPosts(posts).length}</p>
                 </Posts>
-                <Favorites>
+                <Favorites onClick={() => setToggle(true)}>
                     <p>Favorites</p>
                     <p>{posts.filter((post) => (
                         post.likedBy.includes(match.params.id)
@@ -76,9 +88,15 @@ function Profile({ match }) {
            
             </InfoNumber>
             <Pictures>
-                {filterPosts(posts).map((post) => (
+            {toggle ? (
+                    posts.map((post) => (
+                        post.likedBy.includes(match.params.id) ? 
+                        <Post key={post['_id']} src={post.imageUrl} alt='' /> : ''
+                    ))
+                ) : (
+                filterPosts(posts).map((post) => (
                     <Post key={post['_id']} src={post.imageUrl} alt='' />
-                ))}
+                )))}
             </Pictures>
         </div>
     )

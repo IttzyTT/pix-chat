@@ -18,7 +18,6 @@ function Home() {
         fetchAllPosts(globalStore.apiUrl)
             .then(data => globalStore.allPosts = data);
     }, []);
-    
     return (
         <ContentWrapper>
             { showSearch ? <Searchbar allPosts={globalStore.allPosts} /> 
