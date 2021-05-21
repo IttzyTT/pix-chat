@@ -84,7 +84,7 @@ function Postcard({ post }) {
                                     <i className='material-icons'>favorite</i>
                             }
                         </div>
-                        <i className='material-icons'>chat_bubble_outline</i>
+                        {/* <i className='material-icons'>chat_bubble_outline</i> */}
                     </IconCon>
                 </TitleCon>
                 <Date>{createdAt}</Date>
@@ -123,7 +123,8 @@ const TitleCon = styled.div`
 `
 const IconCon = styled.div`
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: flex-end;
     width: 55px;
 `
 const TextTags = styled.div`

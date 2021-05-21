@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components';
 import { useNamedContext } from 'react-easier';
 import Postcard from '../components/Postcard';
@@ -17,7 +17,8 @@ function Home() {
     useEffect(() => {
         fetchAllPosts(globalStore.apiUrl)
             .then(data => globalStore.allPosts = data);
-    }, []);
+    }, [showSearch]);
+        
     return (
         <ContentWrapper>
             { showSearch ? <Searchbar allPosts={globalStore.allPosts} /> 
