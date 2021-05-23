@@ -17,16 +17,16 @@ const postSchema = mongoose.Schema({
     ]
 }, { timestamps: true });
 
-postSchema.pre('save', function (next) {
-    let [type, base64] = this.imageUrl.split(',');
-    let extension = type.split('/')[1].split(';')[0];
-    let buffer = Buffer.from(base64, 'base64');
-    let fileName = `${this.createdById}_${Date.now()}.${extension}`;
-    let filePath = path.join(
-      __dirname, '../', '../', 'uploads', fileName
-    );
-    this.imageUrl = fileName;
-    fs.writeFile(filePath, buffer, next);
-});
+// postSchema.pre('save', function (next) {
+//     let [type, base64] = this.imageUrl.split(',');
+//     let extension = type.split('/')[1].split(';')[0];
+//     let buffer = Buffer.from(base64, 'base64');
+//     let fileName = `${this.createdById}_${Date.now()}.${extension}`;
+//     let filePath = path.join(
+//       __dirname, '../', '../', 'uploads', fileName
+//     );
+//     this.imageUrl = fileName;
+//     fs.writeFile(filePath, buffer, next);
+// });
 
 module.exports = mongoose.model('Post', postSchema, 'posts'); //tredje är vilken collection det gäller

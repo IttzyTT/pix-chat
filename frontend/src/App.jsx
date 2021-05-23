@@ -11,7 +11,6 @@ import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,18 +20,21 @@ import { withContext, useNamedContext } from 'react-easier';
 import fetchAllUsers from './reusable-functions/fetchAllUsers';
 import Login from './pages/Login';
 
+const apiUrl = 'http://localhost:4000';
+
 //global store/variables
 export default withContext(
   'global',
   {
-    apiUrl: 'http://localhost:4000',
+    apiUrl: apiUrl,
     allUsers: [],
-    allPosts: [],
     currentUserId: '' //609d18eea634629d77501077
   },
   App
 );
 
+//Opening up SSE
+const sse = new EventSource(`${apiUrl}/sse`);
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -42,31 +44,29 @@ const Wrapper = styled.div`
 function App() {
   const globalStore = useNamedContext('global');
   
-  useEffect(() => {
-    fetchAllUsers(globalStore.apiUrl)
-      .then(data => globalStore.allUsers = data);
+  useEffect(async () => {
+    let allUsers = await fetchAllUsers(globalStore.apiUrl);
+    globalStore.allUsers = await allUsers;
   }, [])
-
-  const loginCheck = (component) => (
-    globalStore.currentUserId ? component : Login
-  )
 
   return (
     <Router>
-      <Wrapper className="App">
-        <Topbar />
-        <Switch>
-          <Route path="/" exact component={loginCheck(Home)} />
-          <Route path="/search/:showSearch" component={loginCheck(Home)} />
-          <Route path="/camera" component={loginCheck(CapturePage)} />
-          <Route path="/chats" component={loginCheck(Chats)} />
-          <Route path="/chat/:id" component={loginCheck(PostChat)} />
-          <Route path="/profile/:id" component={loginCheck(Profile)} />
-          <Route path="/settings" component={loginCheck(Settings)} />
-          <Route path="/editProfile/:id" component={loginCheck(EditProfile)} />
-        </Switch>
-        <Navbar />
-      </Wrapper>
+      {globalStore.currentUserId ? 
+        <Wrapper className="App">
+          <Topbar />
+          <Switch>
+            <Route path="/" exact             render={props => <Home {...props} sse={sse} />} />
+            <Route path="/search/:showSearch" render={props => <Home {...props} sse={sse} />} />
+            <Route path="/camera"             render={props => <CapturePage {...props} sse={sse} />} />
+            <Route path="/chats"              render={props => <Chats {...props} sse={sse} />} />
+            <Route path="/chat/:id"           render={props => <PostChat {...props} sse={sse} />} />
+            <Route path="/profile/:id"        render={props => <Profile {...props} sse={sse} />} />
+            <Route path="/settings"           render={props => <Settings {...props} sse={sse} />} />
+            <Route path="/editProfile/:id"    render={props => <EditProfile {...props} sse={sse} />} />
+          </Switch>
+          <Navbar />
+        </Wrapper>
+      : <Login />}
     </Router>
   );
 }

@@ -14,7 +14,7 @@ const reqBody = (req) => ({
 //get all posts
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find();
+        const posts = await Post.find().sort({createdAt:-1});
         res.send(posts);
     } catch (error) {
         res.send({ message: error });

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const sse = require('./SSE-handler');
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +16,9 @@ app.use("/posts", postsRouter);
 
 const postMessagesRouter = require("./routes/postMessages");
 app.use("/postmessages", postMessagesRouter);
+
+//sse
+sse.sse(app);
 
 // Connect to Mongo DB Atlas
 mongoose.connect(
