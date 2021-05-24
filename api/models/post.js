@@ -24,7 +24,7 @@ postSchema.pre('save', function (next) {
     let buffer = Buffer.from(base64, 'base64');
     let fileName = `${this.createdById}_${Date.now()}.${extension}`;
     let filePath = path.join(
-      __dirname, '../', '../', 'uploads', fileName
+      __dirname, '../', '../', 'frontend', 'uploads', fileName
     );
     this.imageUrl = fileName;
     fs.writeFile(filePath, buffer, next);

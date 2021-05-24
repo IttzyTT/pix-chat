@@ -4,7 +4,7 @@ import Camera from '../components/Camera';
 function CapturePage({globalStore}) {
   return (
     <div>
-      <Camera globalStore={globalStore} />
+      <Camera globalStore={globalStore} history={history} />
     </div>
   );
 }

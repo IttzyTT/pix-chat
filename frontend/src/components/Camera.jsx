@@ -284,6 +284,14 @@ const CameraWrapper = styled.div`
     border: none;
   }
 
+  .post-btn {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
   .video-player {
     display: block;
   }

@@ -57,17 +57,26 @@ function Postcard({ post }) {
     useEffect(() => {
         setLikeToggle(isLiked(post, globalStore.currentUserId));
     }, [post])
+
+    //Function to show both http-pictures and uploaded ones
+    const typeOfPicture = (url) => (
+        url.substring(0, 4) === 'http' ?
+        url :
+        `/uploads/${url}`
+    )
     
     return (
         <Section>
             <Div>
                 <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
+                { post.location.show ?
                 <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
+                : null }
             </Div>
             <TextTags>
                 <Link to={`/chat/${post['_id']}`}>
                     <ImgCon>
-                        <Image src={post.imageUrl} alt={post.caption} />
+                        <Image src={typeOfPicture(post.imageUrl)} alt={post.caption} />
                     </ImgCon>
                 </Link>
                 <TitleCon>
@@ -89,11 +98,14 @@ function Postcard({ post }) {
                 </TitleCon>
                 <Date>{createdAt}</Date>
                 <Tags>
-                    {post.tags.map((tag, index) => (
-                        <Tag key={index}>
-                            <TagText>{tag}</TagText>
-                        </Tag>
-                    ))}
+                    { post.tags[0].length ?
+                        post.tags.map((tag, index) => (
+                            <Tag key={index}>
+                                <TagText>{tag}</TagText>
+                            </Tag>
+                        ))
+                        : null
+                    }
                 </Tags>
             </TextTags>
         </Section>
@@ -108,10 +120,14 @@ const Div = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    margin: 0 auto;
     margin-top: 20px;
+    margin-bottom: 0.4rem;
     color: #F3F3F3;
     width: 95%;
-    margin: 0 auto;
+    p {
+        margin: 0
+    }
 `
 const TitleCon = styled.div`
     display: flex;
