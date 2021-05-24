@@ -1,6 +1,84 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 import Postcard from './Postcard';
+
+function Searchbar({ allPosts }) {
+    const [searchInput, setSearchInput] = useState('');
+    const [dropdownValue, setDropdownValue] = useState('tag');
+
+    const params = useParams()
+
+    useEffect(() => {
+        //For when somebody clicks a tag or a city
+        if (!params.query) {
+            return
+        } else if (params.query.startsWith('tag=')) {
+            setDropdownValue('tag')
+            setSearchInput(params.query.substring(4));
+        } else if (params.query.startsWith('city=')) {
+            setDropdownValue('city')
+            setSearchInput(params.query.substring(5));
+        }
+    },[])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    }
+
+    const handleChange = (e) => {
+        e.preventDefault();
+
+        if (e.target.nodeName === "INPUT") {
+            setSearchInput(e.target.value);
+        } else if (e.target.nodeName === "SELECT") {
+            setDropdownValue(e.target.value);
+        }
+    }
+
+    const filterSearch = (post, dropdownValue) => {
+        if (dropdownValue === 'tag') {
+            return post.tags;
+        } else if (dropdownValue === 'city') {
+            return post.location.city;
+        }
+    }
+    
+    return (
+        <SearchReturnDiv>
+            <FormWrapper>
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <input
+                            value={searchInput}
+                            onChange={handleChange}
+                            type="text"
+                            placeholder="Search..."
+                            name="searchstring"
+                            id="searchstring"
+                        />
+                        <select name="typeOf" id="typeOf" value={dropdownValue} onChange={handleChange}>
+                            <option value="tag">Tag</option>
+                            <option value="city">City</option>
+                        </select>
+                    </div>
+                </form>
+            </FormWrapper>
+            {allPosts
+            .filter(post => (
+                !searchInput ?
+                post :
+                filterSearch(post, dropdownValue).includes(searchInput)
+            ))
+            .map(post => (
+                <Postcard
+                    key={ post['_id'] }
+                    post={ post }
+                />
+            ))}
+        </SearchReturnDiv>
+    )
+}
 
 const SearchReturnDiv = styled.div`
     display: flex;
@@ -43,79 +121,4 @@ const FormWrapper = styled.div`
     }
 `;
 
-export class Searchbar extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-            searchInput: '',
-            dropdownValue: 'tag'
-        }
-        
-    }
-
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-    }
-
-    handleChange = (e) => {
-        e.preventDefault();
-
-        if (e.target.nodeName === "INPUT") {
-            this.setState({
-                searchInput: e.target.value
-            })
-        
-        } else if (e.target.nodeName === "SELECT") {
-            this.setState({
-                dropdownValue: e.target.value
-            })
-        }
-    }
-
-    filterSearch = (post, dropdownValue) => {
-        if (dropdownValue === 'tag') {
-            return post.tags;
-        } else if (dropdownValue === 'city') {
-            return post.location.city;
-        }
-    }
-    
-    render() {
-        return (
-            <SearchReturnDiv>
-                <FormWrapper>
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <input
-                                value={this.state.searchInput}
-                                onChange={this.handleChange}
-                                type="text"
-                                placeholder="Search..."
-                                name="searchstring"
-                                id="searchstring"
-                            />
-                            <select name="typeOf" id="typeOf" value={this.state.dropdownValue} onChange={this.handleChange}>
-                                <option value="tag">Tag</option>
-                                <option value="city">City</option>
-                            </select>
-                        </div>
-                    </form>
-                </FormWrapper>
-                {this.props.allPosts
-                .filter(post => (
-                    !this.state.searchInput ?
-                    post :
-                    this.filterSearch(post, this.state.dropdownValue).includes(this.state.searchInput)
-                ))
-                .map(post => (
-                    <Postcard
-                        key={ post['_id'] }
-                        post={ post }
-                    />
-                ))}
-            </SearchReturnDiv>
-        )
-    }
-}
+export default Searchbar;

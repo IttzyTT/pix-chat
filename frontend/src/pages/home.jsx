@@ -4,7 +4,7 @@ import { useNamedContext } from 'react-easier';
 import Postcard from '../components/Postcard';
 import fetchAllPosts from '../reusable-functions/fetchAllPosts';
 import { useParams } from 'react-router';
-import { Searchbar } from '../components/Searchbar';
+import Searchbar from '../components/Searchbar';
 
 const ContentWrapper = styled.div`
     padding: 70px 0;
