@@ -43,6 +43,7 @@ function sse(app) {
         connection.hasMessagesUntil = Date.now();
         sendSSE(connection.res, 'postMessages', messages);
       }
+
     // Calculate which photos to send to a connection/user
     // (all the ones he/she doesn't have for now)
     async function sendPosts(connection) {

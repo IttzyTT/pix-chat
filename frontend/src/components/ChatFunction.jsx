@@ -79,7 +79,7 @@ function ChatFunction({ post }) {
         e.preventDefault();
 
         try {
-            await fetch('api/message', {
+            await fetch(`${globalStore.apiUrl}/postMessages`, {
                 method: 'POST', // GET, POST, PATCH, DELETE
                 headers: {
                     'Content-Type': 'application/json'

@@ -41,8 +41,6 @@ const Caption = styled.h1`
     font-size: 20px;
 `
 
-
-
 const MessageSection = styled.section`
 
 `
@@ -70,11 +68,16 @@ function PostChat({ match, sse}) {
         // getUsers();
     }, []);
 
+    const startSSE = () => {
+        sse.addEventListener('postMessages', message => {
+            let data = JSON.parse(message.data)
+            console.log('[postMessages]', data);
+        
+          })
+    }
+
     useEffect(() => {
-        sse.addEventListener('postMessages', e => {
-            setMessages(prevArray => [...JSON.parse(e.data), ...prevArray]);
-            
-        });
+        startSSE();
     }, []);
     console.log(messages)
     const getSinglePost = async () => {
