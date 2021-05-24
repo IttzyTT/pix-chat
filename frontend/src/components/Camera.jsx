@@ -1,14 +1,20 @@
 import React, { Component, useRef } from 'react';
 import styled from 'styled-components';
+import { useNamedContext } from 'react-easier';
 
 class Camera extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageURL: '',
       facingMode: 'user',
-      geo: null,
+      imageURL: '',
+      geo: {
+        city: '',
+        country: '',
+      },
       geoCheckbox: true,
+      caption: '',
+      tags: ''
     };
   }
 
@@ -44,6 +50,12 @@ class Camera extends Component {
       });
     } catch (error) {
       console.log(error);
+      this.setState({
+        geo: {
+          city: '',
+          country: ''
+        },
+      });
     }
   };
 
@@ -62,6 +74,19 @@ class Camera extends Component {
     }
   };
 
+  // helper function to convert canvas image to file
+  // dataURItoBlob = (dataURI) => {
+  //   let byteString = atob(dataURI.split(',')[1]);
+  //   let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+  //   let ab = new ArrayBuffer(byteString.length);
+  //   let ia = new Uint8Array(ab);
+  //   for (let i = 0; i < byteString.length; i++) {
+  //     ia[i] = byteString.charCodeAt(i);
+  //   }
+  //   let blob = new Blob([ab], {type: mimeString});
+  //   return blob;
+  // }
+
   // Take picture
   takePicture = async () => {
     // Get the exact size of the video element.
@@ -78,8 +103,8 @@ class Camera extends Component {
     // Draw the current frame from the video on the canvas.
     ctx.drawImage(this.videoEle.current, 0, 0, width, height);
 
-    // Get an image dataURL from the canvas and set quality to 50%
-    const imageDataURL = this.canvasEle.current.toDataURL('image/png', 0.5);
+    // Get an image dataURL from the canvas 
+    const imageDataURL = this.canvasEle.current.toDataURL('image/jpeg');
     this.stopCam();
 
     this.setState({
@@ -123,6 +148,15 @@ class Camera extends Component {
     });
   };
 
+  handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({
+      ...this.state,
+      [name]: value
+    })
+  }
+
   // Toogle Camera
   rotateCamera = () => {
     const camera = this.state.facingMode;
@@ -133,6 +167,35 @@ class Camera extends Component {
       this.setState({ facingMode: 'user' });
     }
   };
+
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    const postBody = {
+      'caption': this.state.caption,
+      'imageUrl': this.state.imageURL,
+      'tags': this.state.tags.split(' '),
+      'location': {
+        'city': this.state.geoCheckbox ? this.state.geo.city : '',
+        'country': this.state.geoCheckbox ? this.state.geo.country : '',
+        'show': this.state.geoCheckbox
+      },
+      'createdById': localStorage.getItem('pixChatCurrentUserId'),
+      'likedBy': []
+    }
+    try {
+      await fetch(`${this.props.globalStore.apiUrl}/posts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postBody)
+      })
+      console.log('post request sent');
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   render() {
     return (
@@ -158,22 +221,22 @@ class Camera extends Component {
           <canvas ref={this.canvasEle} style={{ display: 'none' }}></canvas>
           {this.state.imageURL !== '' && (
             <div className="preview">
-              <form name="photoUpload">
+              <form name="photoUpload" onSubmit={this.handleSubmit}>
                 <img className="preview-img" src={this.state.imageURL} ref={this.imageEle} />
-                <input type="text" placeholder="caption" />
-                <input type="text" placeholder="tags" />
+                <input type="text" name={'caption'} value={this.state.caption} onChange={this.handleChange} placeholder="caption" />
+                <input type="text" name={'tags'} value={this.state.tags} onChange={this.handleChange} placeholder="tag1 tag2 tag3" />
                 <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
                 <p>Location: {!this.state.geo ? '...loading' : `${this.state.geo.city}, ${this.state.geo.country}`}</p>
                 <p>Include location in the post?: {this.state.geoCheckbox.toString()}</p>
+                <button type={'submit'} className="btn post-btn">
+                  <i className="fa fa-plus-circle"></i>
+                </button>
               </form>
               <div className="btn-container">
                 <button className="btn back-btn" onClick={this.backToCam}>
                   <i className="fa fa-camera" aria-hidden="true"></i>
                 </button>
-                <button className="btn post-btn">
-                  <i className="fa fa-plus-circle"></i>
-                </button>
-                <a href={this.state.imageURL} download="pixchat.png" className="btn download-btn">
+                <a href={this.state.imageURL} download="pixchat.jpeg" className="btn download-btn">
                   <i className="fa fa-download" aria-hidden="true"></i>
                 </a>
               </div>
@@ -221,6 +284,14 @@ const CameraWrapper = styled.div`
     border: none;
   }
 
+  .post-btn {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
   .video-player {
     display: block;
   }
@@ -233,6 +304,7 @@ const CameraWrapper = styled.div`
     left: 0;
     width: 100%;
   }
+
 
   input[type='checkbox']:not(:checked),
   input[type='checkbox']:checked {

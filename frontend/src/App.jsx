@@ -60,7 +60,7 @@ function App() {
           <Switch>
             <Route path="/" exact             render={props => <Home {...props} sse={sse} />} />
             <Route path="/search/:showSearch" render={props => <Home {...props} sse={sse} />} />
-            <Route path="/camera"             render={props => <CapturePage {...props} sse={sse} />} />
+            <Route path="/camera"             render={props => <CapturePage {...props} sse={sse} globalStore={globalStore} />} />
             <Route path="/chats"              render={props => <Chats {...props} sse={sse} />} />
             <Route path="/chat/:id"           render={props => <PostChat {...props} sse={sse} />} />
             <Route path="/profile/:id"        render={props => <Profile {...props} sse={sse} />} />

@@ -79,8 +79,10 @@ const Icon = styled.i`
     color: white;
     font-size: 100px;
     margin-bottom: 10px;
+    @media screen and (min-width: 768px) {
+        font-size: 160px;
+    }
 `
-
 const ChangeInfoText = styled.input`
     color: white;
     margin: 0 0 40px 40px;
@@ -102,6 +104,15 @@ const Con = styled.div`
     flex-direction: column;
     width: 80%;
     margin: 0 auto;
+    @media screen and (min-width: 768px) {
+        width: 60%
+    }
+    @media screen and (min-width: 992px) {
+        width: 50%
+    }
+    @media screen and (min-width: 1280px) {
+        width: 40%
+    }
 `
 const Con2 = styled.div`
     display: flex;
@@ -112,7 +123,7 @@ const Con3 = styled.div`
     display: flex;
     justify-content: flex-end;
     flex-direction: row;
-    margin-top 20px;
+    margin-top: 20px;
 `
 const SaveBtn = styled.button`
     background-color: #434343; 
@@ -121,4 +132,5 @@ const SaveBtn = styled.button`
     height: 30px;
     border: 1px solid white;
     border-radius: 4px;
+    cursor: pointer;
 `
