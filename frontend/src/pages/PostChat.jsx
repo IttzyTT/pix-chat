@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import ChatFunction from '../components/ChatFunction';
+import { useNamedContext } from 'react-easier';
 
 const Content = styled.div`
     height: 150px;
@@ -41,6 +42,7 @@ const Caption = styled.h1`
 `
 
 
+
 const MessageSection = styled.section`
 
 `
@@ -53,20 +55,28 @@ const Messages = styled.p`
     color: #F3F3F3;
 `
 
-function PostChat({ match }) {
+function PostChat({ match, sse}) {
 
     const [post, setPost] = useState([]);
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
+    let globalStore = useNamedContext('global');
 
     useEffect(() => {
         getSinglePost();
-        getMessages();
+        // getMessages();
         // getUsers();
-    }, [])
+    }, []);
 
+    useEffect(() => {
+        sse.addEventListener('postMessages', e => {
+            setMessages(prevArray => [...JSON.parse(e.data), ...prevArray]);
+            
+        });
+    }, []);
+    console.log(messages)
     const getSinglePost = async () => {
         try {
             const response = await fetch(`http://localhost:4000/posts/${match.params.id}`);
@@ -78,16 +88,16 @@ function PostChat({ match }) {
         }
     }
 
-    const getMessages = async () => {
-        try {
-            const response = await fetch(`http://localhost:4000/postMessages`);
-            const data = await response.json();
-            console.log(data);
-            setMessages(data);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const getMessages = async () => {
+    //     try {
+    //         const response = await fetch(`http://localhost:4000/postMessages`);
+    //         const data = await response.json();
+    //         console.log(data);
+    //         setMessages(data);
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
 
     // const getUsers = async () => {
@@ -131,7 +141,7 @@ function PostChat({ match }) {
             </MessageSection>
 
             <div>
-                <ChatFunction />
+                <ChatFunction post={post} />
             </div>
         </Wrapper>
     )

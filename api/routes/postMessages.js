@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const PostMessage = require("../models/postMessage")
+const PostMessage = require("../models/postMessage");
 
 const reqBody = (req) => ({
     content:        req.body.content,

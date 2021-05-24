@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNamedContext } from 'react-easier';
 
 const Wrapper = styled.div`
     background-color: #FFFFFF;
@@ -8,9 +9,9 @@ const Wrapper = styled.div`
     justify-content: space-around;
     color: #F3F3F3;
     height: 50px;
-    position: absolute;
-    width: 100%;
-    bottom: 63px;
+    // position: absolute;
+    // width: 100%;
+    // bottom: 63px;
 `
 
 const FormWrapper = styled.div`
@@ -56,15 +57,20 @@ const Send = styled.i`
 //     height: 80%;
 // `
 
-function ChatFunction() {
+function ChatFunction({ post }) {
     const [chat, setChat] = useState({});
+    let globalStore = useNamedContext('global');
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(value)
-        setChat({
+        console.log(value);
+        console.log(name);
+        console.log(chat);
+        await setChat({
             ...chat,
+            createdById: globalStore.currentUserId,
+            postId: post['_id'],
             [name]: value
         })
     }
@@ -73,7 +79,7 @@ function ChatFunction() {
         e.preventDefault();
 
         try {
-            await fetch('http://localhost:4000/postMessages', {
+            await fetch('api/message', {
                 method: 'POST', // GET, POST, PATCH, DELETE
                 headers: {
                     'Content-Type': 'application/json'
@@ -99,16 +105,17 @@ function ChatFunction() {
                             onChange={handleChange}
                             type="text"
                             placeholder="type message..."
-                            name="content"
+                            name='content'
                         />
                     </div>
+                    <IWrapper>
+                        
+                        <button className="btn-flat"><Send className='material-icons'>send</Send></button>
+                    </IWrapper>
                 </form>
             </FormWrapper>
-            <IWrapper>
-                <Send className='material-icons'>send</Send>
-            </IWrapper>
         </Wrapper>
     )
 }
 
-export default ChatFunction
+export default ChatFunction 
