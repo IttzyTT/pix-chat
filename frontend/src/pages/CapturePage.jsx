@@ -1,10 +1,10 @@
 import React from 'react';
 import Camera from '../components/Camera';
 
-function CapturePage() {
+function CapturePage({globalStore}) {
   return (
     <div>
-      <Camera />
+      <Camera globalStore={globalStore} history={history} />
     </div>
   );
 }
