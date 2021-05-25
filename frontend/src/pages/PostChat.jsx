@@ -53,7 +53,7 @@ const Messages = styled.p`
     color: #F3F3F3;
 `
 
-function PostChat({ match, sse}) {
+function PostChat({ match, sse }) {
 
     const [post, setPost] = useState([]);
     const [messages, setMessages] = useState([]);
@@ -66,23 +66,19 @@ function PostChat({ match, sse}) {
         getSinglePost();
         // getMessages();
         // getUsers();
+        startSSE();
     }, []);
 
     const startSSE = () => {
-        sse.addEventListener('postMessages', message => {
-            let data = JSON.parse(message.data)
-            console.log('[postMessages]', data);
-        
-          })
-    }
-
-    useEffect(() => {
-        startSSE();
-    }, []);
-    console.log(messages)
+    
+        sse.addEventListener('postMessages', e => {
+            setAllPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
+        });
+      }
+      
     const getSinglePost = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/posts/${match.params.id}`);
+            const response = await fetch(`${globalStore.apiUrl}/posts/${match.params.id}`);
             const data = await response.json();
             console.log(data);
             setPost(data);
@@ -90,6 +86,8 @@ function PostChat({ match, sse}) {
             console.log(error)
         }
     }
+
+    
 
     // const getMessages = async () => {
     //     try {
@@ -144,7 +142,7 @@ function PostChat({ match, sse}) {
             </MessageSection>
 
             <div>
-                <ChatFunction post={post} />
+                <ChatFunction post={post} startSSE={startSSE} />
             </div>
         </Wrapper>
     )

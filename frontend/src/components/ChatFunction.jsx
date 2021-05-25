@@ -57,16 +57,13 @@ const Send = styled.i`
 //     height: 80%;
 // `
 
-function ChatFunction({ post }) {
+function ChatFunction({ post, startSSE }) {
     const [chat, setChat] = useState({});
     let globalStore = useNamedContext('global');
 
     const handleChange = async (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(value);
-        console.log(name);
-        console.log(chat);
         await setChat({
             ...chat,
             createdById: globalStore.currentUserId,
@@ -86,6 +83,8 @@ function ChatFunction({ post }) {
                 },
                 body: JSON.stringify(chat) // body data type must match "Content-Type" header
             });
+
+            startSSE();
 
         } catch (error) {
             console.log(error);

@@ -17,9 +17,7 @@ app.use("/posts", postsRouter);
 const postMessagesRouter = require("./routes/postMessages");
 app.use("/postmessages", postMessagesRouter);
 
-// app.post('/api/message', (req, res) => {
-//     let message = req.body
-// })
+console.log(postMessagesRouter)
 
 //sse
 sse.sse(app);

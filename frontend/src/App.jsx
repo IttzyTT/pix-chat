@@ -31,7 +31,7 @@ export default withContext(
     apiUrl: apiUrl,
     allUsers: [],
     currentUserId: '', //609d18eea634629d77501077
-    messages: messages
+    messages
   },
   App
 );

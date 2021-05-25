@@ -14,7 +14,7 @@ function sse(app) {
         connections.push(connection);
         req.on('close', () => connections = connections.filter(x => x !== connection));
         res.set({
-            'Content-Type': 'text/event-stream',
+            'Content-Type': 'text/even t-stream',
             'Cache-Control': 'no-cache'
         });
         
