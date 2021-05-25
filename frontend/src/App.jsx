@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './normalize.css';
 import Topbar from './components/Topbar';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
+import Home from './pages/home';
 import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
 import PostChat from './pages/PostChat';
@@ -58,14 +58,14 @@ function App() {
         <Wrapper className="App">
           <Topbar />
           <Switch>
-            <Route path="/" exact             render={props => <Home {...props} sse={sse} />} />
-            <Route path="/search/:showSearch" render={props => <Home {...props} sse={sse} />} />
-            <Route path="/camera"             render={props => <CapturePage {...props} sse={sse} globalStore={globalStore} />} />
-            <Route path="/chats"              render={props => <Chats {...props} sse={sse} />} />
-            <Route path="/chat/:id"           render={props => <PostChat {...props} sse={sse} />} />
-            <Route path="/profile/:id"        render={props => <Profile {...props} sse={sse} />} />
-            <Route path="/settings"           render={props => <Settings {...props} sse={sse} />} />
-            <Route path="/editProfile/:id"    render={props => <EditProfile {...props} sse={sse} />} />
+            <Route path="/" exact                     render={props => <Home {...props} sse={sse} />} />
+            <Route path="/search/:showSearch/:query?" render={props => <Home {...props} sse={sse} />} />
+            <Route path="/camera"                     render={props => <CapturePage {...props} sse={sse} globalStore={globalStore} />} />
+            <Route path="/chats"                      render={props => <Chats {...props} sse={sse} />} />
+            <Route path="/chat/:id"                   render={props => <PostChat {...props} sse={sse} />} />
+            <Route path="/profile/:id"                render={props => <Profile {...props} sse={sse} />} />
+            <Route path="/settings"                   render={props => <Settings {...props} sse={sse} />} />
+            <Route path="/editProfile/:id"            render={props => <EditProfile {...props} sse={sse} />} />
           </Switch>
           <Navbar />
         </Wrapper>

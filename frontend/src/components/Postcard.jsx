@@ -70,7 +70,9 @@ function Postcard({ post }) {
             <Div>
                 <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
                 { post.location.show ?
-                <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
+                <Link to={`/search/true/city=${post.location.city}`}>
+                    <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
+                </Link>
                 : null }
             </Div>
             <TextTags>
@@ -100,9 +102,11 @@ function Postcard({ post }) {
                 <Tags>
                     { post.tags[0].length ?
                         post.tags.map((tag, index) => (
-                            <Tag key={index}>
-                                <TagText>{tag}</TagText>
-                            </Tag>
+                            <Link to={`/search/true/tag=${tag}`} key={index}>
+                                <Tag key={index}>
+                                    <TagText>{tag}</TagText>
+                                </Tag>
+                            </Link>
                         ))
                         : null
                     }
