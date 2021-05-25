@@ -7,6 +7,7 @@ import displayCreatorName from '../reusable-functions/displayCreatorName';
 function Postcard({ post }) {
     const globalStore = useNamedContext('global');
     const [likeToggle, setLikeToggle] = useState(false);
+    const [postCaption, setPostCaption] = useState(post.caption);
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
 
@@ -64,6 +65,18 @@ function Postcard({ post }) {
         url :
         `/uploads/${url}`
     )
+
+    //Shorten the caption-text if overflow
+    useEffect(() => {
+        let captionsFromDom = document.querySelectorAll('.sc-hBMUJo');
+        for (let caption of captionsFromDom) {
+            if (caption.innerHTML === postCaption) {
+                if (caption.scrollWidth > caption.clientWidth) {
+                    setPostCaption(prevValue => prevValue.substring(0, (prevValue.length - 4)).concat('...'));
+                }
+            }
+        }
+    },[postCaption]);
     
     return (
         <Section>
@@ -75,30 +88,31 @@ function Postcard({ post }) {
                 </Link>
                 : null }
             </Div>
-            <TextTags>
-                <Link to={`/chat/${post['_id']}`}>
-                    <ImgCon>
-                        <Image src={typeOfPicture(post.imageUrl)} alt={post.caption} />
-                    </ImgCon>
-                </Link>
+            <Link to={`/chat/${post['_id']}`}>
+                <ImgCon className={'postcard-img-container'}>
+                    <Image src={typeOfPicture(post.imageUrl)} alt={post.caption} className={'postcard-img'} />
+                </ImgCon>
+            </Link>
+            <div className="just-below-image">
                 <TitleCon>
                     <Link to={`/chat/${post['_id']}`}>
-                        <Title>{post.caption}</Title>
+                        <Title>{postCaption}</Title>
                     </Link>
-
                     <IconCon>
                         <div onClick={likeHandler}>
                             {
                                 !likeToggle ?
-                                    <i className='material-icons'>favorite_border</i>
+                                    <i className='material-icons like-icon-btn'>favorite_border</i>
                                     :
-                                    <i className='material-icons'>favorite</i>
+                                    <i className='material-icons like-icon-btn'>favorite</i>
                             }
                         </div>
-                        <i className='material-icons'>chat_bubble_outline</i>
+                        <i className='material-icons chat-icon-btn'>chat_bubble_outline</i>
                     </IconCon>
                 </TitleCon>
                 <Date>{createdAt}</Date>
+            </div>
+            <TextTags>
                 <Tags>
                     { post.tags[0].length ?
                         post.tags.map((tag, index) => (
@@ -118,6 +132,40 @@ function Postcard({ post }) {
 
 export default Postcard;
 
+const Section = styled.section`
+    --text-color: #F3F3F3;
+    --theme-color: #7B78FD;
+    --heart-color: #FD8078;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
+    width: 100vw;
+    a {
+        color: var(--text-color);
+    }
+    .just-below-image {
+
+    }
+    /* ipad and above */
+    @media only screen and (min-width: 768px) {
+        --width: 400px;
+        --height-4-3-aspect: calc(var(--width) * 0.75);
+        width: var(--width);
+        .postcard-img {
+            object-fit: cover;
+            width: var(--width);
+            height: var(--height-4-3-aspect);
+            position: relative;
+        }
+        .postcard-img-container {
+            width: var(--width);
+            height: var(--height-4-3-aspect);
+            padding-bottom: 0%;
+        }
+    }
+`
+
 const Div = styled.div`
     display: flex;
     flex-direction: row;
@@ -125,56 +173,72 @@ const Div = styled.div`
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
-    margin-top: 20px;
-    margin-bottom: 0.4rem;
-    color: #F3F3F3;
+    color: var(--text-color);
     width: 95%;
     p {
         margin: 0
     }
 `
 const TitleCon = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px;
+    width: calc(100% - 40px);
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 55px;
+    a {
+        overflow: scroll;
+    }
+    margin: 0 20px;
 `
 const IconCon = styled.div`
     display: flex;
+    align-items: center;
     justify-content: space-between;
     width: 55px;
+    div {
+        display: flex;
+        align-items: center;
+    }
+    div > * {
+        transform: translateY(-1px);
+    }
+    .like-icon-btn {
+        color: var(--heart-color);
+    }
+    .chat-icon-btn {
+        color: var(--theme-color);
+    }
 `
 const TextTags = styled.div`
-    color: #7B78FD;
+    color: var(--theme-color);
 `
 const Title = styled.h3`
     margin: 0;
-    padding-bottom: 7px;
     font-size: 30px;
-    color: #F3F3F3;
+    color: var(--text-color);
+    white-space: nowrap;
 `
 const Tags = styled.div`
     margin-left: 20px;
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-left: 20px;
 `
 const Tag = styled.div`
    width: 80px;
    height: 20px;
-   border: 1px solid #7B78FD;
+   border: 1px solid var(--theme-color);
    border-radius: 50px;
    display: flex;
-   justify-content: space-around;
+   justify-content: center;
    align-items: center;
-   margin-right: 10px;
 `
 
 const TagText = styled.p`
     margin: 0;
     padding: 0;
     padding-bottom: 3.5px;
+    color: var(--theme-color);
 `
 
 const Location = styled.i`
@@ -182,23 +246,21 @@ const Location = styled.i`
 `
 
 const Date = styled.p`
-    color: #F3F3F3;
-    margin-left: 20px;
-    margin-top: -25px; 
+    color: var(--text-color);
+    margin: 0 20px;
     font-size: 10px;
 `
 
 const Image = styled.img`
+    object-fit: cover;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    position: absolute;
 `
 
 const ImgCon = styled.div`
+    position: relative;
     width: 100%;
-    height: 300px;
-`
-
-const Section = styled.section`
-    margin-bottom: 20px;
+    padding-bottom: 75%;
+    background-color: transparent;
 `

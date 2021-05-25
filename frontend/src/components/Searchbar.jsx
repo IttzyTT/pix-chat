@@ -64,18 +64,22 @@ function Searchbar({ allPosts }) {
                     </div>
                 </form>
             </FormWrapper>
-            {allPosts
-            .filter(post => (
-                !searchInput ?
-                post :
-                filterSearch(post, dropdownValue).includes(searchInput)
-            ))
-            .map(post => (
-                <Postcard
-                    key={ post['_id'] }
-                    post={ post }
-                />
-            ))}
+            <div className={"postcard-flex-parent"}>
+                <div className={"postcard-flex-it"}>
+                    {allPosts
+                    .filter(post => (
+                        !searchInput ?
+                        post :
+                        filterSearch(post, dropdownValue).includes(searchInput)
+                    ))
+                    .map(post => (
+                        <Postcard
+                            key={ post['_id'] }
+                            post={ post }
+                        />
+                    ))}
+                </div>
+            </div>
         </SearchReturnDiv>
     )
 }
