@@ -48,7 +48,7 @@ function EditProfile({ match }) {
         <form onSubmit={updateUser}>
             <ChangePicture>
                 <Icon className='material-icons'>account_circle</Icon>
-                <Btn>Change profile picture</Btn>
+                {/* <Btn>Change profile picture</Btn> */}
             </ChangePicture>
             <Con>
                 <Con2>
