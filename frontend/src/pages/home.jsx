@@ -43,11 +43,15 @@ function Home({ sse }) {
 
 const ContentWrapper = styled.div`
     padding: 70px 0;
+
+    /* below also affects Searchbar component */
     .postcard-flex-parent {
+        overflow-x: hidden;
         /* ipad and above */
         @media only screen and (min-width: 768px) {
             width: 100%;
-            overflow-y: scroll;
+            overflow-x: scroll;
+            overflow-y: hidden;
         }
     }
     .postcard-flex-it {
@@ -62,6 +66,7 @@ const ContentWrapper = styled.div`
             padding: 0 var(--gap);
         }
     }
+    /* above also affects Searchbar component */
 `
 
 export default Home
