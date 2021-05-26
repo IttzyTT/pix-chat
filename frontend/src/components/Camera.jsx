@@ -14,13 +14,14 @@ class Camera extends Component {
       },
       geoCheckbox: true,
       caption: '',
-      tags: ''
+      tags: '',
+      imageURLtoSend: ''
     };
+    this.imageEle = React.createRef();
   }
 
   videoEle = React.createRef();
   canvasEle = React.createRef();
-  imageEle = React.createRef();
 
   componentDidMount = async () => {
     this.startCamera();
@@ -74,19 +75,6 @@ class Camera extends Component {
     }
   };
 
-  // helper function to convert canvas image to file
-  // dataURItoBlob = (dataURI) => {
-  //   let byteString = atob(dataURI.split(',')[1]);
-  //   let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-  //   let ab = new ArrayBuffer(byteString.length);
-  //   let ia = new Uint8Array(ab);
-  //   for (let i = 0; i < byteString.length; i++) {
-  //     ia[i] = byteString.charCodeAt(i);
-  //   }
-  //   let blob = new Blob([ab], {type: mimeString});
-  //   return blob;
-  // }
-
   // Take picture
   takePicture = async () => {
     // Get the exact size of the video element.
@@ -104,7 +92,7 @@ class Camera extends Component {
     ctx.drawImage(this.videoEle.current, 0, 0, width, height);
 
     // Get an image dataURL from the canvas 
-    const imageDataURL = this.canvasEle.current.toDataURL('image/jpeg');
+    const imageDataURL = this.canvasEle.current.toDataURL('image/jpeg', );
     this.stopCam();
 
     this.setState({
@@ -135,12 +123,39 @@ class Camera extends Component {
   };
 
   // load image from file-picker
-  handleFilePick = (e) => {
+  handleFilePick = async (e) => {
     let imagePickerURL = URL.createObjectURL(e.target.files[0]);
+
     this.setState({
       imageURL: imagePickerURL,
     });
   };
+
+  handleImageUrlUpdate = () => {
+    //Obtain the preview-image, compress it, and save the compressed 
+    //base64-string in prep for sending the POST request
+    
+    // Get the exact size of the element.
+    const width = this.imageEle.current.clientWidth;
+    const height = this.imageEle.current.clientHeight;
+
+    // get the context object of hidden canvas
+    const ctx = this.canvasEle.current.getContext('2d');
+
+    // Set the canvas to the same dimensions as the video.
+    this.canvasEle.current.width = width;
+    this.canvasEle.current.height = height;
+
+    // Draw the current frame from the video on the canvas.
+    ctx.drawImage(this.imageEle.current, 0, 0, width, height);
+
+    // Get an image dataURL from the canvas 
+    const imageDataURL = this.canvasEle.current.toDataURL('image/jpeg', 0.8);
+
+    this.setState({
+      imageURLtoSend: imageDataURL,
+    });
+  }
 
   handleGeo = () => {
     this.setState({
@@ -173,7 +188,7 @@ class Camera extends Component {
     e.preventDefault();
     const postBody = {
       'caption': this.state.caption,
-      'imageUrl': this.state.imageURL,
+      'imageUrl': this.state.imageURLtoSend,
       'tags': this.state.tags.split(' '),
       'location': {
         'city': this.state.geoCheckbox ? this.state.geo.city : '',
@@ -221,8 +236,8 @@ class Camera extends Component {
           <canvas ref={this.canvasEle} style={{ display: 'none' }}></canvas>
           {this.state.imageURL !== '' && (
             <div className="preview">
-              <form name="photoUpload" onSubmit={this.handleSubmit}>
-                <img className="preview-img" src={this.state.imageURL} ref={this.imageEle} />
+              <form id="photoPreview"name="photoUpload" onSubmit={this.handleSubmit}>
+                <img className="preview-img" src={this.state.imageURL} ref={this.imageEle} onLoad={this.handleImageUrlUpdate} />
                 <input type="text" name={'caption'} value={this.state.caption} onChange={this.handleChange} placeholder="caption" />
                 <input type="text" name={'tags'} value={this.state.tags} onChange={this.handleChange} placeholder="tag1 tag2 tag3" />
                 <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
