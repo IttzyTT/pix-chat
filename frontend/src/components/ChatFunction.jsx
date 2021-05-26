@@ -2,6 +2,78 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNamedContext } from 'react-easier';
 
+
+function ChatFunction({ post }) {
+    const [chat, setChat] = useState({});
+    let globalStore = useNamedContext('global');
+
+    const handleChange = async (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        console.log(post['_id']);
+        await setChat({
+            ...chat,
+            createdById: globalStore.currentUserId,
+            postId: post['_id'],
+            [name]: value 
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // e.target.reset();
+
+        try {
+            await fetch(`${globalStore.apiUrl}/postMessages`, {
+                method: 'POST', // GET, POST, PATCH, DELETE
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(chat) // body data type must match "Content-Type" header
+            });
+
+            // e.target.value = '';
+            clearInputField();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const clearInputField = (e) => {
+        Array.from(document.querySelectorAll("input")).forEach(
+            input => (input.value = "")
+          );
+          setChat({});
+    }
+
+    return (
+        <Wrapper>
+            <FormWrapper>
+                <form onSubmit={handleSubmit}>
+                        <IWrapper2>
+                            <Photo className='material-icons'>photo_library</Photo>
+                        </IWrapper2>
+                    <Yes>
+                        <input
+                            value={chat.content}
+                            onChange={handleChange}
+                            type="text"
+                            placeholder="type message..."
+                            name='content'
+                        />
+                    </Yes>
+                        <IWrapper>
+                            <button className="btn-flat"><Send className='material-icons'>send</Send></button>
+                        </IWrapper>
+                </form>
+            </FormWrapper>
+        </Wrapper>
+    )
+}
+
+export default ChatFunction
+
 const Wrapper = styled.div`
     background-color: #FFFFFF;
     display: flex;
@@ -27,6 +99,9 @@ const FormWrapper = styled.div`
             background-color: transparent;
             font-size: 1.4rem;
             font-weight: 200;
+            &:focus {
+                outline: 0;
+            }
         }
         input[type=text]::placeholder {
             color: #222;
@@ -73,69 +148,3 @@ const Photo = styled.i`
     color: #EFEFFF;
     font-size: 23px;
 `
-
-// const Test = styled.div`
-//     height: 80%;
-// `
-
-function ChatFunction({ post, startSSE }) {
-    const [chat, setChat] = useState({});
-    let globalStore = useNamedContext('global');
-
-    const handleChange = async (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        await setChat({
-            ...chat,
-            createdById: globalStore.currentUserId,
-            postId: post['_id'],
-            [name]: value
-        })
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            await fetch(`${globalStore.apiUrl}/postMessages`, {
-                method: 'POST', // GET, POST, PATCH, DELETE
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(chat) // body data type must match "Content-Type" header
-            });
-
-            startSSE();
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    return (
-        <Wrapper>
-            <FormWrapper>
-                <form onSubmit={handleSubmit}>
-                        <IWrapper2>
-                            <Photo className='material-icons'>photo_library</Photo>
-                        </IWrapper2>
-                    <Yes>
-                        <input
-                            value={chat.content}
-                            onChange={handleChange}
-                            type="text"
-                            placeholder="type message..."
-                            name='content'
-                        />
-                    </Yes>
-                        <IWrapper>
-
-                            <button className="btn-flat"><Send className='material-icons'>send</Send></button>
-                        </IWrapper>
-                </form>
-            </FormWrapper>
-        </Wrapper>
-    )
-}
-
-export default ChatFunction
