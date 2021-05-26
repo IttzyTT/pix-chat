@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNamedContext } from 'react-easier';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Link } from "react-router-dom";
 import displayCreatorName from '../reusable-functions/displayCreatorName';
 
@@ -8,6 +8,7 @@ function Postcard({ post }) {
     const globalStore = useNamedContext('global');
     const [likeToggle, setLikeToggle] = useState(false);
     const [postCaption, setPostCaption] = useState(post.caption);
+    const captionRef = useRef(null);
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
 
@@ -68,13 +69,8 @@ function Postcard({ post }) {
 
     //Shorten the caption-text if overflow
     useEffect(() => {
-        let captionsFromDom = document.querySelectorAll('.sc-hBMUJo');
-        for (let caption of captionsFromDom) {
-            if (caption.innerHTML === postCaption) {
-                if (caption.scrollWidth > caption.clientWidth) {
-                    setPostCaption(prevValue => prevValue.substring(0, (prevValue.length - 4)).concat('...'));
-                }
-            }
+        if (captionRef.current.scrollWidth > captionRef.current.clientWidth) {
+            setPostCaption(prevValue => prevValue.substring(0, (prevValue.length - 4)).concat('...'));
         }
     },[postCaption]);
     
@@ -96,7 +92,7 @@ function Postcard({ post }) {
             <div className="just-below-image">
                 <TitleCon>
                     <Link to={`/chat/${post['_id']}`}>
-                        <Title>{postCaption}</Title>
+                        <Title ref={captionRef}>{postCaption}</Title>
                     </Link>
                     <IconCon>
                         <div onClick={likeHandler}>
@@ -132,10 +128,16 @@ function Postcard({ post }) {
 
 export default Postcard;
 
+const loadAni = keyframes`
+    from    { opacity: 0 }
+    to      { opacity: 1 }
+`
+
 const Section = styled.section`
     --text-color: #F3F3F3;
     --theme-color: #7B78FD;
     --heart-color: #FD8078;
+    animation: ${loadAni} .3s linear;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -185,7 +187,7 @@ const TitleCon = styled.div`
     gap: 10px;
     grid-template-columns: 1fr 55px;
     a {
-        overflow: scroll;
+        overflow: hidden;
     }
     margin: 0 20px;
 `
