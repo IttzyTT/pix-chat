@@ -38,9 +38,9 @@ function sse(app) {
     async function sendMessages(connection) {
         // let userId = connection.req.session.user._id;   
         let messages = await PostMessage.find({
-        createdAt: { $gte: new Date(connection.hasMessagesUntil) }
-        })
-        connection.hasMessagesUntil = Date.now();
+        createdAt: { $gte: new Date(connection.hasPostMessagesUntil) }
+        }).sort({createdAt:-1});
+        connection.hasPostMessagesUntil = Date.now();
         sendSSE(connection.res, 'postMessages', messages);
       }
 
