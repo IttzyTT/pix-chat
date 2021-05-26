@@ -17,6 +17,8 @@ app.use("/posts", postsRouter);
 const postMessagesRouter = require("./routes/postMessages");
 app.use("/postmessages", postMessagesRouter);
 
+console.log(postMessagesRouter)
+
 //sse
 sse.sse(app);
 

@@ -20,6 +20,8 @@ function Chats() {
     const [user, setUser] = useState ({})
     const [messages, setMessage] = useState ([])
 
+    let createdAt = new window.Date(post.createdAt).toLocaleDateString();
+
     useEffect(() => {
        fetchAllUsers
        fetchAllPosts

@@ -6,9 +6,6 @@ import fetchAllPosts from '../reusable-functions/fetchAllPosts';
 import { useParams } from 'react-router';
 import Searchbar from '../components/Searchbar';
 
-const ContentWrapper = styled.div`
-    padding: 70px 0;
-`
 function Home({ sse }) {
     let globalStore = useNamedContext('global');
     const [allPosts, setAllPosts] = useState([]);
@@ -27,15 +24,44 @@ function Home({ sse }) {
     
     return (
         <ContentWrapper>
-            { showSearch ? <Searchbar allPosts={allPosts} /> 
-            : allPosts.map(post => (
-                <Postcard 
-                    key={ post['_id'] } 
-                    post={ post } 
-                />
-            ))}
+            { showSearch ? 
+            <Searchbar allPosts={allPosts} />
+            : 
+            <div className={"postcard-flex-parent"}>
+                <div className={"postcard-flex-it"}>
+                    {allPosts.map(post => (
+                        <Postcard
+                            key={ post['_id'] }
+                            post={ post }
+                        />
+                    ))}
+                </div>
+            </div>}
         </ContentWrapper>
     )
 }
+
+const ContentWrapper = styled.div`
+    padding: 70px 0;
+    .postcard-flex-parent {
+        /* ipad and above */
+        @media only screen and (min-width: 768px) {
+            width: 100%;
+            overflow-y: scroll;
+        }
+    }
+    .postcard-flex-it {
+        --gap: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap);
+        /* ipad and above */
+        @media only screen and (min-width: 768px) {
+            flex-direction: row;
+            width: fit-content;
+            padding: 0 var(--gap);
+        }
+    }
+`
 
 export default Home
