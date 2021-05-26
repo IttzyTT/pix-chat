@@ -3,56 +3,6 @@ import styled from 'styled-components';
 import ChatFunction from '../components/ChatFunction';
 import { useNamedContext } from 'react-easier';
 
-const Content = styled.div`
-    height: 150px;
-    background-color: #373737;
-    display: flex;
-    align-items: center;
-    color: #F3F3F3;
-`
-
-const InfoCon = styled.div`
-    width: 200px;
-`
-
-const Wrapper = styled.div`
-    padding-top: 100px;
-`
-const Img = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-`
-const ImgCon = styled.div`
-    width: 40%;
-    height: 80%;
-    margin-right: 10px;
-`
-
-const Location = styled.i`
-    font-size: 12px;
-`
-
-const Date = styled.p`
-    font-size: 10px;
-`
-
-const Caption = styled.h1`
-    font-size: 20px;
-`
-
-const MessageSection = styled.section`
-
-`
-
-const ChatCon = styled.div`
-    margin-left: 30px;
-`
-
-const Messages = styled.p`
-    color: #F3F3F3;
-`
-
 function PostChat({ match, sse }) {
 
     const [post, setPost] = useState([]);
@@ -64,9 +14,9 @@ function PostChat({ match, sse }) {
 
     useEffect(() => {
         getSinglePost();
-        // getMessages();
+        getMessages();
         // getUsers();
-        startSSE();
+        // startSSE();
     }, []);
 
     const startSSE = () => {
@@ -89,16 +39,16 @@ function PostChat({ match, sse }) {
 
     
 
-    // const getMessages = async () => {
-    //     try {
-    //         const response = await fetch(`http://localhost:4000/postMessages`);
-    //         const data = await response.json();
-    //         console.log(data);
-    //         setMessages(data);
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
+    const getMessages = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/postMessages`);
+            const data = await response.json();
+            console.log(data);
+            setMessages(data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     // const getUsers = async () => {
@@ -111,6 +61,15 @@ function PostChat({ match, sse }) {
     //         console.log(error)
     //     }
     // }
+    
+    const filterMessages = messages => {
+        return(
+            messages.filter(message => (
+                message.postId === match.params.id
+            ))
+        )
+        
+    }
 
     return (
         <Wrapper>
@@ -126,8 +85,8 @@ function PostChat({ match, sse }) {
             </Content>
 
             <MessageSection>
-                {messages.map(message => {
-                    return (
+                {filterMessages(messages).map(message => {
+                    return (    
                         <ChatCon key={message['_id']}>
                             <Messages>{message.content}</Messages>
                         </ChatCon>
@@ -149,3 +108,55 @@ function PostChat({ match, sse }) {
 }
 
 export default PostChat
+
+const Content = styled.div`
+    height: 150px;
+    background-color: #373737;
+    display: flex;
+    align-items: center;
+    color: #F3F3F3;
+`
+
+const InfoCon = styled.div`
+    width: 200px;
+`
+
+const Wrapper = styled.div`
+    padding-top: 70px;
+`
+const Img = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+`
+const ImgCon = styled.div`
+    width: 40%;
+    height: 80%;
+    margin: 0 14px 0 14px;
+`
+
+const Location = styled.i`
+    font-size: 12px;
+`
+
+const Date = styled.p`
+    font-size: 10px;
+`
+
+const Caption = styled.h1`
+    font-size: 20px;
+`
+
+const MessageSection = styled.section`
+    overflow-y: scroll;
+    height: 60vh;
+    // padding-bottom: 80px;
+`
+
+const ChatCon = styled.div`
+    margin-left: 30px;
+`
+
+const Messages = styled.p`
+    color: #F3F3F3;
+`
