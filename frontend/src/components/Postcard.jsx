@@ -91,21 +91,23 @@ function Postcard({ post }) {
             </Link>
             <div className="just-below-image">
                 <TitleCon>
-                    <Link to={`/chat/${post['_id']}`}>
+                    <Link to={`/chat/${post['_id']}`} className={'post-caption'}>
                         <Title ref={captionRef}>{postCaption}</Title>
                     </Link>
-                    <IconCon>
-                        <div onClick={likeHandler}>
-                            {
-                                !likeToggle ?
-                                    <i className='material-icons like-icon-btn'>favorite_border</i>
-                                    :
-                                    <i className='material-icons like-icon-btn'>favorite</i>
-                            }
-                        </div>
-                        <i className='material-icons chat-icon-btn'>chat_bubble_outline</i>
-                    </IconCon>
                 </TitleCon>
+                <IconCon>
+                    <div onClick={likeHandler}>
+                        {
+                            !likeToggle ?
+                                <i className='material-icons like-icon-btn like-icon-btn-not-liked'>favorite_border</i>
+                                :
+                                <i className='material-icons like-icon-btn like-icon-btn-liked'>favorite</i>
+                        }
+                    </div>
+                    <Link to={`/chat/${post['_id']}`} className={'chat-bubble-link'}>
+                        <i className='material-icons chat-icon-btn'>chat_bubble_outline</i>
+                    </Link>
+                </IconCon>
                 <Date>{createdAt}</Date>
             </div>
             <TextTags>
@@ -132,7 +134,28 @@ const loadAni = keyframes`
     from    { opacity: 0 }
     to      { opacity: 1 }
 `
-
+const oneBeatAni = keyframes`
+    0%   {  transform: scale3d(1, 1, 1); 
+            opacity: 0;
+    }
+    80%  {  transform: scale3d(1.3, 1.3, 1.3); 
+            opacity: 1;
+    }
+    100% {  transform: scale3d(1, 1, 1); 
+            opacity: 1;
+    }
+`
+const squeezeAni = keyframes`
+    0%   {  transform: scale3d(1, 1, 1); 
+            opacity: 1;
+    }
+    20%  {  transform: scale3d(0.2, 0.7, 1.3); 
+            opacity: 1;
+    }
+    100% {  transform: scale3d(1, 1, 1); 
+            opacity: 1;
+    }
+`
 const Section = styled.section`
     --text-color: #F3F3F3;
     --theme-color: #7B78FD;
@@ -147,7 +170,15 @@ const Section = styled.section`
         color: var(--text-color);
     }
     .just-below-image {
-
+        width: calc(100% - 40px);
+        display: grid;
+        gap: 0.3rem;
+        grid-template-columns: 1fr 55px;
+        grid-template-areas:
+            "caption iconcon"
+            "date ."
+        ;
+        margin: 0 20px;
     }
     /* ipad and above */
     @media only screen and (min-width: 768px) {
@@ -168,7 +199,7 @@ const Section = styled.section`
     }
 `
 
-const Div = styled.div`
+const Div = styled.div` /* top, above image */
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -181,17 +212,8 @@ const Div = styled.div`
         margin: 0
     }
 `
-const TitleCon = styled.div`
-    width: calc(100% - 40px);
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 1fr 55px;
-    a {
-        overflow: hidden;
-    }
-    margin: 0 20px;
-`
 const IconCon = styled.div`
+    grid-area: iconcon;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -200,24 +222,38 @@ const IconCon = styled.div`
         display: flex;
         align-items: center;
     }
-    div > * {
-        transform: translateY(-1px);
-    }
-    .like-icon-btn {
-        color: var(--heart-color);
+    .chat-bubble-link {
+        line-height: 0;
     }
     .chat-icon-btn {
         color: var(--theme-color);
     }
+    .like-icon-btn {
+        color: var(--heart-color);
+    }
+    .like-icon-btn-liked {
+        animation: ${oneBeatAni} .2s ease-in-out;
+    }
+    .like-icon-btn-not-liked {
+        animation: ${squeezeAni} .2s ease-in-out;
+    }
+    
 `
-const TextTags = styled.div`
-    color: var(--theme-color);
+const TitleCon = styled.div`
+    grid-area: caption;
+    overflow: hidden;
 `
 const Title = styled.h3`
     margin: 0;
     font-size: 30px;
     color: var(--text-color);
     white-space: nowrap;
+`
+const Date = styled.p`
+    grid-area: date;
+    color: var(--text-color);
+    font-size: 10px;
+    margin: 0;
 `
 const Tags = styled.div`
     margin-left: 20px;
@@ -226,14 +262,17 @@ const Tags = styled.div`
     gap: 10px;
     margin-left: 20px;
 `
+const TextTags = styled.div`
+    color: var(--theme-color);
+`
 const Tag = styled.div`
-   width: 80px;
-   height: 20px;
-   border: 1px solid var(--theme-color);
-   border-radius: 50px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
+    width: 80px;
+    height: 20px;
+    border: 1px solid var(--theme-color);
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const TagText = styled.p`
@@ -245,12 +284,6 @@ const TagText = styled.p`
 
 const Location = styled.i`
     font-size: 12px;
-`
-
-const Date = styled.p`
-    color: var(--text-color);
-    margin: 0 20px;
-    font-size: 10px;
 `
 
 const Image = styled.img`
