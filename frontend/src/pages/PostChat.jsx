@@ -16,7 +16,7 @@ function PostChat({ match, sse }) {
         getSinglePost();
         getMessages();
         // getUsers();
-        // startSSE();
+        startSSE();
     }, []);
 
     const startSSE = () => {
