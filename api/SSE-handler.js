@@ -14,7 +14,7 @@ function sse(app) {
         connections.push(connection);
         req.on('close', () => connections = connections.filter(x => x !== connection));
         res.set({
-            'Content-Type': 'text/even t-stream',
+            'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache'
         });
         
@@ -35,14 +35,14 @@ function sse(app) {
     }
         // Calculate which messages to send to a connection/user
     // (all the ones he/she doesn't have for now)
-    // async function sendMessages(connection) {
-    //     // let userId = connection.req.session.user._id;   
-    //     let messages = await PostMessage.find({
-    //     createdAt: { $gte: new Date(connection.hasMessagesUntil) }
-    //     })
-    //     connection.hasMessagesUntil = Date.now();
-    //     sendSSE(connection.res, 'postMessages', messages);
-    //   }
+    async function sendMessages(connection) {
+        // let userId = connection.req.session.user._id;   
+        let messages = await PostMessage.find({
+        createdAt: { $gte: new Date(connection.hasMessagesUntil) }
+        })
+        connection.hasMessagesUntil = Date.now();
+        sendSSE(connection.res, 'postMessages', messages);
+      }
 
     // Calculate which photos to send to a connection/user
     // (all the ones he/she doesn't have for now)
@@ -56,7 +56,7 @@ function sse(app) {
 
     // Change listeners - listen to DB changes
     Post.watch().on('change', () => connections.forEach(sendPosts));
-    // PostMessage.watch().on('change', () => connections.forEach(sendMessages));
+    PostMessage.watch().on('change', () => connections.forEach(sendMessages));
 
     // Heartbeat (send empty messages with 20 second delays)
     // helps keep the connection alive - some proxies close it otherwise
