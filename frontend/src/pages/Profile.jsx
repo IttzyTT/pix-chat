@@ -42,6 +42,11 @@ function Profile({ match }) {
         }
     }
 
+    const typeOfPicture = (url) => (
+        url.substring(0, 4) === 'http' ?
+        url :
+        `/uploads/${url}`
+    )
 
     return (
         <Wrap>
@@ -50,7 +55,7 @@ function Profile({ match }) {
                 <InfoEdit>
                     <Name>{ user.name }</Name>
                     {loc.pathname !== `/profile/${globalStore.currentUserId}` ? '' : (
-                        <Link to={`/editProfile/${user['_id']}`}><Btn>Edit Profile</Btn></Link>
+                        <Link to={`/editProfile/${user['_id']}`}><Btn>Settings</Btn></Link>
                     )}
                 </InfoEdit>
             </Con>
@@ -70,11 +75,11 @@ function Profile({ match }) {
             {toggle ? (
                 posts.map((post) => (
                     post.likedBy.includes(match.params.id) ? 
-                    <Post key={post['_id']} src={post.imageUrl} alt='' /> : ''
+                    <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' /> : ''
                 ))
             ) : (
                 filterPosts(posts).map((post) => (
-                    <Post key={post['_id']} src={post.imageUrl} alt='' />
+                    <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' />
                     )))}
            </Pictures>
         </Wrap>
@@ -152,11 +157,13 @@ const Favorites = styled.div`
 const Pictures = styled.div`
     display: flex;
     width: 100%;
-    height: auto;
+    height: 450px;
     border-top: 1px solid white;
     padding-bottom: 2px;
     flex-wrap: wrap;
+    padding-bottom: 100px;
     justify-content: flex-start;
+    overflow-y: scroll;
 `
 const Post = styled.img`
     width: 48.93%;

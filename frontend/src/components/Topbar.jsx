@@ -12,23 +12,14 @@ function topbar() {
   return (
     <>
       <TopbarWrapper>
-        {loc.pathname == '/settings' || loc.pathname == '/camera' || loc.pathname == `/editProfile/${globalStore.currentUserId}` ? (
+        {loc.pathname == '/camera' || loc.pathname == `/editProfile/${globalStore.currentUserId}` ? (
           <BackButton onClick={history.goBack} className="material-icons">
             arrow_back_ios
           </BackButton>
-        ) : (
-          ''
-        )}
+        ) : ''}
         <Con>
           <LogoImg src={logo} />
         </Con>
-        {loc.pathname != '/settings' && loc.pathname != '/editProfile' ? (
-          <Settings to="/settings">
-            <SettingsIcon className="material-icons">settings</SettingsIcon>
-          </Settings>
-        ) : (
-          ''
-        )}
       </TopbarWrapper>
     </>
   );
@@ -60,16 +51,6 @@ const LogoText = styled.p`
   font-family: 'montserrat';
   font-size: 18px;
   padding-left: 5px;
-`;
-
-const Settings = styled(Link)`
-  position: absolute;
-  right: 25px;
-  color: #fff;
-`;
-
-const SettingsIcon = styled.i`
-  font-size: 32px;
 `;
 
 const BackButton = styled.i`

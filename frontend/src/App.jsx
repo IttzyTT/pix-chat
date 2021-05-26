@@ -7,7 +7,6 @@ import CapturePage from './pages/CapturePage';
 import Chats from './pages/Chats';
 import PostChat from './pages/PostChat';
 import Profile from './pages/Profile';
-import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
 import SplashScreen from './pages/SplashScreen';
 import styled from 'styled-components';
@@ -61,7 +60,6 @@ function App() {
             <Route path="/chats"                      render={props => <Chats {...props} sse={sse} />} />
             <Route path="/chat/:id"                   render={props => <PostChat {...props} sse={sse} />} />
             <Route path="/profile/:id"                render={props => <Profile {...props} sse={sse} />} />
-            <Route path="/settings"                   render={props => <Settings {...props} sse={sse} />} />
             <Route path="/editProfile/:id"            render={props => <EditProfile {...props} sse={sse} />} />
           </Switch>
           <Navbar />
