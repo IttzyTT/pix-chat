@@ -11,7 +11,7 @@ const reqBody = (req) => ({
 // Get all postMessages
 router.get('/', async (req, res) => {
     try{
-        const postMessages = await PostMessage.find().sort({createdAt:-1});
+        const postMessages = await PostMessage.find().sort({createdAt:1});
         res.send(postMessages)
     } catch (error) {
         res.send({ message: error })

@@ -61,6 +61,7 @@ function ChatFunction({ post }) {
                             type="text"
                             placeholder="type message..."
                             name='content'
+                            autocomplete="off"
                         />
                     </Yes>
                         <IWrapper>
@@ -84,6 +85,7 @@ const Wrapper = styled.div`
     position: fixed;
     width: 100%;
     bottom: 63px;
+    z-index: 10;
 `
 
 const FormWrapper = styled.div`

@@ -10,10 +10,9 @@ function PostChat({ match, sse }) {
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
 
-    let options = { timeZone: 'UTC'};
+    let options = { timeZone: 'UTC' };
 
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
-    let messageTimeStamp = new window.Date(post.createdAt).toLocaleTimeString('sv-SE', options);
     let globalStore = useNamedContext('global');
 
     useEffect(() => {
@@ -24,12 +23,12 @@ function PostChat({ match, sse }) {
     }, []);
 
     const startSSE = () => {
-    
+
         sse.addEventListener('postMessages', e => {
             setMessages(prevArray => [...JSON.parse(e.data), ...prevArray]);
         });
-      }
-      
+    }
+
     const getSinglePost = async () => {
         try {
             const response = await fetch(`${globalStore.apiUrl}/posts/${match.params.id}`);
@@ -63,14 +62,14 @@ function PostChat({ match, sse }) {
     //         console.log(error)
     //     }
     // }
-    
+
     const filterMessages = messages => {
-        return(
+        return (
             messages.filter(message => (
                 message.postId === match.params.id
             ))
         )
-        
+
     }
 
     return (
@@ -88,11 +87,41 @@ function PostChat({ match, sse }) {
 
             <MessageSection>
                 {filterMessages(messages).map(message => {
-                    return (    
-                        <ChatCon key={message['_id']}>
-                            <p>{messageTimeStamp}</p>
-                            <Messages>{displayCreatorName(message, globalStore.allUsers)}: {message.content}</Messages>
-                        </ChatCon>
+                    const check = (globalStore.currentUserId === message.createdById);
+                    let messageTimeStamp = new window.Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    console.log(check);
+                    return (
+                        <ChatWrapper>
+                            <ChatCon key={message['_id']}>
+                                {!check ?
+                                    <Con1>
+                                        <User>
+                                        {displayCreatorName(message, globalStore.allUsers)}
+                                        </User>
+                                        <Messages>
+                                        <Time>{messageTimeStamp}</Time>
+                                            <Chat>{message.content}</Chat>
+                                            </Messages>
+                                    </Con1>
+                                    :
+                                    <Con2>
+                                        <UserMessages>
+                                        <Time>{messageTimeStamp}</Time>
+                                        <Chat>{message.content}</Chat>
+                                            </UserMessages>
+                                        <User>
+                                        {displayCreatorName(message, globalStore.allUsers)}
+                                        </User>
+                                    </Con2>
+                                }
+                            </ChatCon>
+
+                            {/* <UserCon key={message['_id']}>
+                                <p>{messageTimeStamp}</p>
+                                <Messages>{displayCreatorName(message, globalStore.allUsers)}: {message.content}</Messages>
+                            </UserCon> */}
+
+                        </ChatWrapper>
                     )
                 })}
 
@@ -156,10 +185,120 @@ const MessageSection = styled.section`
     // padding-bottom: 80px;
 `
 
-const ChatCon = styled.div`
-    margin-left: 30px;
+const ChatWrapper = styled.div`
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 0 auto;
 `
 
-const Messages = styled.p`
-    color: #F3F3F3;
+const ChatCon = styled.div`
+    color: white;
 `
+
+const Con1 = styled.div`
+    align-items: flex-end;
+    display: flex;
+    justify-content: flex-start;
+`
+
+const Con2 = styled.div`
+    align-items: flex-end;
+    display: flex;
+    justify-content: flex-end;
+`
+
+const Chat = styled.p`
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+`
+
+const Time = styled.div`
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+`
+
+const Messages = styled.div`
+    margin-left: 15px;
+    margin-right: 25%;
+    background-color: #6a6a6a;
+    position: relative;
+    border-radius: 20px;
+    padding: 8px 15px;
+    display: inline-block;
+
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        bottom: 0;
+        left: -7px;
+        height: 20px;
+        width: 20px;
+        background: #6a6a6a;
+        border-bottom-right-radius: 15px;
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: -10px;
+        width: 10px;
+        height: 21px;
+        background: #434343;
+        border-bottom-right-radius: 10px;
+    }
+`
+const UserMessages = styled.div`
+    margin-right: 15px;
+    margin-left: 25%;
+    background: linear-gradient(to bottom, #00D0EA 0%, #7B78FD 100%);
+    border-radius: 20px;
+    padding: 10px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+
+    margin-left: 25%;
+    background-attachment: fixed;
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        bottom: 0;
+        right: -8px;
+        height: 20px;
+        width: 20px;
+        background: linear-gradient(to bottom, #00D0EA 0%, #7B78FD 100%);
+        background-attachment: fixed;
+        border-bottom-left-radius: 15px;
+    }
+
+    &:after{
+        content: "";
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        right: -10px;
+        width: 10px;
+        height: 21px;
+        background: #434343;
+        border-bottom-left-radius: 10px;
+    }
+`
+
+const User = styled.div`
+    width: 30px;
+    z-index: 2;
+`
+
+// const Messages = styled.p`
+//     color: #F3F3F3;
+// `
