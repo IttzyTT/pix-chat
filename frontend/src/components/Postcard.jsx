@@ -240,25 +240,29 @@ const Tags = styled.div`
     flex-wrap: wrap;
     gap: 10px;
     margin-left: 20px;
+
 `
 const TextTags = styled.div`
     color: var(--theme-color);
 `
 const Tag = styled.div`
-    width: 80px;
-    height: 20px;
+padding: 1px 10px ;
+    height: 23px;
     border: 1px solid var(--theme-color);
+    background: #725791;
     border-radius: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 `
 
 const TagText = styled.p`
     margin: 0;
     padding: 0;
-    padding-bottom: 3.5px;
-    color: var(--theme-color);
+    font-size: 9px;
+   
+    color: whitesmoke;
 `
 
 const Location = styled.i`
