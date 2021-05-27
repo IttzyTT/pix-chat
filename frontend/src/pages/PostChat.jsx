@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import ScrollableFeed from 'react-scrollable-feed';
 import { motion } from "framer-motion";
 import ChatFunction from "../components/ChatFunction";
 import { useNamedContext } from "react-easier";
 import displayCreatorName from "../reusable-functions/displayCreatorName";
 
 function PostChat({ match, sse }) {
-  const bottomRef = useRef();
 
   const [post, setPost] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -20,7 +20,6 @@ function PostChat({ match, sse }) {
     getMessages();
     // getUsers();
     startSSE();
-    window.scrollTo(0, 1000);
   }, []);
 
   const startSSE = () => {
@@ -53,13 +52,6 @@ function PostChat({ match, sse }) {
     }
   };
 
-  const scrollToBottom = () => {
-    bottomRef.current.scrollTo({
-      bottom: 0,
-      left: 100,
-      behavior: "smooth",
-    });
-  };
 
   // const getUsers = async () => {
   //     try {
@@ -97,6 +89,7 @@ function PostChat({ match, sse }) {
       </Content>
 
       <MessageSection>
+        <ScrollableFeed>
         {filterMessages(messages).map((message) => {
           const check = globalStore.currentUserId === message.createdById;
           let messageTimeStamp = new window.Date(
@@ -135,13 +128,13 @@ function PostChat({ match, sse }) {
             </ChatWrapper>
           );
         })}
-        <p ref={bottomRef}></p>
 
         {/* {users.map(user => {
                     return(
                         <p>{user.name}</p>
                     )
                 })} */}
+        </ScrollableFeed>
       </MessageSection>
 
       <div>
