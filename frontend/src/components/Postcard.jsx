@@ -260,8 +260,7 @@ padding: 1px 10px ;
 const TagText = styled.p`
     margin: 0;
     padding: 0;
-    font-size: 9px;
-   
+    font-size: 11px;
     color: whitesmoke;
 `
 
