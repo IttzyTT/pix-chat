@@ -28,7 +28,7 @@ class Camera extends Component {
     this.fetchMoreGeoInfo();
   };
   componentWillUnmount = () => {
-    this.stopCam();
+      this.stopCam();
   };
 
   //GEO-stuff
@@ -102,12 +102,14 @@ class Camera extends Component {
 
   // Stop Camera
   stopCam = () => {
-    const stream = this.videoEle.current.srcObject;
-    const tracks = stream.getTracks();
+    if (this.videoEle.current !== null) {
+      const stream = this.videoEle.current.srcObject;
+      const tracks = stream.getTracks();
 
-    tracks.forEach((track) => {
-      track.stop();
-    });
+      tracks.forEach((track) => {
+        track.stop();
+      });
+    }
   };
 
   // Back BTN
@@ -207,6 +209,7 @@ class Camera extends Component {
         body: JSON.stringify(postBody)
       })
       console.log('post request sent');
+      this.props.history.push('/');
     } catch (error) {
       console.log(error);
     }
@@ -243,7 +246,7 @@ class Camera extends Component {
                 <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
                 <p>Location: {!this.state.geo ? '...loading' : `${this.state.geo.city}, ${this.state.geo.country}`}</p>
                 <p>Include location in the post?: {this.state.geoCheckbox.toString()}</p>
-                <button type={'submit'} className="btn post-btn">
+                <button type={'submit'} className="btn post-btn" >
                   <i className="fa fa-plus-circle"></i>
                 </button>
               </form>
