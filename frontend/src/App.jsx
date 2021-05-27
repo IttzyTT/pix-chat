@@ -3,7 +3,7 @@ import './normalize.css';
 import Topbar from './components/Topbar';
 import Navbar from './components/Navbar';
 import Home from './pages/home';
-import CapturePage from './pages/CapturePage';
+import Camera from './pages/Camera';
 import Chats from './pages/Chats';
 import PostChat from './pages/PostChat';
 import Profile from './pages/Profile';
@@ -59,7 +59,7 @@ function App() {
           <Switch>
             <Route path="/" exact                     render={props => <Home {...props} sse={sse} />} />
             <Route path="/search/:showSearch/:query?" render={props => <Home {...props} sse={sse} />} />
-            <Route path="/camera"                     render={props => <CapturePage {...props} sse={sse} globalStore={globalStore} />} />
+            <Route path="/camera"                     render={props => <Camera {...props} sse={sse} globalStore={globalStore} />} />
             <Route path="/chats"                      render={props => <Chats {...props} sse={sse} />} />
             <Route path="/chat/:id"                   render={props => <PostChat {...props} sse={sse} />} />
             <Route path="/profile/:id"                render={props => <Profile {...props} sse={sse} />} />
