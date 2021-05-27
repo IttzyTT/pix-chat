@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNamedContext } from 'react-easier';
 import styled, { keyframes } from 'styled-components';
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import displayCreatorName from '../reusable-functions/displayCreatorName';
 
@@ -76,14 +77,14 @@ function Postcard({ post }) {
     
     return (
         <Section>
-            <Div>
+            <AboveImage>
                 <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
                 { post.location.show ?
                 <Link to={`/search/true/city=${post.location.city}`}>
                     <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
                 </Link>
                 : null }
-            </Div>
+            </AboveImage>
             <Link to={`/chat/${post['_id']}`}>
                 <ImgCon className={'postcard-img-container'}>
                     <Image src={typeOfPicture(post.imageUrl)} alt={post.caption} className={'postcard-img'} />
@@ -96,14 +97,22 @@ function Postcard({ post }) {
                     </Link>
                 </TitleCon>
                 <IconCon>
-                    <div onClick={likeHandler}>
+                    <motion.div 
+                        onClick={likeHandler}
+                        initial={{scale: 1}}
+                        animate={likeToggle ? 'liked' : 'unliked'}
+                        variants={likeBtnVariants}
+                        transition={{
+                            duration: 0.5
+                        }}
+                    >
                         {
                             !likeToggle ?
-                                <i className='material-icons like-icon-btn like-icon-btn-not-liked'>favorite_border</i>
+                                <i className='material-icons like-icon-btn'>favorite_border</i>
                                 :
-                                <i className='material-icons like-icon-btn like-icon-btn-liked'>favorite</i>
+                                <i className='material-icons like-icon-btn'>favorite</i>
                         }
-                    </div>
+                    </motion.div>
                     <Link to={`/chat/${post['_id']}`} className={'chat-bubble-link'}>
                         <i className='material-icons chat-icon-btn'>chat_bubble_outline</i>
                     </Link>
@@ -130,37 +139,14 @@ function Postcard({ post }) {
 
 export default Postcard;
 
-const loadAni = keyframes`
-    from    { opacity: 0 }
-    to      { opacity: 1 }
-`
-const oneBeatAni = keyframes`
-    0%   {  transform: scale3d(1, 1, 1); 
-            opacity: 0;
-    }
-    80%  {  transform: scale3d(1.3, 1.3, 1.3); 
-            opacity: 1;
-    }
-    100% {  transform: scale3d(1, 1, 1); 
-            opacity: 1;
-    }
-`
-const squeezeAni = keyframes`
-    0%   {  transform: scale3d(1, 1, 1); 
-            opacity: 1;
-    }
-    20%  {  transform: scale3d(0.2, 0.7, 1.3); 
-            opacity: 1;
-    }
-    100% {  transform: scale3d(1, 1, 1); 
-            opacity: 1;
-    }
-`
+const likeBtnVariants = {
+    liked: { scale: [1, 2, 1, 1.5, 1] },
+    unliked: {  }
+}
 const Section = styled.section`
     --text-color: #F3F3F3;
     --theme-color: #7B78FD;
     --heart-color: #FD8078;
-    animation: ${loadAni} .3s linear;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -199,7 +185,7 @@ const Section = styled.section`
     }
 `
 
-const Div = styled.div` /* top, above image */
+const AboveImage = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -231,13 +217,6 @@ const IconCon = styled.div`
     .like-icon-btn {
         color: var(--heart-color);
     }
-    .like-icon-btn-liked {
-        animation: ${oneBeatAni} .2s ease-in-out;
-    }
-    .like-icon-btn-not-liked {
-        animation: ${squeezeAni} .2s ease-in-out;
-    }
-    
 `
 const TitleCon = styled.div`
     grid-area: caption;

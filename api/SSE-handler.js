@@ -39,7 +39,7 @@ function sse(app) {
         // let userId = connection.req.session.user._id;   
         let messages = await PostMessage.find({
         createdAt: { $gte: new Date(connection.hasPostMessagesUntil) }
-        }).sort({createdAt:-1});
+        }).sort({createdAt:1});
         connection.hasPostMessagesUntil = Date.now();
         sendSSE(connection.res, 'postMessages', messages);
       }
