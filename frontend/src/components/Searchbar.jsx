@@ -96,6 +96,7 @@ const FormWrapper = styled.div`
     border-radius: 30px;
     width: 90vw;
     background-color: #5a5a5a;
+    margin-bottom: 25px;
     form {
         width: 88%;
         div {
