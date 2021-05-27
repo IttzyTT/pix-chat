@@ -71,6 +71,7 @@ function Profile({ match }) {
                     )).length}</p>
                 </Favorites>
            </InfoNumber>
+           <PicCon>
            <Pictures>
             {toggle ? (
                 posts.map((post) => (
@@ -82,6 +83,7 @@ function Profile({ match }) {
                     <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' />
                     )))}
            </Pictures>
+           </PicCon>
         </Wrap>
     )
 }
@@ -154,16 +156,19 @@ const Favorites = styled.div`
     text-align: center;
     cursor: pointer;
 `
+const PicCon = styled.div`
+    height: 450px;
+    overflow-y: scroll;
+`
 const Pictures = styled.div`
     display: flex;
     width: 100%;
-    height: 450px;
+    height: auto;
     border-top: 1px solid white;
     padding-bottom: 2px;
     flex-wrap: wrap;
     padding-bottom: 100px;
     justify-content: flex-start;
-    overflow-y: scroll;
 `
 const Post = styled.img`
     width: 48.93%;

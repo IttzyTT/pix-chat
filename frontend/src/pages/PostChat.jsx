@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import ChatFunction from '../components/ChatFunction';
 import { useNamedContext } from 'react-easier';
+import displayCreatorName from '../reusable-functions/displayCreatorName';
 
 function PostChat({ match, sse }) {
 
@@ -9,7 +10,10 @@ function PostChat({ match, sse }) {
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
 
+    let options = { timeZone: 'UTC'};
+
     let createdAt = new window.Date(post.createdAt).toLocaleDateString();
+    let messageTimeStamp = new window.Date(post.createdAt).toLocaleTimeString('sv-SE', options);
     let globalStore = useNamedContext('global');
 
     useEffect(() => {
@@ -22,7 +26,7 @@ function PostChat({ match, sse }) {
     const startSSE = () => {
     
         sse.addEventListener('postMessages', e => {
-            setAllPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
+            setMessages(prevArray => [...JSON.parse(e.data), ...prevArray]);
         });
       }
       
@@ -36,8 +40,6 @@ function PostChat({ match, sse }) {
             console.log(error)
         }
     }
-
-    
 
     const getMessages = async () => {
         try {
@@ -88,7 +90,8 @@ function PostChat({ match, sse }) {
                 {filterMessages(messages).map(message => {
                     return (    
                         <ChatCon key={message['_id']}>
-                            <Messages>{message.content}</Messages>
+                            <p>{messageTimeStamp}</p>
+                            <Messages>{displayCreatorName(message, globalStore.allUsers)}: {message.content}</Messages>
                         </ChatCon>
                     )
                 })}
@@ -101,7 +104,7 @@ function PostChat({ match, sse }) {
             </MessageSection>
 
             <div>
-                <ChatFunction post={post} startSSE={startSSE} />
+                <ChatFunction post={post} />
             </div>
         </Wrapper>
     )
