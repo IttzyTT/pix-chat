@@ -1,303 +1,323 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components';
-import ChatFunction from '../components/ChatFunction';
-import { useNamedContext } from 'react-easier';
-import displayCreatorName from '../reusable-functions/displayCreatorName';
+import React, { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import ChatFunction from "../components/ChatFunction";
+import { useNamedContext } from "react-easier";
+import displayCreatorName from "../reusable-functions/displayCreatorName";
 
 function PostChat({ match, sse }) {
+  const bottomRef = useRef();
 
-    const [post, setPost] = useState([]);
-    const [messages, setMessages] = useState([]);
-    const [users, setUsers] = useState([]);
+  const [post, setPost] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [users, setUsers] = useState([]);
 
-    let options = { timeZone: 'UTC' };
+  let createdAt = new window.Date(post.createdAt).toLocaleDateString();
+  let globalStore = useNamedContext("global");
 
-    let createdAt = new window.Date(post.createdAt).toLocaleDateString();
-    let globalStore = useNamedContext('global');
+  useEffect(() => {
+    getSinglePost();
+    getMessages();
+    // getUsers();
+    startSSE();
+    window.scrollTo(0, 1000);
+  }, []);
 
-    useEffect(() => {
-        getSinglePost();
-        getMessages();
-        // getUsers();
-        startSSE();
-    }, []);
+  const startSSE = () => {
+    sse.addEventListener("postMessages", (e) => {
+      setMessages((prevArray) => [...prevArray, ...JSON.parse(e.data)]);
+    });
+  };
 
-    const startSSE = () => {
-
-        sse.addEventListener('postMessages', e => {
-            setMessages(prevArray => [...JSON.parse(e.data), ...prevArray]);
-        });
+  const getSinglePost = async () => {
+    try {
+      const response = await fetch(
+        `${globalStore.apiUrl}/posts/${match.params.id}`
+      );
+      const data = await response.json();
+      console.log(data);
+      setPost(data);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    const getSinglePost = async () => {
-        try {
-            const response = await fetch(`${globalStore.apiUrl}/posts/${match.params.id}`);
-            const data = await response.json();
-            console.log(data);
-            setPost(data);
-        } catch (error) {
-            console.log(error)
-        }
+  const getMessages = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/postMessages`);
+      const data = await response.json();
+      console.log(data);
+      setMessages(data);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    const getMessages = async () => {
-        try {
-            const response = await fetch(`http://localhost:4000/postMessages`);
-            const data = await response.json();
-            console.log(data);
-            setMessages(data);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  const scrollToBottom = () => {
+    bottomRef.current.scrollTo({
+      bottom: 0,
+      left: 100,
+      behavior: "smooth",
+    });
+  };
 
+  // const getUsers = async () => {
+  //     try {
+  //         const response = await fetch(`http://localhost:4000/users`);
+  //         const data = await response.json();
+  //         console.log(data);
+  //         setUsers(data);
+  //     } catch (error) {
+  //         console.log(error)
+  //     }
+  // }
+  // const typeOfPicture = (url) => {
+  //     return (
+  //         url.substring(0, 4) === 'http' ?
+  //         url :
+  //         `/uploads/${url}`
+  //     )
+  // }
 
-    // const getUsers = async () => {
-    //     try {
-    //         const response = await fetch(`http://localhost:4000/users`);
-    //         const data = await response.json();
-    //         console.log(data);
-    //         setUsers(data);
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
+  const filterMessages = (messages) => {
+    return messages.filter((message) => message.postId === match.params.id);
+  };
 
-    const filterMessages = messages => {
-        return (
-            messages.filter(message => (
-                message.postId === match.params.id
-            ))
-        )
+  return (
+    <Wrapper>
+      <Content>
+        <ImgCon>
+          <Img src={post.imageUrl} />
+        </ImgCon>
+        <InfoCon>
+          {/* <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p> */}
+          <Date>{createdAt}</Date>
+          <Caption>{post.caption}</Caption>
+        </InfoCon>
+      </Content>
 
-    }
+      <MessageSection>
+        {filterMessages(messages).map((message) => {
+          const check = globalStore.currentUserId === message.createdById;
+          let messageTimeStamp = new window.Date(
+            message.createdAt
+          ).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+          // console.log(check);
+          return (
+            <ChatWrapper>
+              <ChatCon
+                key={message["_id"]}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+              >
+                {!check ? (
+                  <Con1>
+                    <User>
+                      {displayCreatorName(message, globalStore.allUsers)}
+                    </User>
+                    <Messages>
+                      <Time>{messageTimeStamp}</Time>
+                      <Chat>{message.content}</Chat>
+                    </Messages>
+                  </Con1>
+                ) : (
+                  <Con2>
+                    <UserMessages>
+                      <Time>{messageTimeStamp}</Time>
+                      <Chat>{message.content}</Chat>
+                    </UserMessages>
+                    <User>
+                      {displayCreatorName(message, globalStore.allUsers)}
+                    </User>
+                  </Con2>
+                )}
+              </ChatCon>
+            </ChatWrapper>
+          );
+        })}
+        <p ref={bottomRef}></p>
 
-    return (
-        <Wrapper>
-            <Content>
-                <ImgCon>
-                    <Img src={post.imageUrl} />
-                </ImgCon>
-                <InfoCon>
-                    {/* <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p> */}
-                    <Date>{createdAt}</Date>
-                    <Caption>{post.caption}</Caption>
-                </InfoCon>
-            </Content>
-
-            <MessageSection>
-                {filterMessages(messages).map(message => {
-                    const check = (globalStore.currentUserId === message.createdById);
-                    let messageTimeStamp = new window.Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    console.log(check);
-                    return (
-                        <ChatWrapper>
-                            <ChatCon key={message['_id']}>
-                                {!check ?
-                                    <Con1>
-                                        <User>
-                                        {displayCreatorName(message, globalStore.allUsers)}
-                                        </User>
-                                        <Messages>
-                                        <Time>{messageTimeStamp}</Time>
-                                            <Chat>{message.content}</Chat>
-                                            </Messages>
-                                    </Con1>
-                                    :
-                                    <Con2>
-                                        <UserMessages>
-                                        <Time>{messageTimeStamp}</Time>
-                                        <Chat>{message.content}</Chat>
-                                            </UserMessages>
-                                        <User>
-                                        {displayCreatorName(message, globalStore.allUsers)}
-                                        </User>
-                                    </Con2>
-                                }
-                            </ChatCon>
-
-                            {/* <UserCon key={message['_id']}>
-                                <p>{messageTimeStamp}</p>
-                                <Messages>{displayCreatorName(message, globalStore.allUsers)}: {message.content}</Messages>
-                            </UserCon> */}
-
-                        </ChatWrapper>
-                    )
-                })}
-
-                {/* {users.map(user => {
+        {/* {users.map(user => {
                     return(
                         <p>{user.name}</p>
                     )
                 })} */}
-            </MessageSection>
+      </MessageSection>
 
-            <div>
-                <ChatFunction post={post} />
-            </div>
-        </Wrapper>
-    )
+      <div>
+        <ChatFunction post={post} />
+      </div>
+    </Wrapper>
+  );
 }
 
-export default PostChat
+export default PostChat;
 
 const Content = styled.div`
-    height: 150px;
-    background-color: #373737;
-    display: flex;
-    align-items: center;
-    color: #F3F3F3;
-`
+  height: 150px;
+  background-color: #373737;
+  display: flex;
+  align-items: center;
+  color: #f3f3f3;
+  @media screen and (min-width: 768px) {
+    height: 460px;
+  }
+`;
 
 const InfoCon = styled.div`
-    width: 200px;
-`
+  width: 200px;
+`;
 
 const Wrapper = styled.div`
-    padding-top: 70px;
-`
+  padding-top: 70px;
+`;
 const Img = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
 const ImgCon = styled.div`
-    width: 40%;
-    height: 80%;
-    margin: 0 14px 0 14px;
-`
+  width: 40%;
+  height: 80%;
+  margin: 0 14px 0 14px;
+  @media screen and (min-width: 768px) {
+    width: 50%;
+    height: auto;
+    margin: 0 40px 0 40px;
+  }
+`;
 
 const Location = styled.i`
-    font-size: 12px;
-`
+  font-size: 12px;
+`;
 
 const Date = styled.p`
-    font-size: 10px;
-`
+  font-size: 10px;
+`;
 
 const Caption = styled.h1`
-    font-size: 20px;
-`
+  font-size: 20px;
+`;
 
 const MessageSection = styled.section`
-    overflow-y: scroll;
-    height: 60vh;
-    // padding-bottom: 80px;
-`
+  overflow-y: scroll;
+  height: 60vh;
+  // padding-bottom: 80px;
+`;
 
 const ChatWrapper = styled.div`
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    margin: 0 auto;
-`
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin: 0 auto;
+`;
 
-const ChatCon = styled.div`
-    color: white;
-`
+const ChatCon = styled(motion.div)`
+  color: white;
+`;
 
 const Con1 = styled.div`
-    align-items: flex-end;
-    display: flex;
-    justify-content: flex-start;
-`
+  align-items: flex-end;
+  display: flex;
+  justify-content: flex-start;
+`;
 
 const Con2 = styled.div`
-    align-items: flex-end;
-    display: flex;
-    justify-content: flex-end;
-`
+  align-items: flex-end;
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const Chat = styled.p`
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-`
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+`;
 
 const Time = styled.div`
-    margin: 0;
-    padding: 0;
-    font-size: 10px;
-`
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+`;
 
 const Messages = styled.div`
-    margin-left: 15px;
-    margin-right: 25%;
-    background-color: #6a6a6a;
-    position: relative;
-    border-radius: 20px;
-    padding: 8px 15px;
-    display: inline-block;
+  margin-left: 15px;
+  margin-right: 25%;
+  background-color: #6a6a6a;
+  position: relative;
+  border-radius: 20px;
+  padding: 8px 15px;
+  display: inline-block;
 
-    &:before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        bottom: 0;
-        left: -7px;
-        height: 20px;
-        width: 20px;
-        background: #6a6a6a;
-        border-bottom-right-radius: 15px;
-    }
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: -7px;
+    height: 20px;
+    width: 20px;
+    background: #6a6a6a;
+    border-bottom-right-radius: 15px;
+  }
 
-    &:after {
-        content: "";
-        position: absolute;
-        z-index: 1;
-        bottom: 0;
-        left: -10px;
-        width: 10px;
-        height: 21px;
-        background: #434343;
-        border-bottom-right-radius: 10px;
-    }
-`
+  &:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: -10px;
+    width: 10px;
+    height: 21px;
+    background: #434343;
+    border-bottom-right-radius: 10px;
+  }
+`;
 const UserMessages = styled.div`
-    margin-right: 15px;
-    margin-left: 25%;
-    background: linear-gradient(to bottom, #00D0EA 0%, #7B78FD 100%);
-    border-radius: 20px;
-    padding: 10px 15px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    display: inline-block;
+  margin-right: 15px;
+  margin-left: 25%;
+  background: linear-gradient(to bottom, #00d0ea 0%, #7b78fd 100%);
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
 
-    margin-left: 25%;
+  margin-left: 25%;
+  background-attachment: fixed;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    right: -8px;
+    height: 20px;
+    width: 20px;
+    background: linear-gradient(to bottom, #00d0ea 0%, #7b78fd 100%);
     background-attachment: fixed;
-    position: relative;
+    border-bottom-left-radius: 15px;
+  }
 
-    &:before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        bottom: 0;
-        right: -8px;
-        height: 20px;
-        width: 20px;
-        background: linear-gradient(to bottom, #00D0EA 0%, #7B78FD 100%);
-        background-attachment: fixed;
-        border-bottom-left-radius: 15px;
-    }
-
-    &:after{
-        content: "";
-        position: absolute;
-        z-index: 1;
-        bottom: 0;
-        right: -10px;
-        width: 10px;
-        height: 21px;
-        background: #434343;
-        border-bottom-left-radius: 10px;
-    }
-`
+  &:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: -10px;
+    width: 10px;
+    height: 21px;
+    background: #434343;
+    border-bottom-left-radius: 10px;
+  }
+`;
 
 const User = styled.div`
-    width: 30px;
-    z-index: 2;
-`
+  width: 30px;
+  z-index: 2;
+`;
 
 // const Messages = styled.p`
 //     color: #F3F3F3;

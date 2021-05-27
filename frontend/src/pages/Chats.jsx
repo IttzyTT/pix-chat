@@ -38,29 +38,26 @@ function Chats() {
         }
     }
 
-    const filterMessages = (messages) => {
-        return(
-            messages.filter(message => (
-                message.createdById === globalStore.currentUserId
-            ))
-        ) 
-    }
+    // const filterMessages = (post) => {
+    //     return(
+    //         post.filter(p => (
+    //             p.createdById.include(globalStore.currentUserId)
+    //         ))
+    //     ) 
+    // }
 
     return (
         <Wrapper>
             <Title>Chats</Title>
             <div>
-                {filterMessages(messages).map((message) => {
-                    let createdAt = new window.Date(message.createdAt).toLocaleDateString('sv-SE');
-
+                {post.map(p => {
                     return (
-                        <div key={message['_id']}>
-                            <Date>{createdAt}</Date>
-                            <Caption>{message.content}</Caption>
-                        </div>
+                         
+                        console.log('lots of posts')
+
+
                     )
-                    })
-                }
+                })}
             </div>
         </Wrapper>
         

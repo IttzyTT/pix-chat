@@ -40,7 +40,7 @@ function ChatFunction({ post }) {
         }
     }
 
-    const clearInputField = (e) => {
+    const clearInputField = () => {
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
           );
@@ -61,7 +61,6 @@ function ChatFunction({ post }) {
                             type="text"
                             placeholder="type message..."
                             name='content'
-                            autocomplete="off"
                         />
                     </Yes>
                         <IWrapper>
