@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNamedContext } from 'react-easier';
 import styled from 'styled-components';
 
+ 
 
 export default function Login() {
     const globalStore = useNamedContext('global');
@@ -50,21 +51,7 @@ export default function Login() {
         }
     }
 
-    const createAccountHandler = async () => {
-        try {
-            await fetch(`${globalStore.apiUrl}/users`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(loginCred)
-            })
-            alert('account created');
-            await signInHandler();
-        } catch (error) {
-            console.log(error);
-        }
-    }
+
 
     return (
         <Flexwrapper>
@@ -99,7 +86,7 @@ export default function Login() {
                 </FormContainer>
                 <CreateAccountContainer>
                         <p>New to pix|chat?</p>
-                        <button onClick={createAccountHandler} id="btn-create-account" className="btn-round">Create Account & Sign In</button>
+                        <button id="btn-create-account" className="btn-round">Create Account</button>
                 </CreateAccountContainer>
             </Centering>
         </Flexwrapper>
