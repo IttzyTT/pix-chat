@@ -106,6 +106,21 @@ try {
     
 });
 
+// let user = {
+//     name: 'Jon',
+//     password: 'stuff'
 
+// }
+// let body = {
+//     name: 'loke',
+// }
 
+// Object.assign(user, body)
+
+// body.password = bcryptjs(body.password)
+
+// let body = {
+//     name: 'loke',
+//     password: '343ffgf!=='
+// }
 module.exports = router;
