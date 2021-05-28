@@ -40,7 +40,7 @@ function ChatFunction({ post }) {
         }
     }
 
-    const clearInputField = (e) => {
+    const clearInputField = () => {
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
           );
@@ -61,7 +61,6 @@ function ChatFunction({ post }) {
                             type="text"
                             placeholder="type message..."
                             name='content'
-                            autocomplete="off"
                         />
                     </Yes>
                         <IWrapper>
@@ -76,7 +75,7 @@ function ChatFunction({ post }) {
 export default ChatFunction
 
 const Wrapper = styled.div`
-    background-color: #FFFFFF;
+    background-color: #373737;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -99,6 +98,7 @@ const FormWrapper = styled.div`
             margin: 0;
             padding: 0 0 0 10px;
             background-color: transparent;
+            color: #F3F3F3;
             font-size: 1.4rem;
             font-weight: 200;
             &:focus {
@@ -106,7 +106,7 @@ const FormWrapper = styled.div`
             }
         }
         input[type=text]::placeholder {
-            color: #222;
+            color: #F3F3F3;
         }
     }
 `;
@@ -136,7 +136,7 @@ display: flex;
 justify-content: space-between;
 flex-direction: row;
 border-radius: 30px;
-background-color: #EAE8E8;
+background-color: #5a5a5a;
 width: 100%;
 margin: 0 10px 0 10px;
 `

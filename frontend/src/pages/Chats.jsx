@@ -4,7 +4,7 @@ import { useNamedContext } from 'react-easier';
 
 
 function Chats() {
-    const [post, setPost] = useState ({});
+    const [posts, setPost] = useState ([]);
     const [messages, setMessage] = useState ([]);
     let globalStore = useNamedContext('global');
 
@@ -19,7 +19,6 @@ function Chats() {
         try {
             const response = await fetch(`http://localhost:4000/postMessages`);
             const data = await response.json(); 
-            console.log(data['createdAt']);
             setMessage(data);
             } catch (error) {
                 console.log(error)
@@ -38,29 +37,66 @@ function Chats() {
         }
     }
 
-    const filterMessages = (messages) => {
-        return(
-            messages.filter(message => (
-                message.createdById === globalStore.currentUserId
-            ))
-        ) 
+    // const filterMessages = (post) => {
+    //     return(
+    //         post.filter(p => (
+    //             p.createdById.include(globalStore.currentUserId)
+    //         ))
+    //     ) 
+    // }
+
+    // const checkPost = () => {
+    //     if(thispost.include(you)) {
+    //         work
+    //     }
+    // }
+
+    const allPosts = posts.map(post => {
+        return post
+    });
+    const allMessages = messages.map(message => {
+        return message
+    });
+
+    console.log(allPosts, allMessages);
+
+    let combinedStuff = [...allPosts, ...allMessages];
+    console.log(combinedStuff);
+
+    const filterAllThings = () => {
+        combinedStuff.filter(stuff => {
+            return (
+                stuff.createdById.includes(globalStore.currentUserId)
+            )
+        });
     }
+
+    // const typeOfPicture = (url) => (
+    //     url.substring(0, 4) === 'http' ?
+    //     url :
+    //     `/uploads/${url}`
+    // ) 
 
     return (
         <Wrapper>
             <Title>Chats</Title>
             <div>
-                {filterMessages(messages).map((message) => {
-                    let createdAt = new window.Date(message.createdAt).toLocaleDateString('sv-SE');
-
+                {combinedStuff.map(stuff => {
+                    console.log(stuff.imageUrl);
+                    let check = stuff.createdById.includes(globalStore.currentUserId);
                     return (
-                        <div key={message['_id']}>
-                            <Date>{createdAt}</Date>
-                            <Caption>{message.content}</Caption>
+                        <div>
+                            {check ? (
+                                <>
+                                <img src={stuff.imageUrl} width="100"/>
+                                <p>{stuff.caption}</p>
+                                    <p>{stuff.content}</p>
+                                </>
+                            ) : null}
+                            
                         </div>
                     )
-                    })
-                }
+                })}
             </div>
         </Wrapper>
         

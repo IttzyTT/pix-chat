@@ -67,7 +67,6 @@ function Postcard({ post }) {
         url :
         `/uploads/${url}`
     )
-
     //Shorten the caption-text if overflow
     useEffect(() => {
         if (captionRef.current.scrollWidth > captionRef.current.clientWidth) {
