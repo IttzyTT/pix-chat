@@ -10,7 +10,7 @@ function Searchbar({ allPosts }) {
     const params = useParams()
 
     useEffect(() => {
-        //For when somebody clicks a tag or a city
+        //For when somebody clicks a tag or a city from another page
         if (!params.query) {
             return
         } else if (params.query.startsWith('tag=')) {
@@ -66,11 +66,17 @@ function Searchbar({ allPosts }) {
             </FormWrapper>
             <div className={"postcard-flex-parent"}>
                 <div className={"postcard-flex-it"}>
-                    {allPosts
+                    { !searchInput ? 
+                        <Placeholder>
+                            <i class="material-icons">search</i>
+                        </Placeholder> 
+                        : 
+                        null }
+                    { allPosts
                     .filter(post => (
                         !searchInput ?
-                        post :
-                        filterSearch(post, dropdownValue).includes(searchInput)
+                        null :
+                        filterSearch(post, dropdownValue)?.includes(searchInput)
                     ))
                     .map(post => (
                         <Postcard
@@ -107,7 +113,6 @@ const FormWrapper = styled.div`
         input[type=text], select {
             box-sizing: border-box;
             border: 0;
-            /* height: initial; */
             margin: 0;
             padding: 0;
             background-color: transparent;
@@ -125,5 +130,16 @@ const FormWrapper = styled.div`
         }
     }
 `;
+
+const Placeholder = styled.div`
+    i {
+        font-size: 10rem;
+        color: #3C3B3B;
+    }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`
 
 export default Searchbar;
