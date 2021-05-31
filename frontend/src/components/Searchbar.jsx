@@ -114,6 +114,9 @@ const SearchReturnDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media screen and (min-width: 768px) {
+            
+        }
 `;
 
 const FormWrapper = styled.div`
@@ -123,6 +126,12 @@ const FormWrapper = styled.div`
     width: 90vw;
     background-color: #5a5a5a;
     margin-bottom: 25px;
+    @media screen and (min-width: 768px) {
+            width: 60vw;
+        }
+        @media screen and (min-width: 1024px) {
+            width: 40vw;
+        }
     form {
         width: 88%;
         div {
@@ -147,6 +156,7 @@ const FormWrapper = styled.div`
             flex-shrink: 1;
             display: block;
             width: fit-content;
+            background-color: #5a5a5a;
         }
     }
 `;

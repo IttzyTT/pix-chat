@@ -86,33 +86,10 @@ const ContentWrapper = styled.div`
 
     /* below also affects Searchbar component */
     .postcard-flex-parent {
-        overflow-x: hidden;
-        /* ipad and above */
-        @media only screen and (min-width: 768px) {
-            width: 100%;
-            overflow-x: scroll;
-            overflow-y: scroll;
-        }
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        ::-webkit-scrollbar {
-            display: none;
-        }
-        /* Hide scrollbar for IE, Edge and Firefox */
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
-    .postcard-flex-it {
-        --gap: 20px;
         display: flex;
-        flex-direction: column;
-        gap: var(--gap);
-        /* ipad and above */
-        @media only screen and (min-width: 768px) {
-            flex-direction: row;
-            width: fit-content;
-            padding: 0 var(--gap);
-        }
+        justify-content: center;
     }
+
     /* above also affects Searchbar component */
 
     #load-more {

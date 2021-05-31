@@ -186,6 +186,9 @@ const Toggler = styled.div `
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @media screen and (min-width: 768px) {
+        justify-content: space-around;
+    }
 `
 
 const TogglerSettingText = styled.p `
@@ -216,7 +219,7 @@ const ConBtn = styled.div`
    border: 1px solid #7B78FD;
    border-radius: 50px;
    @media screen and (min-width: 768px) {
-        width: 200px;
+        width: 160px;
         height: 60px;
     }
 `
@@ -225,6 +228,6 @@ const LogOut = styled.button`
     color: #fff;
     text-align: center;
     @media screen and (min-width: 768px) {
-       font-size: 24px;
+       font-size: 18px;
     }
 `
