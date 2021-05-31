@@ -67,7 +67,7 @@ function Chats() {
 
     return (
         <Wrapper>
-            <Title>Chats</Title>
+            <Title>Latest chats</Title>
             <ChatsContainer>
                 { createChatPreview().map(chat => (
                         <Link to={`/chat/${chat.postId}`} key={chat['_id']}>

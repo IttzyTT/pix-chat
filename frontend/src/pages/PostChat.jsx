@@ -63,6 +63,7 @@ function PostChat({ match, sse }) {
   //         console.log(error)
   //     }
   // }
+  
   // const typeOfPicture = (url) => {
   //     return (
   //         url.substring(0, 4) === 'http' ?
@@ -70,6 +71,7 @@ function PostChat({ match, sse }) {
   //         `/uploads/${url}`
   //     )
   // }
+ 
 
   const filterMessages = (messages) => {
     return messages.filter((message) => message.postId === match.params.id);
@@ -77,12 +79,15 @@ function PostChat({ match, sse }) {
 
   return (
     <Wrapper>
+      <ContentWrapper>
       <Content>
         <ImgCon>
           <Img src={post.imageUrl} />
+          {/* <Img src={typeOfPicture(post.imageUrl)} alt={post.caption} /> */}
         </ImgCon>
         <InfoCon>
           {/* <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p> */}
+
           <Date>{createdAt}</Date>
           <Caption>{post.caption}</Caption>
         </InfoCon>
@@ -136,6 +141,7 @@ function PostChat({ match, sse }) {
                 })} */}
         </ScrollableFeed>
       </MessageSection>
+      </ContentWrapper>
 
       <div>
         <ChatFunction post={post} />
@@ -153,9 +159,28 @@ const Content = styled.div`
   align-items: center;
   color: #f3f3f3;
   @media screen and (min-width: 768px) {
-    height: 460px;
+    height: 240px;
+  }
+  @media screen and (min-width: 1024px) {
+    height: 300px;
+  }
+  @media screen and (min-width: 1200px) {
+    height: 560px;
+    width: 40%;
+    flex-direction: column;
+    justify-content: space-around;
+    border-radius: 10px;
+    box-shadow: 0px 2px 3px 1px #191818;
   }
 `;
+
+const ContentWrapper = styled.div`
+@media screen and (min-width: 1200px) {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+`
 
 const InfoCon = styled.div`
   width: 200px;
@@ -174,9 +199,19 @@ const ImgCon = styled.div`
   height: 80%;
   margin: 0 14px 0 14px;
   @media screen and (min-width: 768px) {
-    width: 50%;
-    height: auto;
-    margin: 0 40px 0 40px;
+    width: 34%;
+    height: 80%;
+    margin: 0 26px 0 26px;
+  }
+  @media screen and (min-width: 1024px) {
+    width: 30%;
+    height: 80%;
+    margin: 0 30px 0 30px;
+  }
+  @media screen and (min-width: 1200px) {
+    width: 90%;
+    height: 70%;
+    margin-top: 10px;
   }
 `;
 
@@ -186,16 +221,50 @@ const Location = styled.i`
 
 const Date = styled.p`
   font-size: 10px;
+  @media screen and (min-width: 1024px) {
+    font-size: 20px;
+  }
+  @media screen and (min-width: 1200px) {
+    font-size: 16px;
+  }
 `;
 
 const Caption = styled.h1`
   font-size: 20px;
+  @media screen and (min-width: 1024px) {
+    font-size: 30px;
+  }
+  @media screen and (min-width: 1200px) {
+    font-size: 22px;
+  }
 `;
 
 const MessageSection = styled.section`
   overflow-y: scroll;
-  height: 60vh;
+  height: 59vh;
   // padding-bottom: 80px;
+  @media screen and (max-height: 568px) {
+    height: 42vh;
+  }
+  @media screen and (min-height: 569px) and (max-height: 667px) {
+    height: 50vh;
+  }
+  @media screen and (min-height: 668px) and (max-height: 736px) {
+    height: 55vh;
+  }
+  @media screen and (min-width: 768px) {
+    height: 56vh;
+  }
+  @media screen and (min-width: 1024px) {
+    height: 61vh;
+  }
+  @media screen and (min-width: 1200px) {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    width:40%;
+    height: 76vh;
+  }
 `;
 
 const ChatWrapper = styled.div`
@@ -226,12 +295,25 @@ const Chat = styled.p`
   margin: 0;
   padding: 0;
   font-size: 16px;
+  @media screen and (min-width: 1024px) {
+    font-size: 30px;
+  }
+  @media screen and (min-width: 1200px) {
+    font-size: 20px;
+  }
+  
 `;
 
 const Time = styled.div`
   margin: 0;
   padding: 0;
   font-size: 10px;
+  @media screen and (min-width: 1024px) {
+    font-size: 15px;
+  }
+  @media screen and (min-width: 1200px) {
+    font-size: 16px;
+  }
 `;
 
 const Messages = styled.div`
@@ -242,6 +324,12 @@ const Messages = styled.div`
   border-radius: 20px;
   padding: 8px 15px;
   display: inline-block;
+  @media screen and (min-width: 1024px) {
+    margin-left: 54px;
+  }
+  @media screen and (min-width: 1200px) {
+    margin-left: 44px;
+  }
 
   &:before {
     content: "";
@@ -310,6 +398,12 @@ const UserMessages = styled.div`
 const User = styled.div`
   width: 30px;
   z-index: 2;
+  @media screen and (min-width: 1024px) {
+    font-size: 25px;
+  }
+  @media screen and (min-width: 1200px) {
+    font-size: 20px;
+  }
 `;
 
 // const Messages = styled.p`

@@ -174,8 +174,13 @@ const Section = styled(motion.section)`
     }
     /* ipad and above */
     @media only screen and (min-width: 768px) {
-        --width: 400px;
+        --width: 550px;
         --height-4-3-aspect: calc(var(--width) * 0.75);
+        border-radius: 10px;
+        box-shadow: 0px 2px 3px 1px #191818;
+        margin: 20px 0;
+        padding: 30px 0;
+        background: #252525;
         width: var(--width);
         .postcard-img {
             object-fit: cover;
