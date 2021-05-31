@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNamedContext } from 'react-easier';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import displayCreatorName from '../reusable-functions/displayCreatorName';
@@ -75,7 +75,7 @@ function Postcard({ post }) {
     },[postCaption]);
     
     return (
-        <Section>
+        <Section variants={postAni}>
             <AboveImage>
                 <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
                 { post.location.show ?
@@ -138,11 +138,18 @@ function Postcard({ post }) {
 
 export default Postcard;
 
+//framer motion
 const likeBtnVariants = {
     liked: { scale: [1, 2, 1, 1.5, 1] },
     unliked: {  }
 }
-const Section = styled.section`
+const postAni = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 }
+}
+
+//styled components
+const Section = styled(motion.section)`
     --text-color: #F3F3F3;
     --theme-color: #7B78FD;
     --heart-color: #FD8078;

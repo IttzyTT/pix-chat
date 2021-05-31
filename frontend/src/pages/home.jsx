@@ -5,10 +5,15 @@ import Postcard from '../components/Postcard';
 import fetchAllPosts from '../reusable-functions/fetchAllPosts';
 import { useParams } from 'react-router';
 import Searchbar from '../components/Searchbar';
+import { motion } from "framer-motion";
 
 function Home({ sse }) {
     let globalStore = useNamedContext('global');
     const [allPosts, setAllPosts] = useState([]);
+
+    //pagination basic
+    const [displayedPosts, setDisplayedPosts] = useState([]);
+    const [nbOfDisplayedPosts, setNbOfDisplayedPosts] = useState(8); //increase on click
 
     const showSearch = useParams().showSearch;
 
@@ -21,6 +26,17 @@ function Home({ sse }) {
             setAllPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
         });
     }, [])
+
+    //pagination
+    useEffect(() => {
+        setDisplayedPosts(allPosts.filter((v,i) => ( 
+            i < nbOfDisplayedPosts
+        )))
+    }, [allPosts, nbOfDisplayedPosts])
+
+    const loadMorePosts = () => {
+        setNbOfDisplayedPosts(prevValue => prevValue += 8);
+    }
     
     return (
         <ContentWrapper>
@@ -28,19 +44,43 @@ function Home({ sse }) {
             <Searchbar allPosts={allPosts} />
             : 
             <div className={"postcard-flex-parent"}>
-                <div className={"postcard-flex-it"}>
-                    {allPosts.map(post => (
+                <motion.div 
+                    className={"postcard-flex-it"}
+                    variants={containerAni}
+                    initial={"hidden"}
+                    animate={"show"}
+                >
+                    { displayedPosts.map(post => (
                         <Postcard
                             key={ post['_id'] }
                             post={ post }
                         />
                     ))}
-                </div>
-            </div>}
+                    { allPosts.length === displayedPosts.length ?
+                        null :
+                        <div id={'load-more'}>
+                            <p id={'load-more-text'} onClick={loadMorePosts}>Load more...</p>
+                        </div>
+                    }
+                </motion.div>
+            </div>
+            }
         </ContentWrapper>
     )
 }
 
+//framer motion
+const containerAni = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2
+        }
+    }
+}
+
+//styled components
 const ContentWrapper = styled.div`
     padding: 70px 0;
 
@@ -48,6 +88,31 @@ const ContentWrapper = styled.div`
     .postcard-flex-parent {
         display: flex;
         justify-content: center;
+    }
+
+    /* above also affects Searchbar component */
+
+    #load-more {
+        margin-bottom: 40vh;
+        text-align: center;
+        #load-more-text {
+            cursor: pointer;
+            margin: 0;
+            padding: 1rem 0;
+        }
+    }
+    @media only screen and (min-width: 768px) {
+        --width: 400px;
+        --height-4-3-aspect: calc(var(--width) * 0.75);
+        #load-more {
+            width: var(--width);
+            height: var(--height-4-3-aspect);
+            margin-bottom: 0;
+            #load-more-text {
+                position: relative;
+                top: 50%;
+            }
+        }
     }
 `
 

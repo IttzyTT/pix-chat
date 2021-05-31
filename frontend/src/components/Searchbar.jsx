@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import Postcard from './Postcard';
+import { motion } from "framer-motion";
 
 function Searchbar({ allPosts }) {
     const [searchInput, setSearchInput] = useState('');
@@ -10,7 +11,7 @@ function Searchbar({ allPosts }) {
     const params = useParams()
 
     useEffect(() => {
-        //For when somebody clicks a tag or a city
+        //For when somebody clicks a tag or a city from another page
         if (!params.query) {
             return
         } else if (params.query.startsWith('tag=')) {
@@ -65,25 +66,50 @@ function Searchbar({ allPosts }) {
                 </form>
             </FormWrapper>
             <div className={"postcard-flex-parent"}>
-                <div className={"postcard-flex-it"}>
-                    {allPosts
-                    .filter(post => (
-                        !searchInput ?
-                        post :
-                        filterSearch(post, dropdownValue).includes(searchInput)
-                    ))
-                    .map(post => (
-                        <Postcard
-                            key={ post['_id'] }
-                            post={ post }
-                        />
-                    ))}
-                </div>
+                <motion.div 
+                    className={"postcard-flex-it"}
+                    variants={containerAni}
+                    initial={"hidden"}
+                    animate={"show"}
+                >
+                    { !searchInput ? 
+                        <Placeholder>
+                            <i className={"material-icons"}>search</i>
+                        </Placeholder> 
+                        : 
+                        null 
+                    }
+                    { allPosts
+                        .filter(post => (
+                            !searchInput ?
+                            null :
+                            new RegExp(searchInput, 'gi').test(filterSearch(post, dropdownValue)?.toString())
+                        ))
+                        .map(post => (
+                            <Postcard
+                                key={ post['_id'] }
+                                post={ post }
+                            />
+                        ))
+                    }
+                </motion.div>
             </div>
         </SearchReturnDiv>
     )
 }
 
+//framer motion
+const containerAni = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2
+        }
+    }
+}
+
+//styled components
 const SearchReturnDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -116,7 +142,6 @@ const FormWrapper = styled.div`
         input[type=text], select {
             box-sizing: border-box;
             border: 0;
-            /* height: initial; */
             margin: 0;
             padding: 0;
             background-color: transparent;
@@ -135,5 +160,16 @@ const FormWrapper = styled.div`
         }
     }
 `;
+
+const Placeholder = styled.div`
+    i {
+        font-size: 10rem;
+        color: #3C3B3B;
+    }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`
 
 export default Searchbar;

@@ -10,6 +10,7 @@ export default function Login() {
         name: '',
         password: ''
     });
+    const [currentPage, setCurrentPage] = useState('login'); // 'login' eller 'createAccount'
 
     useEffect(() => {
         let currentUserId = localStorage.getItem('pixChatCurrentUserId');
@@ -51,8 +52,34 @@ export default function Login() {
         }
     }
 
+    // Create Account
+    const createAccountHandler = async (e) => {
+        if (e) e.preventDefault();
 
+        try {
+            await fetch(`${globalStore.apiUrl}/users`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginCred)
+            })
+            console.log('account created');
+            await signInHandler();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
+    const whatPage = (e) => {
+        e.preventDefault();
+        if (currentPage === 'login') {
+            signInHandler();
+        } else if (currentPage === 'createAccount') {
+            createAccountHandler();
+        }
+    }
+    console.log(currentPage);
     return (
         <Flexwrapper>
             <Centering>
@@ -65,7 +92,7 @@ export default function Login() {
                     </svg>
                 </LogoDiv>
                 <FormContainer>
-                    <form onSubmit={signInHandler}>
+                    <form onSubmit={whatPage}>
                         <div className="input-field-container">
                             <i className="material-icons">person_outline</i>
                             <span>
@@ -80,14 +107,27 @@ export default function Login() {
                         </div>
                         <br />
                         <br />
-                        <button type="submit" id="btn-sign-in" className="btn-round">Sign In</button>
-                        <p>Forgot password?</p>
+                        <button 
+                            type="submit" 
+                            id="btn-sign-in" 
+                            className="btn-round"
+                            style={currentPage === 'login' ? 
+                            {fontSize: '2.2rem'}
+                            : 
+                            {fontSize: '1.8rem'}
+                            }
+                        >
+                            {currentPage === 'login' ? 'Sign In' : 'Create Account & Sign In'}
+                        </button>
                     </form>
                 </FormContainer>
+                {currentPage === 'login' ?
                 <CreateAccountContainer>
                         <p>New to pix|chat?</p>
-                        <button id="btn-create-account" className="btn-round">Create Account</button>
+                        <button id="btn-create-account" className="btn-round" onClick={() => setCurrentPage('createAccount')}>Create Account</button>
                 </CreateAccountContainer>
+                :
+                null}
             </Centering>
         </Flexwrapper>
     )

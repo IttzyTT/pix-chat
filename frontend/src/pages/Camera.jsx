@@ -241,11 +241,18 @@ class Camera extends Component {
             <div className="preview">
               <form id="photoPreview"name="photoUpload" onSubmit={this.handleSubmit}>
                 <img className="preview-img" src={this.state.imageURL} ref={this.imageEle} onLoad={this.handleImageUrlUpdate} />
-                <input type="text" name={'caption'} value={this.state.caption} onChange={this.handleChange} placeholder="caption" />
-                <input type="text" name={'tags'} value={this.state.tags} onChange={this.handleChange} placeholder="tag1 tag2 tag3" />
-                <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
-                <p>Location: {!this.state.geo ? '...loading' : `${this.state.geo.city}, ${this.state.geo.country}`}</p>
-                <p>Include location in the post?: {this.state.geoCheckbox.toString()}</p>
+               
+                <div className="switch">
+                <input className="input" type="text" name={'caption'} value={this.state.caption} onChange={this.handleChange} placeholder="Write caption..." />
+                <input className="input" type="text" name={'tags'} value={this.state.tags} onChange={this.handleChange} placeholder="tag1 tag2 tag3" />
+
+                    <label> Location off/on:
+                    <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
+                    <span className="lever"></span>
+                    </label>
+                    <p >Location: {!this.state.geo ? '...loading' : `${this.state.geo.city}, ${this.state.geo.country}`}</p>
+
+                </div>
                 <button type={'submit'} className="btn post-btn" >
                   <i className="fa fa-plus-circle"></i>
                 </button>
@@ -300,8 +307,18 @@ const CameraWrapper = styled.div`
     background: transparent;
     color: #fff;
     border: none;
-  }
+  } 
 
+  input{
+    color: whitesmoke; 
+  }
+.switch{
+  margin-top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-size: 1rem;
+  color: whitesmoke; 
+}
   .post-btn {
     position: absolute;
     bottom: 0;
@@ -324,10 +341,5 @@ const CameraWrapper = styled.div`
   }
 
 
-  input[type='checkbox']:not(:checked),
-  input[type='checkbox']:checked {
-    position: relative;
-    opacity: 1;
-    pointer-events: auto;
-  }
+
 `;
