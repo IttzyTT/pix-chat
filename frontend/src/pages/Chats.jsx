@@ -71,16 +71,16 @@ function Chats() {
             <ChatsContainer>
                 { createChatPreview().map(chat => (
                         <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
-                    <Chat>
-                            <img src={typeOfPicture(chat.imageUrl)} />
-                            <div className={'chat-text'}>
-                                <div className="chat-top-text">
-                                    <h5>{chat.caption}</h5>
-                                    <p className={'chat-date'}>{chat.createdAt}</p>
+                            <Chat>
+                                <img src={typeOfPicture(chat.imageUrl)} />
+                                <div className={'chat-text'}>
+                                    <div className="chat-top-text">
+                                        <h5>{chat.caption}</h5>
+                                        <p className={'chat-date'}>{chat.createdAt}</p>
+                                    </div>
+                                    <p className={'chat-content'}>{chat.content}</p>
                                 </div>
-                                <p className={'chat-content'}>{chat.content}</p>
-                            </div>
-                    </Chat>
+                            </Chat>
                         </Link>
                 )) }
             </ChatsContainer>
