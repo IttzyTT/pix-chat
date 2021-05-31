@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNamedContext } from 'react-easier';
 import { useLocation, Link } from "react-router-dom";
-import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 function Profile({ match }) {
@@ -92,7 +91,7 @@ export default Profile
 
 const Wrap = styled.div` 
     @media screen and (min-width: 1280px) {
-       margin: 0 180px 0 180px 
+       margin: 0 280px 0 280px 
     }
 `
 const Con = styled.div` 

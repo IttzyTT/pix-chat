@@ -37,13 +37,13 @@ function Chats() {
         }
     }
 
-    // const filterMessages = (post) => {
-    //     return(
-    //         post.filter(p => (
-    //             p.createdById.include(globalStore.currentUserId)
-    //         ))
-    //     ) 
-    // }
+    const filterPosts = (posts) => {
+        return(
+            posts.filter(post => (
+                post._id.includes(globalStore.currentUserId)
+            ))
+        ) 
+    }
 
     // const checkPost = () => {
     //     if(thispost.include(you)) {
@@ -51,25 +51,25 @@ function Chats() {
     //     }
     // }
 
-    const allPosts = posts.map(post => {
-        return post
-    });
-    const allMessages = messages.map(message => {
-        return message
-    });
+    // const allPosts = posts.map(post => {
+    //     return post
+    // });
+    // const allMessages = messages.map(message => {
+    //     return message
+    // });
 
-    console.log(allPosts, allMessages);
+    // console.log(allPosts, allMessages);
 
-    let combinedStuff = [...allPosts, ...allMessages];
-    console.log(combinedStuff);
+    // let combinedStuff = [...allPosts, ...allMessages];
+    // console.log(combinedStuff);
 
-    const filterAllThings = () => {
-        combinedStuff.filter(stuff => {
-            return (
-                stuff.createdById.includes(globalStore.currentUserId)
-            )
-        });
-    }
+    // const filterAllThings = () => {
+    //     combinedStuff.filter(stuff => {
+    //         return (
+    //             stuff.createdById.includes(globalStore.currentUserId)
+    //         )
+    //     });
+    // }
 
     // const typeOfPicture = (url) => (
     //     url.substring(0, 4) === 'http' ?
@@ -80,7 +80,7 @@ function Chats() {
     return (
         <Wrapper>
             <Title>Chats</Title>
-            <div>
+            {/* <div>
                 {combinedStuff.map(stuff => {
                     console.log(stuff.imageUrl);
                     let check = stuff.createdById.includes(globalStore.currentUserId);
@@ -97,8 +97,16 @@ function Chats() {
                         </div>
                     )
                 })}
-            </div>
-        </Wrapper>
+            </div> */}
+
+            {filterPosts(posts.map((post) => {
+                return (
+                    <div>
+                        <h1>{post.caption}</h1>
+                    </div>
+                )
+            }))}
+        </Wrapper>  
         
         
     )

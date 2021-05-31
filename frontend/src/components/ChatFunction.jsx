@@ -85,6 +85,16 @@ const Wrapper = styled.div`
     width: 100%;
     bottom: 63px;
     z-index: 10;
+    @media screen and (min-width: 768px) {
+        height: 68px;
+      }
+      @media screen and (min-width: 1024px) {
+        height: 86px;
+      }
+    @media screen and (min-width: 1200px) {
+        bottom: 0;
+        height: 60px;
+      }
 `
 
 const FormWrapper = styled.div`
@@ -104,9 +114,21 @@ const FormWrapper = styled.div`
             &:focus {
                 outline: 0;
             }
+            @media screen and (min-width: 1024px) {
+                height: 100%;
+            }
         }
         input[type=text]::placeholder {
             color: #F3F3F3;
+            @media screen and (min-width: 768px) {
+                font-size: 26px;
+            }
+            @media screen and (min-width: 1024px) {
+                font-size: 30px;
+            }
+            @media screen and (min-width: 1200px) {
+                font-size: 18px;
+            }
         }
     }
 `;
@@ -119,6 +141,19 @@ const IWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-around;
+    @media screen and (min-width: 768px) {
+        width: 60px;
+        height: 50px;
+      }
+      @media screen and (min-width: 1024px) {
+        width: 84px;
+        height: 64px;
+      }
+
+    @media screen and (min-width: 1200px) {
+        width: 50px;
+        height: 50px;
+      }
 `
 
 const IWrapper2 = styled.div`
@@ -129,6 +164,18 @@ const IWrapper2 = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-around;
+    @media screen and (min-width: 768px) {
+        width: 60px;
+        height: 50px;
+      }
+      @media screen and (min-width: 1024px) {
+        width: 84px;
+        height: 64px;
+      }
+    @media screen and (min-width: 1200px) {
+        width: 50px;
+        height: 50px;
+      }
 `
 
 const Yes = styled.div`
@@ -139,6 +186,16 @@ border-radius: 30px;
 background-color: #5a5a5a;
 width: 100%;
 margin: 0 10px 0 10px;
+align-items: center;
+@media screen and (min-width: 768px) {
+        height: 56px;
+      }
+      @media screen and (min-width: 1024px) {
+        height: 66px;
+      }
+      @media screen and (min-width: 1200px) {
+        height: 46px;
+      }
 `
 
 const Send = styled.i`

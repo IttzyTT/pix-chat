@@ -28,12 +28,16 @@ export default navbar
 
 const Navbar = styled.div `
     background-color: #434343;
-    position: fixed;
-    z-index: 99;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border-top: 1px solid #fff;
+        position: fixed;
+        z-index: 99;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        border-top: 1px solid #fff;
+    @media screen and (min-width: 1025px) {
+    display: none;
+        
+    }
 `
 
 const NavbarList = styled.ul `
