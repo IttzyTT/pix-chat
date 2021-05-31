@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNamedContext } from 'react-easier';
+import { Link } from "react-router-dom";
 
 
 function Chats() {
@@ -30,83 +31,60 @@ function Chats() {
         try {
             const response = await fetch(`http://localhost:4000/posts`);
             const data = await response.json(); 
-            console.log(data.createdAt);
             setPost(data);
         } catch (error) {
             console.log(error)
         }
     }
 
-    const filterPosts = (posts) => {
-        return(
-            posts.filter(post => (
-                post._id.includes(globalStore.currentUserId)
-            ))
-        ) 
+    const createChatPreview = () => {
+        let yourMessages = messages.filter(message => message.createdById === globalStore.currentUserId);
+        let chatPreviews = yourMessages.map(message => message = {
+                                                                ...message, 
+                                                                'imageUrl': posts
+                                                                            .filter(post => message.postId === post['_id'])
+                                                                            .map(post => post.imageUrl)
+                                                                            .toString(),
+                                                                'caption': posts
+                                                                            .filter(post => message.postId === post['_id'])
+                                                                            .map(post => post.caption)
+                                                                            .toString(),
+                                                                'createdAt': new window.Date(message.createdAt).toLocaleDateString()
+                                                                }
+                                            )
+                                        .sort((a,b) => (
+                                            a.createdAt > b.createdAt ? -1 : 1
+                                        ))
+        return chatPreviews;
     }
 
-    // const checkPost = () => {
-    //     if(thispost.include(you)) {
-    //         work
-    //     }
-    // }
-
-    // const allPosts = posts.map(post => {
-    //     return post
-    // });
-    // const allMessages = messages.map(message => {
-    //     return message
-    // });
-
-    // console.log(allPosts, allMessages);
-
-    // let combinedStuff = [...allPosts, ...allMessages];
-    // console.log(combinedStuff);
-
-    // const filterAllThings = () => {
-    //     combinedStuff.filter(stuff => {
-    //         return (
-    //             stuff.createdById.includes(globalStore.currentUserId)
-    //         )
-    //     });
-    // }
-
-    // const typeOfPicture = (url) => (
-    //     url.substring(0, 4) === 'http' ?
-    //     url :
-    //     `/uploads/${url}`
-    // ) 
+    //Function to show both http-pictures and uploaded ones
+    const typeOfPicture = (url) => (
+        url.substring(0, 4) === 'http' ?
+        url :
+        `/uploads/${url}`
+    )
 
     return (
         <Wrapper>
-            <Title>Chats</Title>
-            {/* <div>
-                {combinedStuff.map(stuff => {
-                    console.log(stuff.imageUrl);
-                    let check = stuff.createdById.includes(globalStore.currentUserId);
-                    return (
-                        <div>
-                            {check ? (
-                                <>
-                                <img src={stuff.imageUrl} width="100"/>
-                                <p>{stuff.caption}</p>
-                                    <p>{stuff.content}</p>
-                                </>
-                            ) : null}
-                            
-                        </div>
-                    )
-                })}
-            </div> */}
-
-            {filterPosts(posts.map((post) => {
-                return (
-                    <div>
-                        <h1>{post.caption}</h1>
-                    </div>
-                )
-            }))}
-        </Wrapper>  
+            <Title>Latest chats</Title>
+            <ChatsContainer>
+                { createChatPreview().map(chat => (
+                        <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
+                    <Chat>
+                            <img src={typeOfPicture(chat.imageUrl)} />
+                            <div className={'chat-text'}>
+                                <div className="chat-top-text">
+                                    <h5>{chat.caption}</h5>
+                                    <p className={'chat-date'}>{chat.createdAt}</p>
+                                </div>
+                                <p className={'chat-content'}>{chat.content}</p>
+                            </div>
+                    </Chat>
+                        </Link>
+                )) }
+            </ChatsContainer>
+        </Wrapper>
         
         
     )
@@ -115,14 +93,58 @@ function Chats() {
 export default Chats
 
 const Wrapper = styled.div`
-padding-top: 100px;
+    width: 90%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-top: 100px;
 `
 const Title = styled.h1`
-font-size: 20px;
+    font-size: 20px;
 `
-const Date = styled.p`
-color: #FFFF;
+const ChatsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    a {
+        width: 100%;
+        color: #F3F3F3;
+    }
 `
-const Caption = styled.h2`
-color: #5590e7;
+const Chat = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    .chat-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        gap: 0;
+    }
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+        object-fit: cover;
+    }
+    h5 {
+        margin: 0 0 0 0;
+        flex-grow: 1;
+    }
+    .chat-top-text {
+        display: flex;
+        width: 100%;
+    }
+    .chat-content {
+        margin: 0.5rem 0 0 0;
+        flex-grow: 1;
+    }
+    .chat-date {
+        margin: 0 0 0.1rem 0;
+        align-self: flex-end;
+        color: #f3f3f38d
+    }
 `
