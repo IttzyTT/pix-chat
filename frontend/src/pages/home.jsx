@@ -62,7 +62,7 @@ function Home({ sse }) {
                     { allPosts.length === displayedPosts.length ?
                         null :
                         <div id={'load-more'}>
-                            <p onClick={loadMorePosts}>Load more...</p>
+                            <p id={'load-more-text'} onClick={loadMorePosts}>Load more...</p>
                         </div>
                     }
                 </motion.div>
@@ -114,7 +114,7 @@ const ContentWrapper = styled.div`
     #load-more {
         margin-bottom: 40vh;
         text-align: center;
-        p {
+        #load-more-text {
             margin: 0;
             padding: 1rem 0;
         }
@@ -126,7 +126,7 @@ const ContentWrapper = styled.div`
             width: var(--width);
             height: var(--height-4-3-aspect);
             margin-bottom: 0;
-            p {
+            #load-more-text {
                 position: relative;
                 top: 50%;
             }

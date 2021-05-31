@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import Postcard from './Postcard';
+import { motion } from "framer-motion";
 
 function Searchbar({ allPosts }) {
     const [searchInput, setSearchInput] = useState('');
@@ -65,10 +66,15 @@ function Searchbar({ allPosts }) {
                 </form>
             </FormWrapper>
             <div className={"postcard-flex-parent"}>
-                <div className={"postcard-flex-it"}>
+                <motion.div 
+                    className={"postcard-flex-it"}
+                    variants={containerAni}
+                    initial={"hidden"}
+                    animate={"show"}
+                >
                     { !searchInput ? 
                         <Placeholder>
-                            <i class="material-icons">search</i>
+                            <i className={"material-icons"}>search</i>
                         </Placeholder> 
                         : 
                         null }
@@ -76,7 +82,7 @@ function Searchbar({ allPosts }) {
                     .filter(post => (
                         !searchInput ?
                         null :
-                        filterSearch(post, dropdownValue)?.includes(searchInput)
+                        new RegExp(searchInput, 'gi').test(filterSearch(post, dropdownValue)?.toString())
                     ))
                     .map(post => (
                         <Postcard
@@ -84,12 +90,24 @@ function Searchbar({ allPosts }) {
                             post={ post }
                         />
                     ))}
-                </div>
+                </motion.div>
             </div>
         </SearchReturnDiv>
     )
 }
 
+//framer motion
+const containerAni = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2
+        }
+    }
+}
+
+//styled components
 const SearchReturnDiv = styled.div`
     display: flex;
     flex-direction: column;
