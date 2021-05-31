@@ -77,19 +77,21 @@ function Searchbar({ allPosts }) {
                             <i className={"material-icons"}>search</i>
                         </Placeholder> 
                         : 
-                        null }
+                        null 
+                    }
                     { allPosts
-                    .filter(post => (
-                        !searchInput ?
-                        null :
-                        new RegExp(searchInput, 'gi').test(filterSearch(post, dropdownValue)?.toString())
-                    ))
-                    .map(post => (
-                        <Postcard
-                            key={ post['_id'] }
-                            post={ post }
-                        />
-                    ))}
+                        .filter(post => (
+                            !searchInput ?
+                            null :
+                            new RegExp(searchInput, 'gi').test(filterSearch(post, dropdownValue)?.toString())
+                        ))
+                        .map(post => (
+                            <Postcard
+                                key={ post['_id'] }
+                                post={ post }
+                            />
+                        ))
+                    }
                 </motion.div>
             </div>
         </SearchReturnDiv>
