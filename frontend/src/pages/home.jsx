@@ -91,8 +91,15 @@ const ContentWrapper = styled.div`
         @media only screen and (min-width: 768px) {
             width: 100%;
             overflow-x: scroll;
-            overflow-y: hidden;
+            overflow-y: scroll;
         }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
     }
     .postcard-flex-it {
         --gap: 20px;
@@ -112,6 +119,7 @@ const ContentWrapper = styled.div`
         margin-bottom: 40vh;
         text-align: center;
         #load-more-text {
+            cursor: pointer;
             margin: 0;
             padding: 1rem 0;
         }
