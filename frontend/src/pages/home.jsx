@@ -32,13 +32,10 @@ function Home({ sse }) {
         setDisplayedPosts(allPosts.filter((v,i) => ( 
             i < nbOfDisplayedPosts
         )))
-    }, [allPosts])
+    }, [allPosts, nbOfDisplayedPosts])
 
     const loadMorePosts = () => {
         setNbOfDisplayedPosts(prevValue => prevValue += 8);
-        setDisplayedPosts(allPosts.filter((v,i) => ( 
-            i < nbOfDisplayedPosts
-        )))
     }
     
     return (
