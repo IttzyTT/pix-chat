@@ -104,51 +104,45 @@ const Wrapper = styled.div`
     transform: translateX(-50%);
     padding-top: 100px;
     padding-bottom: 100px;
-    @media screen and (min-width: 1024px) {
-        padding-top: 20px;
-    }
-`
+   
+`;
+
 const Title = styled.h1`
     font-size: 20px;
     margin-bottom: 3rem;
-    @media screen and (min-width: 768px)  {
-    font-size: 25px;
-  }
-`
+
+      @media screen and (min-width: 481px) and (max-width: 768px) {
+        font-size: 25px;
+        margin-bottom: 3rem;   
+    } 
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+        font-size: 30px;
+    }
+`;
+
 const ChatsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+
     a {
         width: 100%;
-        color: #F3F3F3;
+        color: #F3F3F3;    
     }
-        @media screen and (min-width: 768px) and (max-height: 1023px){
+        @media screen and (max-width: 480px){
         font-size: 20px;
-          margin: 0;
-    }
-        @media screen and (min-width: 1024px)  {
-        font-size: 20px;
-          margin: 0;
-    }
-  h5 {
-      @media screen and (min-width: 768px) and (max-height: 1023px) {
-        font-size: 28px;
         margin: 0;
     }
-    }
-        @media screen and (min-width: 1024px) {
-        font-size: 10px;
-    }
-    
-  
+
 `;
+
 const Chat = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
     gap: 1rem;
+
     .chat-text {
         display: flex;
         flex-direction: column;
@@ -167,43 +161,50 @@ const Chat = styled.div`
     h5 {
         margin: 0.7rem 0 0 0;
         flex-grow: 1;
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            font-size: 2rem;  
+        }
         
     }
     .chat-content {
         margin: 0.5rem 0 0 0;
         color: #f3f3f3a7;
+        font-size: 15px;
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            font-size: 23px;
+        }
     }
     .chat-date {
         margin: 0.2rem 0 1.1rem 0;
         color: #f3f3f3a7;
+        font-size: 15px;   
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            font-size: 23px;
+        }
     }
-`
+    
+`;
+
 const AllWrapper = styled.div `
 
-   @media screen and (min-width: 768px) {
-    font-size: 20px;
-    display: flex;
-    justify-content: space-around;
+    img {
+        @media screen and (max-width: 480px) {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            object-fit: cover;
     }
-   @media screen and (min-width: 1024px) {
-    font-size: 20px;
-    display: flex;
-    justify-content: space-around;
-      padding-top: 35px;
+        @media screen and (min-width: 481px) and (max-width: 768px) {
+            width: 125px;
+            height: 125px;
+            border-radius: 75px;
+            object-fit: cover;
     }
-  img {
-      @media screen and (min-width: 768px) {
-        width: 150px;
-        height: 150px;
-        border-radius: 75px;
-        object-fit: cover;
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            width: 150px;
+            height: 150px;
+            border-radius: 100px;
+            object-fit: cover;
+        }
     }
-    }
-        @media screen and (min-width: 1024px) {
-        width: 250px;
-        height: 250px;
-        border-radius: 125px;
-        object-fit: cover;
-        
-  }
-`
+`;
