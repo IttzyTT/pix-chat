@@ -49,9 +49,10 @@ const TopbarWrapper = styled.div`
   width: 100%;
   position: fixed;
   z-index: 1;
-  @media screen and (min-width: 1200px) {
+  @media screen and (min-width: 1025px) {
     justify-content: flex-start;
     margin: 0 auto;
+    background-color: #3C3B3B;
   }
 `;
 
@@ -60,7 +61,7 @@ const Con = styled.div`
   align-items: center;
   
   margin: 0 auto;
-  @media screen and (min-width: 1200px) {
+  @media screen and (min-width: 1025px) {
     width: 80%;
     justify-content: space-between;
   }
@@ -98,6 +99,10 @@ const SearchText = styled.span`
 
 const LogoImg = styled.img`
   width: 150px;
+
+  @media screen and (max-width: 767px) {
+    width: 120px;
+  }
 `;
 
 const LogoText = styled.p`
