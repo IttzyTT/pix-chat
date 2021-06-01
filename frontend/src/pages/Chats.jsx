@@ -79,11 +79,9 @@ function Chats() {
                             <Chat>
                                 <img src={typeOfPicture(chat.imageUrl)} />
                                 <div className={'chat-text'}>
-                                    <div className="chat-top-text">
-                                        <h5>{chat.caption}</h5>
-                                        <p className={'chat-date'}>{chat.createdAt}</p>
-                                    </div>
-                                    <p className={'chat-content'}>{chat.content}</p>
+                                    <h5>{chat.caption}</h5>
+                                    <p className={'chat-content'}>You: {chat.content}</p>
+                                    <p className={'chat-date'}>Sent: {chat.createdAt}</p>
                                 </div>
                             </Chat>
                         </Link>
@@ -106,6 +104,7 @@ const Wrapper = styled.div`
 `
 const Title = styled.h1`
     font-size: 20px;
+    margin-bottom: 3rem;
 `
 const ChatsContainer = styled.div`
     display: flex;
@@ -128,6 +127,7 @@ const Chat = styled.div`
         justify-content: space-between;
         width: 100%;
         gap: 0;
+        border-bottom: 1px solid #f3f3f334;
     }
     img {
         width: 100px;
@@ -136,20 +136,15 @@ const Chat = styled.div`
         object-fit: cover;
     }
     h5 {
-        margin: 0 0 0 0;
+        margin: 0.7rem 0 0 0;
         flex-grow: 1;
-    }
-    .chat-top-text {
-        display: flex;
-        width: 100%;
     }
     .chat-content {
         margin: 0.5rem 0 0 0;
-        flex-grow: 1;
+        color: #f3f3f3a7;
     }
     .chat-date {
-        margin: 0 0 0.1rem 0;
-        align-self: flex-end;
-        color: #f3f3f38d
+        margin: 0.2rem 0 1.1rem 0;
+        color: #f3f3f3a7;
     }
 `
