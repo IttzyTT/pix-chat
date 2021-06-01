@@ -103,15 +103,16 @@ const Wrapper = styled.div`
     left: 50%;
     transform: translateX(-50%);
     padding-top: 100px;
-    @media screen and (min-width: 1200px) {
+    padding-bottom: 100px;
+    @media screen and (min-width: 1024px) {
         padding-top: 20px;
     }
 `
 const Title = styled.h1`
     font-size: 20px;
     margin-bottom: 3rem;
-    @media screen and (min-width: 768px) {
-    font-size: 40px;
+    @media screen and (min-width: 768px)  {
+    font-size: 25px;
   }
 `
 const ChatsContainer = styled.div`
@@ -123,20 +124,21 @@ const ChatsContainer = styled.div`
         width: 100%;
         color: #F3F3F3;
     }
-        @media screen and (min-width: 768px) {
-        font-size: 30px;
+        @media screen and (min-width: 768px) and (max-height: 1023px){
+        font-size: 20px;
+          margin: 0;
     }
-        @media screen and (min-width: 1024px) {
-        margin-top: 40px; 
-        font-size: 50px;
+        @media screen and (min-width: 1024px)  {
+        font-size: 20px;
+          margin: 0;
     }
   h5 {
-      @media screen and (min-width: 768px) {
-        font-size: 45px;
+      @media screen and (min-width: 768px) and (max-height: 1023px) {
+        font-size: 28px;
+        margin: 0;
     }
     }
         @media screen and (min-width: 1024px) {
-        margin-top: 40px; 
         font-size: 10px;
     }
     
@@ -182,13 +184,12 @@ const AllWrapper = styled.div `
     font-size: 20px;
     display: flex;
     justify-content: space-around;
-    margin-top: 20px; 
     }
    @media screen and (min-width: 1024px) {
-    font-size: 30px;
+    font-size: 20px;
     display: flex;
     justify-content: space-around;
-    margin-top: 30px; 
+      padding-top: 35px;
     }
   img {
       @media screen and (min-width: 768px) {
