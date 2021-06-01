@@ -103,6 +103,9 @@ const Wrapper = styled.div`
     left: 50%;
     transform: translateX(-50%);
     padding-top: 100px;
+    @media screen and (min-width: 1200px) {
+        padding-top: 20px;
+    }
 `
 const Title = styled.h1`
     font-size: 20px;
