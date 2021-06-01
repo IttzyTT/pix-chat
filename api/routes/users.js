@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
 router.post("/", async (req, res) => {
 
     const plainTextPassword = req.body.password;
-    console.log(plainTextPassword);
     const saltRounds = 10;
 
     try {
@@ -40,18 +39,14 @@ router.post("/", async (req, res) => {
 router.get("/login/:name/:password", async (request, response) => {
 
     const inputPassword = request.params.password;
-    console.log(inputPassword);
     
     try {
         const user = await User.findOne({ name: request.params.name });
-        console.log(user);
         const match = await bcryptjs.compare(inputPassword, user.password);
-        console.log(match);
         const resObject = {
             isMatch: match,
             ...user
         }
-        console.log(resObject.isMatch);
         response.send(JSON.stringify(resObject));  
     } catch(error) {
         response.send({message: error});
@@ -62,7 +57,6 @@ router.get("/login/:name/:password", async (request, response) => {
 router.get("/:userId", async (request, response) => {
     try {
         const user = await User.findById(request.params.userId);
-        console.log(user);
         response.send(user);  
     } catch(error) {
         response.send({message: error});
