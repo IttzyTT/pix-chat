@@ -253,7 +253,7 @@ class Camera extends Component {
                 <input className="input" type="text" name={'caption'} value={this.state.caption} onChange={this.handleChange} placeholder="Write caption..." />
                 <input className="input" type="text" name={'tags'} value={this.state.tags} onChange={this.handleChange} placeholder="tag1 tag2 tag3" />
 
-                    <label> Location off/on:
+                    <label className="geoLabel"> Location:
                     <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
                     <span className="lever"></span>
                     </label>
@@ -320,6 +320,11 @@ const CameraWrapper = styled.div`
     border: none;
   } 
 
+
+.geoLabel{
+  font-size: 1rem;
+  
+}
   input{
     color: whitesmoke; 
   }
