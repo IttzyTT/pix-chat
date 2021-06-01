@@ -5,6 +5,7 @@ import { useNamedContext } from 'react-easier';
 
 function ChatFunction({ post }) {
     const [chat, setChat] = useState({});
+    // const [selectedFile, setSelectedFile] = useState(null)
     let globalStore = useNamedContext('global');
 
     const handleChange = async (e) => {
@@ -47,13 +48,24 @@ function ChatFunction({ post }) {
           setChat({});
     }
 
+// // // Uppload image
+// const fileSelectedHandler = (e) =>{
+//     setSelectedFile(e.target.files[0])
+// }
+
+// console.log(selectedFile);
+
     return (
         <Wrapper>
             <FormWrapper>
                 <form onSubmit={handleSubmit}>
-                        <IWrapper2>
-                            <Photo className='material-icons'>photo_library</Photo>
-                        </IWrapper2>
+                        {/* <IWrapper2>
+                        <label className="material-icons" htmlFor="fileUpload">
+                            <Photo className='material-icons' aria-hidden="true">photo_library</Photo> 
+                        </label>
+                        <input id="fileUpload" type="file" accept="image/*" style={{ display: 'none' }} onChange={fileSelectedHandler}></input>
+                          
+                        </IWrapper2> */}
                     <Yes>
                         <input
                             value={chat.content}
