@@ -78,7 +78,7 @@ function Postcard({ post }) {
         <Section variants={postAni}>
             <AboveImage>
                 <Link to={`/profile/${post.createdById}`}>{displayCreatorName(post, globalStore.allUsers)}</Link>
-                { post.location.show ?
+                { post.location.show && post.location.city !== '' ?
                 <Link to={`/search/true/city=${post.location.city}`}>
                     <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p>
                 </Link>

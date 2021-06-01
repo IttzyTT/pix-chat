@@ -42,7 +42,7 @@ class Camera extends Component {
 
       let response = await fetch(`https://geocode.xyz/${posResponse.coords.latitude},${posResponse.coords.longitude}?geoit=json`);
       let data = await response.json();
-
+      console.log(data.city, data.country);
       this.setState({
         geo: {
           city: data.city,
@@ -188,6 +188,12 @@ class Camera extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (this.state.geo.city === undefined) {
+      this.state.geo.city = '';
+      this.state.geo.country = '';
+    }
+
     const postBody = {
       'caption': this.state.caption,
       'imageUrl': this.state.imageURLtoSend,
@@ -216,6 +222,7 @@ class Camera extends Component {
   }
 
   render() {
+    console.log(this.state.geo);
     return (
       <CameraWrapper>
         <div className="selfie">
@@ -250,7 +257,11 @@ class Camera extends Component {
                     <input type="checkbox" id="geo-checkbox" name="geo-checkbox" onChange={this.handleGeo} checked={this.state.geoCheckbox} />
                     <span className="lever"></span>
                     </label>
-                    <p >Location: {!this.state.geo ? '...loading' : `${this.state.geo.city}, ${this.state.geo.country}`}</p>
+                    <p>Location: {this.state.geo.city === '' ? 
+                                  '...loading' : 
+                                  this.state.geo.city === undefined ?
+                                  'unavailable right now =(' :
+                                  `${this.state.geo.city}, ${this.state.geo.country}`}</p>
 
                 </div>
                 <button type={'submit'} className="btn post-btn" >
