@@ -71,23 +71,25 @@ function Chats() {
     )
 
     return (
-        <Wrapper>
-            <Title>Your latest sent chats</Title>
-            <ChatsContainer>
-                { createChatPreview().map(chat => (
-                        <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
-                            <Chat>
-                                <img src={typeOfPicture(chat.imageUrl)} />
-                                <div className={'chat-text'}>
-                                    <h5>{chat.caption}</h5>
-                                    <p className={'chat-content'}>You: {chat.content}</p>
-                                    <p className={'chat-date'}>Sent: {chat.createdAt}</p>
-                                </div>
-                            </Chat>
-                        </Link>
-                )) }
-            </ChatsContainer>
-        </Wrapper>
+        <AllWrapper> 
+            <Wrapper>
+                <Title>Your latest sent chats</Title>
+                <ChatsContainer>
+                    { createChatPreview().map(chat => (
+                            <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
+                                <Chat>
+                                    <img src={typeOfPicture(chat.imageUrl)} />
+                                    <div className={'chat-text'}>
+                                        <h5>{chat.caption}</h5>
+                                        <p className={'chat-content'}>You: {chat.content}</p>
+                                        <p className={'chat-date'}>Sent: {chat.createdAt}</p>
+                                    </div>
+                                </Chat>
+                            </Link>
+                    )) }
+                </ChatsContainer>
+            </Wrapper>
+        </AllWrapper>
         
         
     )
@@ -105,6 +107,9 @@ const Wrapper = styled.div`
 const Title = styled.h1`
     font-size: 20px;
     margin-bottom: 3rem;
+    @media screen and (min-width: 768px) {
+    font-size: 40px;
+  }
 `
 const ChatsContainer = styled.div`
     display: flex;
@@ -115,7 +120,25 @@ const ChatsContainer = styled.div`
         width: 100%;
         color: #F3F3F3;
     }
-`
+        @media screen and (min-width: 768px) {
+        font-size: 30px;
+    }
+        @media screen and (min-width: 1024px) {
+        margin-top: 40px; 
+        font-size: 50px;
+    }
+  h5 {
+      @media screen and (min-width: 768px) {
+        font-size: 45px;
+    }
+    }
+        @media screen and (min-width: 1024px) {
+        margin-top: 40px; 
+        font-size: 10px;
+    }
+    
+  
+`;
 const Chat = styled.div`
     width: 100%;
     display: flex;
@@ -126,8 +149,9 @@ const Chat = styled.div`
         flex-direction: column;
         justify-content: space-between;
         width: 100%;
-        gap: 0;
+        gap: 0;       
         border-bottom: 1px solid #f3f3f334;
+           
     }
     img {
         width: 100px;
@@ -138,6 +162,7 @@ const Chat = styled.div`
     h5 {
         margin: 0.7rem 0 0 0;
         flex-grow: 1;
+        
     }
     .chat-content {
         margin: 0.5rem 0 0 0;
@@ -147,4 +172,34 @@ const Chat = styled.div`
         margin: 0.2rem 0 1.1rem 0;
         color: #f3f3f3a7;
     }
+`
+const AllWrapper = styled.div `
+
+   @media screen and (min-width: 768px) {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px; 
+    }
+   @media screen and (min-width: 1024px) {
+    font-size: 30px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px; 
+    }
+  img {
+      @media screen and (min-width: 768px) {
+        width: 150px;
+        height: 150px;
+        border-radius: 75px;
+        object-fit: cover;
+    }
+    }
+        @media screen and (min-width: 1024px) {
+        width: 250px;
+        height: 250px;
+        border-radius: 125px;
+        object-fit: cover;
+        
+  }
 `
