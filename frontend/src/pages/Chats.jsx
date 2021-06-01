@@ -39,7 +39,9 @@ function Chats() {
 
     const createChatPreview = () => {
         let yourMessages = messages.filter(message => message.createdById === globalStore.currentUserId);
-        let chatPreviews = yourMessages.map(message => message = {
+        let uniquePostIds = new Set(yourMessages.map(m => m.postId));
+        //add corresponding images and imagecaptions to messages
+        yourMessages = yourMessages.map(message => message = {
                                                                 ...message, 
                                                                 'imageUrl': posts
                                                                             .filter(post => message.postId === post['_id'])
@@ -55,6 +57,9 @@ function Chats() {
                                         .sort((a,b) => (
                                             a.createdAt > b.createdAt ? -1 : 1
                                         ))
+        let chatPreviews = [];
+        //only the latest message sent by you in each chatroom
+        uniquePostIds.forEach(id => chatPreviews.unshift(yourMessages.filter(m => m.postId === id)[0]))
         return chatPreviews;
     }
 
@@ -67,7 +72,7 @@ function Chats() {
 
     return (
         <Wrapper>
-            <Title>Latest chats</Title>
+            <Title>Your latest sent chats</Title>
             <ChatsContainer>
                 { createChatPreview().map(chat => (
                         <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
