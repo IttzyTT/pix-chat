@@ -79,7 +79,7 @@ export default function Login() {
             createAccountHandler();
         }
     }
-    console.log(currentPage);
+
     return (
         <Flexwrapper>
             <Centering>

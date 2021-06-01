@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const sse = require('./SSE-handler');
+const mongoDBUrl = require('./settings/dontCommit.json').mongoDBUrl;
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
@@ -22,7 +23,7 @@ sse.sse(app);
 
 // Connect to Mongo DB Atlas
 mongoose.connect(
-    "mongodb+srv://pixchat:frk20s@cluster0.qmhfd.mongodb.net/pixChat?retryWrites=true&w=majority",
+    mongoDBUrl,
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => {
         console.log('DB connected');
