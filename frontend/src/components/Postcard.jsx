@@ -190,7 +190,7 @@ const Section = styled(motion.section)`
         }
         .postcard-img-container {
             width: var(--width);
-            height: var(--height-4-3-aspect);
+      Y  : var(--height-4-3-aspect);
             padding-bottom: 0%;
         }
     }
