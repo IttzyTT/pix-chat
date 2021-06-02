@@ -10,11 +10,15 @@ function PostChat({ match, sse }) {
 
   const [post, setPost] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState([]);
 
   let createdAt = new window.Date(post.createdAt).toLocaleDateString();
   let globalStore = useNamedContext("global");
 
+  const typeOfPicture = (url) => {
+    return (
+      `/uploads/${url}` 
+     )
+  }
   useEffect(() => {
     getSinglePost();
     getMessages();
@@ -51,13 +55,7 @@ function PostChat({ match, sse }) {
     }
   };
 
-  const typeOfPicture = (url) => {
-    return (
-      url.substring(0, 4) === 'http' ?
-        url :
-        `/uploads/${url}`
-    )
-  }
+  
 
   const filterMessages = (messages) => {
     return messages.filter((message) => message.postId === match.params.id);
@@ -69,11 +67,13 @@ function PostChat({ match, sse }) {
         <Content>
           <ImgCon>
             {/* <Img src={post.imageUrl} /> */}
-            <Img src={typeOfPicture(post.imageUrl)} alt={post.caption} /> 
+             <Img src={typeOfPicture(post.imageUrl)} alt={post.caption} />  
           </ImgCon>
           <InfoCon>
-            {/* <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p> */}
-
+            {/* { post.location.show && post.location.city !== '' ?
+                    <p>{post.location && post.location.city}, {post.location && post.location.country}</p>
+                : null } */}
+                <p>{post.location && post.location.city}, {post.location && post.location.country} <Location className='material-icons'>location_on</Location></p>
             <Date>{createdAt}</Date>
             <Caption>{post.caption}</Caption>
           </InfoCon>
@@ -81,7 +81,7 @@ function PostChat({ match, sse }) {
 
         <MessageSection>
           <ScrollableFeed>
-            {filterMessages(messages).map((message) => {
+          {filterMessages(messages).map((message) => {
               const check = globalStore.currentUserId === message.createdById;
               let messageTimeStamp = new window.Date(
                 message.createdAt
@@ -127,7 +127,7 @@ function PostChat({ match, sse }) {
         <ChatFunction post={post} />
       </div>
     </Wrapper>
-  );
+  )
 }
 
 export default PostChat;
@@ -148,7 +148,7 @@ const Content = styled.div`
     height: 560px;
     width: 40%;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     border-radius: 10px;
     box-shadow: 0px 2px 3px 1px #191818;
   }
@@ -164,6 +164,9 @@ const ContentWrapper = styled.div`
 
 const InfoCon = styled.div`
   width: 200px;
+  @media screen and (min-width: 1200px) {
+    // margin-left: -220px;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -222,7 +225,21 @@ const Caption = styled.h1`
 const MessageSection = styled.section`
   overflow-y: scroll;
   height: 59vh;
-  // padding-bottom: 80px;
+  &::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #3C3B3B;
+    }
+
+    &::-webkit-scrollbar {
+        width: 12px;
+        background-color: #3C3B3B;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    }
   @media screen and (max-height: 568px) {
     height: 42vh;
   }
@@ -241,7 +258,7 @@ const MessageSection = styled.section`
   @media screen and (min-width: 1200px) {
     &::-webkit-scrollbar {
       display: none;
-    }
+  }
     width:40%;
     height: 76vh;
   }

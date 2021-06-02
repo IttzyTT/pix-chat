@@ -9,14 +9,14 @@ function Profile({ match }) {
     const [toggle, setToggle] = useState(false);
     const loc = useLocation();
     let globalStore = useNamedContext('global');
-    
+
     useEffect(() => {
         fetchUser();
         fetchPosts();
     }, [match.params.id]);
 
     const filterPosts = (posts) => {
-        return ( posts.filter((post) => (
+        return (posts.filter((post) => (
             post.createdById === match.params.id
         )))
     };
@@ -26,7 +26,7 @@ function Profile({ match }) {
             const response = await fetch(`${globalStore.apiUrl}/users/${match.params.id}`);
             const data = await response.json();
             setUser(data);
-        } catch(error) {
+        } catch (error) {
             console.log(error)
         }
     }
@@ -36,23 +36,24 @@ function Profile({ match }) {
             const response = await fetch(`${globalStore.apiUrl}/posts/`);
             const data = await response.json();
             setPosts(data);
-        } catch(error) {
+        } catch (error) {
             console.log(error)
         }
     }
 
     const typeOfPicture = (url) => (
         url.substring(0, 4) === 'http' ?
-        url :
-        `/uploads/${url}`
+            url :
+            `/uploads/${url}`
     )
+    
 
     return (
         <Wrap>
             <Con>
                 <Icon className='material-icons'>account_circle</Icon>
                 <InfoEdit>
-                    <Name>{ user.name }</Name>
+                    <Name>{user.name}</Name>
                     {loc.pathname !== `/profile/${globalStore.currentUserId}` ? '' : (
                         <Link to={`/editProfile/${user['_id']}`}><Btn>Settings</Btn></Link>
                     )}
@@ -69,20 +70,25 @@ function Profile({ match }) {
                         post.likedBy.includes(match.params.id)
                     )).length}</p>
                 </Favorites>
-           </InfoNumber>
-           <PicCon>
-           <Pictures>
-            {toggle ? (
-                posts.map((post) => (
-                    post.likedBy.includes(match.params.id) ? 
-                    <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' /> : ''
-                ))
-            ) : (
-                filterPosts(posts).map((post) => (
-                    <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' />
-                    )))}
-           </Pictures>
-           </PicCon>
+            </InfoNumber>
+            <PicCon>
+                <Pictures>
+                    {toggle ? (
+                        posts.map((post) => (
+                            post.likedBy.includes(match.params.id) ?
+                            <div>
+                                <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' /> 
+                            </div>
+                            : ''
+                        ))
+                    ) : (
+                        filterPosts(posts).map((post) => (
+                            <div>
+                                <Post key={post['_id']} src={typeOfPicture(post.imageUrl)} alt='' />
+                            </div>
+                        )))}
+                </Pictures>
+            </PicCon>
         </Wrap>
     )
 }
@@ -156,36 +162,86 @@ const Favorites = styled.div`
     cursor: pointer;
 `
 const PicCon = styled.div`
-    height: 450px;
+    height: 490px;
     overflow-y: scroll;
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #3C3B3B;
+    }
+
+    &::-webkit-scrollbar {
+        width: 12px;
+        background-color: #3C3B3B;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    }
+
+    @media screen and (min-width: 768px) {
+        height: 660px;
+    }
+    @media screen and (min-width: 1024px) {
+        height: 910px;
+    }
+    @media screen and (min-width: 1280px) {
+        height: 800px;
+    }
 `
 const Pictures = styled.div`
     display: flex;
     width: 100%;
-    height: auto;
     border-top: 1px solid white;
     padding-bottom: 2px;
     flex-wrap: wrap;
-    padding-bottom: 100px;
+    padding-bottom: 6px;
     justify-content: flex-start;
-`
-const Post = styled.img`
-    width: 48.93%;
-    height: auto;
-    margin: 2px 2px 2px 2px;
+    @media screen and (min-width: 375px) and (max-width: 760px) {
+        padding-bottom: 68px;
+    }
     @media screen and (min-width: 768px) {
-        width: 32.48%;
-        margin: 4px 2.5px 2.5px 4px;
-        &:nth-child(3n) {
-            margin-right: 0;
-        }
+        padding-bottom: 68px;
     }
     @media screen and (min-width: 1024px) {
-        width: 32.48%;
-        margin: 4px 6px 6px 4px;
-        &:nth-child(3n) {
-            margin-right: 0;
+        padding-bottom: 0;
+    }
+    @media screen and (min-width: 1280px) {
+        padding-bottom: 0;
+    }
+
+    div {
+        width: 48.9%;
+        height: 130px; 
+        margin: 2px 2px 2px 2px;
+        @media screen and (min-width: 768px) {
+            width: 32.48%;
+            height: 180px;
+            margin: 4px 2.5px 2.5px 4px;
+            &:nth-child(3n) {
+                margin-right: 0;
+            }
+        }
+        @media screen and (min-width: 1024px) {
+            width: 32.48%;
+            height: 240px;
+            margin: 4px 6px 6px 4px;
+            &:nth-child(3n) {
+                margin-right: 0;
+            }
+            @media screen and (min-width: 1280px) {
+            width: 32%;
+            margin: 4px 6px 6px 4px;
+            &:nth-child(3n) {
+                margin-right: 0;
+            }
         }
     }
+`
+const Post = styled.img`
+    width: 100%;
+    height: 100%;
+    display: block;
 
 `

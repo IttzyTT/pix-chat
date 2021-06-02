@@ -62,8 +62,8 @@ function Home({ sse }) {
                     ))}
                     { allPosts.length === displayedPosts.length ?
                         null :
-                        <div id={'load-more'}>
-                            <p id={'load-more-text'} onClick={loadMorePosts}>Load more</p>
+                        <div id={'load-more'} onClick={loadMorePosts}>
+                            <p id={'load-more-text'}>Load more</p>
                             <motion.i className="medium material-icons"
                                 animate={{ y: 8 }}
                                 transition={{repeat: Infinity, repeatType: "reverse", duration: 1}}
@@ -99,7 +99,7 @@ const ContentWrapper = styled.div`
         display: flex;
         justify-content: center;
         @media screen and (min-width: 1200px) {
-            margin-left: 31%;
+            margin-left: 5%;
         }
     }
 
@@ -109,8 +109,8 @@ const ContentWrapper = styled.div`
         margin-bottom: 30vh;
         margin-top: 50px;
         text-align: center;
+        cursor: pointer;
         #load-more-text {
-            cursor: pointer;
             margin: 0;
             color: #fff;
             font-size: 25px;
@@ -120,14 +120,12 @@ const ContentWrapper = styled.div`
 
     @media screen and (min-width: 1200px) {
         background-color: #434343;
-        // margin-left: 35%;
     }
 `
 
 const Sidebar = styled.div`
     display: none;
     height: 91%;
-    width: 30%;
     background-color: #4c4c4c;
     position: fixed;
     left: 0;
