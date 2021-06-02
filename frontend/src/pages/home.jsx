@@ -7,47 +7,38 @@ import Searchbar from '../components/Searchbar';
 import { motion } from "framer-motion";
 import Chats from "./Chats";
 
-function Home({ sse }) {
-
-    //bug sometimes 2 posts occur from one posting 
-    //bug but fortunately, only one database entry is created 
-    //comment Kan ha att göra med useEffect-cleanup, kanske behöver mer av det 
-
+function Home({ triggerPostsFetch }) {
     let globalStore = useNamedContext('global');
 
-    //experimenting with pagination on Home.jsx
+    //experimenting with pagination serverside
     const [paginatedPosts, setPaginatedPosts] = useState([]);
     const [page, setPage] = useState(0);
     const [totalPosts, setTotalPosts] = useState();
     
     const showSearch = useParams().showSearch;
 
-    //pagination experiment on Home.jsx
     useEffect(async () => {
         try {
             let responsePaginated = await fetch(`${globalStore.apiUrl}/posts/pagination?page=${page}`);
             let dataPaginated = await responsePaginated.json();
-            setPaginatedPosts(prevArray => [...prevArray, ...dataPaginated.posts]);
-            setTotalPosts(dataPaginated.totalPosts);
-            console.log('fetch paginated posts ran, set state');
-            sse.addEventListener('posts', e => {
-                setPaginatedPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
+            
+            setPaginatedPosts(prevArray => {
+                let ids = new Set(prevArray.map(post => post['_id']));
+                return [
+                    ...prevArray, 
+                    ...dataPaginated.posts.filter(post => !ids.has(post['_id']))
+                ].sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
             });
-            console.log('sse event ran', paginatedPosts);
+
+            setTotalPosts(dataPaginated.totalPosts);
+
         } catch (error) {
             console.log(error);
         }
-        console.log('page var: ' + page);
-        return () => {
-            sse.removeEventListener('posts', e => {
-                setPaginatedPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
-            })
-        }
-    }, [page]);
+    }, [page, triggerPostsFetch]);
 
     const loadMorePosts = async () => {
         setPage(prevValue => prevValue + 1);
-        console.log('load more posts function ran');
     }
     
     return (

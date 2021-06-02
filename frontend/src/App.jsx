@@ -43,6 +43,14 @@ const Wrapper = styled.div`
 
 function App() {
   const globalStore = useNamedContext('global');
+  const [triggerPostsFetch, setTriggerPostsFetch] = useState([]);
+
+  //the idea is to trigger a new "normal fetch" with the sse-message to avoid duplicates-bug
+  useEffect(() => {
+    sse.addEventListener('posts', e => {
+      setTriggerPostsFetch([...JSON.parse(e.data)]);
+    });
+  }, [])
   
   useEffect(async () => {
     let allUsers = await fetchAllUsers(globalStore.apiUrl);
@@ -55,9 +63,8 @@ function App() {
         <Wrapper className="App">
           <Topbar />
           <Switch>
-            {/* <Route path="/" exact                     render={props => <Home {...props} sse={sse} />} /> */}
             <Route path="/" exact>
-              <Home sse={sse} />
+              <Home triggerPostsFetch={triggerPostsFetch} />
             </Route>
             <Route path="/search/:showSearch/:query?" render={props => <Home {...props} sse={sse} />} />
             <Route path="/camera"                     render={props => <Camera {...props} sse={sse} globalStore={globalStore} />} />
