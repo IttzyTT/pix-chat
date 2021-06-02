@@ -8,35 +8,58 @@ import Searchbar from '../components/Searchbar';
 import { motion } from "framer-motion";
 import Chats from "./Chats";
 
+let sseEventlistenerAddedCount = 0;
+
 function Home({ sse }) {
     let globalStore = useNamedContext('global');
     const [allPosts, setAllPosts] = useState([]);
 
-    //pagination basic
-    const [displayedPosts, setDisplayedPosts] = useState([]);
-    const [nbOfDisplayedPosts, setNbOfDisplayedPosts] = useState(8); //increase on click
+    //experimenting with pagination on Home.jsx
+    const [paginatedPosts, setPaginatedPosts] = useState([]);
+    const [page, setPage] = useState(0);
+    const [totalPosts, setTotalPosts] = useState();
 
     const showSearch = useParams().showSearch;
 
     useEffect(async () => {
-        setAllPosts(await fetchAllPosts(globalStore.apiUrl));
+        try {
+            setAllPosts(await fetchAllPosts(globalStore.apiUrl));
+        } catch (error) {
+            console.log(error);
+        }
     }, [showSearch]);
 
+    //pagination experiment on Home.jsx
+    useEffect(async () => {
+        try {
+            let responsePaginated = await fetch(`${globalStore.apiUrl}/posts/pagination?page=${page}`);
+            let dataPaginated = await responsePaginated.json();
+            setPaginatedPosts(prevArray => [...prevArray, ...dataPaginated.posts]);
+            setTotalPosts(dataPaginated.totalPosts);
+            console.log('fetch paginated posts ran, set state');
+        } catch (error) {
+            console.log(error);
+        }
+        console.log('page var: ' + page);
+    }, [page]);
+    
+    //bug sse eventlistener runs twice when you create a new post
+    //bug but fortunately, only one database entry is created
+    //bug the variable sseEventlistenerAddedCount is a hack to make it run only once
     useEffect(() => {
-        sse.addEventListener('posts', e => {
-            setAllPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
-        });
+        sseEventlistenerAddedCount++;
+        if (sseEventlistenerAddedCount === 1) {
+            sse.addEventListener('posts', e => {
+                setAllPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
+                setPaginatedPosts(prevArray => [...JSON.parse(e.data), ...prevArray]);
+                console.log('sse ran and set state');
+            });
+        };
     }, [])
 
-    //pagination
-    useEffect(() => {
-        setDisplayedPosts(allPosts.filter((v,i) => ( 
-            i < nbOfDisplayedPosts
-        )))
-    }, [allPosts, nbOfDisplayedPosts])
 
-    const loadMorePosts = () => {
-        setNbOfDisplayedPosts(prevValue => prevValue += 8);
+    const loadMorePosts = async () => {
+        setPage(prevValue => prevValue + 1);
     }
     
     return (
@@ -54,13 +77,13 @@ function Home({ sse }) {
                     initial={"hidden"}
                     animate={"show"}
                 >
-                    { displayedPosts.map(post => (
+                    { paginatedPosts.map(post => (
                         <Postcard
                             key={ post['_id'] }
                             post={ post }
                         />
                     ))}
-                    { allPosts.length === displayedPosts.length ?
+                    { paginatedPosts.length >= totalPosts ?
                         null :
                         <div id={'load-more'}>
                             <p id={'load-more-text'} onClick={loadMorePosts}>Load more</p>

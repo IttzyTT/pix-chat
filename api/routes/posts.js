@@ -21,6 +21,27 @@ router.get('/', async (req, res) => {
     }
 })
 
+//"pagination"
+router.get('/pagination', async (req, res) => {
+    const documentsAtATime = 8;
+    const page = parseInt(req.query.page || '0');
+    try {
+        const totalPosts = await Post.countDocuments();
+        const posts = await Post.find()
+                                .sort({createdAt:-1})
+                                .limit(documentsAtATime)
+                                .skip(documentsAtATime * page);
+
+        res.json({
+            totalPosts,
+            posts
+        });
+    } catch (error) {
+        res.send({ message: error });
+    }
+
+})
+
 //get specific post
 router.get('/:postId', async (req, res) => {
     try {
