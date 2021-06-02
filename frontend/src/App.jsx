@@ -58,7 +58,10 @@ function App() {
         <Wrapper className="App">
           <Topbar />
           <Switch>
-            <Route path="/" exact                     render={props => <Home {...props} sse={sse} />} />
+            {/* <Route path="/" exact                     render={props => <Home {...props} sse={sse} />} /> */}
+            <Route path="/" exact>
+              <Home sse={sse} />
+            </Route>
             <Route path="/search/:showSearch/:query?" render={props => <Home {...props} sse={sse} />} />
             <Route path="/camera"                     render={props => <Camera {...props} sse={sse} globalStore={globalStore} />} />
             <Route path="/chats"                      render={props => <Chats {...props} sse={sse} />} />

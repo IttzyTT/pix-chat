@@ -10,7 +10,7 @@ function sse(app) {
         //     res.json({ error: 'Not logged in!' });
         //     return;
         // }
-        let connection = { req, res, hasPostMessagesUntil: 0, hasPostsUntil: 0 };
+        let connection = { req, res, hasPostMessagesUntil: 0, hasPostsUntil: Date.now() };
         connections.push(connection);
         req.on('close', () => connections = connections.filter(x => x !== connection));
         res.set({
@@ -48,12 +48,12 @@ function sse(app) {
     // (all the ones he/she doesn't have for now)
     async function sendPosts(connection) {
         let posts = await Post.find({
-        createdAt: { $gte: new Date(connection.hasPostsUntil) }
+            createdAt: { $gte: new Date(connection.hasPostsUntil) }
         }).sort({createdAt:-1});
         connection.hasPostsUntil = Date.now();
         sendSSE(connection.res, 'posts', posts);
     }
-
+    
     // Change listeners - listen to DB changes
     Post.watch().on('change', () => connections.forEach(sendPosts));
     PostMessage.watch().on('change', () => connections.forEach(sendMessages));
