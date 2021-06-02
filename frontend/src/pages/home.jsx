@@ -6,6 +6,7 @@ import fetchAllPosts from '../reusable-functions/fetchAllPosts';
 import { useParams } from 'react-router';
 import Searchbar from '../components/Searchbar';
 import { motion } from "framer-motion";
+import Chats from "./Chats";
 
 function Home({ sse }) {
     let globalStore = useNamedContext('global');
@@ -44,6 +45,9 @@ function Home({ sse }) {
             <Searchbar allPosts={allPosts} />
             : 
             <div className={"postcard-flex-parent"}>
+                <Sidebar>
+                    <Chats />
+                </Sidebar>
                 <motion.div 
                     className={"postcard-flex-it"}
                     variants={containerAni}
@@ -59,7 +63,13 @@ function Home({ sse }) {
                     { allPosts.length === displayedPosts.length ?
                         null :
                         <div id={'load-more'}>
-                            <p id={'load-more-text'} onClick={loadMorePosts}>Load more...</p>
+                            <p id={'load-more-text'} onClick={loadMorePosts}>Load more</p>
+                            <motion.i className="medium material-icons"
+                                animate={{ y: 8 }}
+                                transition={{repeat: Infinity, repeatType: "reverse", duration: 1}}
+                            >
+                                expand_more
+                            </motion.i>
                         </div>
                     }
                 </motion.div>
@@ -88,31 +98,45 @@ const ContentWrapper = styled.div`
     .postcard-flex-parent {
         display: flex;
         justify-content: center;
+        @media screen and (min-width: 1200px) {
+            margin-left: 31%;
+        }
     }
 
     /* above also affects Searchbar component */
 
     #load-more {
-        margin-bottom: 40vh;
+        margin-bottom: 30vh;
+        margin-top: 50px;
         text-align: center;
         #load-more-text {
             cursor: pointer;
             margin: 0;
-            padding: 1rem 0;
+            color: #fff;
+            font-size: 25px;
+            font-weight: bold;
         }
     }
-    @media only screen and (min-width: 768px) {
-        --width: 400px;
-        --height-4-3-aspect: calc(var(--width) * 0.75);
-        #load-more {
-            width: var(--width);
-            height: var(--height-4-3-aspect);
-            margin-bottom: 0;
-            #load-more-text {
-                position: relative;
-                top: 50%;
-            }
-        }
+
+    @media screen and (min-width: 1200px) {
+        background-color: #434343;
+        // margin-left: 35%;
+    }
+`
+
+const Sidebar = styled.div`
+    display: none;
+    height: 91%;
+    width: 30%;
+    background-color: #4c4c4c;
+    position: fixed;
+    left: 0;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    @media screen and (min-width: 1200px) {
+        display: flex;
     }
 `
 

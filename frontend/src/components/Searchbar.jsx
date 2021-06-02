@@ -114,9 +114,11 @@ const SearchReturnDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media screen and (min-width: 768px) {
-            
+    .postcard-flex-parent {
+        @media screen and (min-width: 1200px) {
+            margin-left: 0;
         }
+    }
 `;
 
 const FormWrapper = styled.div`
@@ -129,9 +131,12 @@ const FormWrapper = styled.div`
     @media screen and (min-width: 768px) {
             width: 60vw;
         }
-        @media screen and (min-width: 1024px) {
-            width: 40vw;
-        }
+    @media screen and (min-width: 1024px) {
+        width: 40vw;
+    }
+    @media screen and (min-width: 1200px) {
+        margin-top: 20px;
+    }
     form {
         width: 88%;
         div {
