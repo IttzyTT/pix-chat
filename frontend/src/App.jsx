@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './normalize.css';
+import './App.css';
 import Topbar from './components/Topbar';
 import Navbar from './components/Navbar';
 import Home from './pages/home';

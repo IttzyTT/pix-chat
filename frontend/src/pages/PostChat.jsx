@@ -18,7 +18,6 @@ function PostChat({ match, sse }) {
   useEffect(() => {
     getSinglePost();
     getMessages();
-    // getUsers();
     startSSE();
   }, []);
 
@@ -52,26 +51,13 @@ function PostChat({ match, sse }) {
     }
   };
 
-
-  // const getUsers = async () => {
-  //     try {
-  //         const response = await fetch(`http://localhost:4000/users`);
-  //         const data = await response.json();
-  //         console.log(data);
-  //         setUsers(data);
-  //     } catch (error) {
-  //         console.log(error)
-  //     }
-  // }
-  
-  // const typeOfPicture = (url) => {
-  //     return (
-  //         url.substring(0, 4) === 'http' ?
-  //         url :
-  //         `/uploads/${url}`
-  //     )
-  // }
- 
+  const typeOfPicture = (url) => {
+    return (
+      url.substring(0, 4) === 'http' ?
+        url :
+        `/uploads/${url}`
+    )
+  }
 
   const filterMessages = (messages) => {
     return messages.filter((message) => message.postId === match.params.id);
@@ -80,67 +66,61 @@ function PostChat({ match, sse }) {
   return (
     <Wrapper>
       <ContentWrapper>
-      <Content>
-        <ImgCon>
-          <Img src={post.imageUrl} />
-          {/* <Img src={typeOfPicture(post.imageUrl)} alt={post.caption} /> */}
-        </ImgCon>
-        <InfoCon>
-          {/* <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p> */}
+        <Content>
+          <ImgCon>
+            {/* <Img src={post.imageUrl} /> */}
+            <Img src={typeOfPicture(post.imageUrl)} alt={post.caption} /> 
+          </ImgCon>
+          <InfoCon>
+            {/* <p>{post.location.city}, {post.location.country} <Location className='material-icons'>location_on</Location></p> */}
 
-          <Date>{createdAt}</Date>
-          <Caption>{post.caption}</Caption>
-        </InfoCon>
-      </Content>
+            <Date>{createdAt}</Date>
+            <Caption>{post.caption}</Caption>
+          </InfoCon>
+        </Content>
 
-      <MessageSection>
-        <ScrollableFeed>
-        {filterMessages(messages).map((message) => {
-          const check = globalStore.currentUserId === message.createdById;
-          let messageTimeStamp = new window.Date(
-            message.createdAt
-          ).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
-          // console.log(check);
-          return (
-            <ChatWrapper>
-              <ChatCon
-                key={message["_id"]}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-              >
-                {!check ? (
-                  <Con1>
-                    <User>
-                      {displayCreatorName(message, globalStore.allUsers)}
-                    </User>
-                    <Messages>
-                      <Time>{messageTimeStamp}</Time>
-                      <Chat>{message.content}</Chat>
-                    </Messages>
-                  </Con1>
-                ) : (
-                  <Con2>
-                    <UserMessages>
-                      <Time>{messageTimeStamp}</Time>
-                      <Chat>{message.content}</Chat>
-                    </UserMessages>
-                    <User>
-                      {displayCreatorName(message, globalStore.allUsers)}
-                    </User>
-                  </Con2>
-                )}
-              </ChatCon>
-            </ChatWrapper>
-          );
-        })}
-
-        {/* {users.map(user => {
-                    return(
-                        <p>{user.name}</p>
-                    )
-                })} */}
-        </ScrollableFeed>
-      </MessageSection>
+        <MessageSection>
+          <ScrollableFeed>
+            {filterMessages(messages).map((message) => {
+              const check = globalStore.currentUserId === message.createdById;
+              let messageTimeStamp = new window.Date(
+                message.createdAt
+              ).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+              // console.log(check);
+              return (
+                <ChatWrapper>
+                  <ChatCon
+                    key={message["_id"]}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                  >
+                    {!check ? (
+                      <Con1>
+                        <User>
+                          {displayCreatorName(message, globalStore.allUsers)}
+                        </User>
+                        <Messages>
+                          <Time>{messageTimeStamp}</Time>
+                          <Chat>{message.content}</Chat>
+                        </Messages>
+                      </Con1>
+                    ) : (
+                      <Con2>
+                        <UserMessages>
+                          <Time>{messageTimeStamp}</Time>
+                          <Chat>{message.content}</Chat>
+                        </UserMessages>
+                        <User>
+                          {displayCreatorName(message, globalStore.allUsers)}
+                        </User>
+                      </Con2>
+                    )}
+                  </ChatCon>
+                </ChatWrapper>
+              );
+            })}
+          </ScrollableFeed>
+        </MessageSection>
       </ContentWrapper>
 
       <div>

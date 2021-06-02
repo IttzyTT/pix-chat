@@ -66,7 +66,7 @@ function ChatFunction({ post }) {
                         <input id="fileUpload" type="file" accept="image/*" style={{ display: 'none' }} onChange={fileSelectedHandler}></input>
                           
                         </IWrapper2> */}
-                    <Yes>
+                    <MessageInput>
                         <input
                             value={chat.content}
                             onChange={handleChange}
@@ -74,7 +74,7 @@ function ChatFunction({ post }) {
                             placeholder="type message..."
                             name='content'
                         />
-                    </Yes>
+                    </MessageInput>
                         <IWrapper>
                             <button className="btn-flat"><Send className='material-icons'>send</Send></button>
                         </IWrapper>
@@ -190,7 +190,7 @@ const IWrapper2 = styled.div`
       }
 `
 
-const Yes = styled.div`
+const MessageInput = styled.div`
 display: flex;
 justify-content: space-between;
 flex-direction: row;
