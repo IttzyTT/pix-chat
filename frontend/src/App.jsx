@@ -22,16 +22,13 @@ import Login from './pages/Login';
 
 const apiUrl = 'http://localhost:4000';
 
-let messages = [];
-
 //global store/variables
 export default withContext(
   'global',
   {
     apiUrl: apiUrl,
     allUsers: [],
-    currentUserId: '', //609d18eea634629d77501077
-    messages
+    currentUserId: '' //609d18eea634629d77501077
   },
   App
 );

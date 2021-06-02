@@ -75,17 +75,19 @@ function Chats() {
             <Wrapper>
                 <Title>Your latest sent chats</Title>
                 <ChatsContainer>
-                    { createChatPreview().map(chat => (
-                            <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
-                                <Chat>
-                                    <img src={typeOfPicture(chat.imageUrl)} />
-                                    <div className={'chat-text'}>
-                                        <h5>{chat.caption}</h5>
-                                        <p className={'chat-content'}>You: {chat.content}</p>
-                                        <p className={'chat-date'}>Sent: {chat.createdAt}</p>
-                                    </div>
-                                </Chat>
-                            </Link>
+                    { createChatPreview().map(chat => (   
+                                <Link to={`/chat/${chat.postId}`} key={chat['_id']}>
+                                    <Chat>
+                                        <ImgCon>
+                                            <img src={typeOfPicture(chat.imageUrl)} />
+                                        </ImgCon>
+                                        <div className={'chat-text'}>
+                                            <h5>{chat.caption}</h5>
+                                            <p className={'chat-content'}>You: {chat.content}</p>
+                                            <p className={'chat-date'}>Sent: {chat.createdAt}</p>
+                                        </div>
+                                    </Chat>
+                                </Link>
                     )) }
                 </ChatsContainer>
             </Wrapper>
@@ -104,6 +106,9 @@ const Wrapper = styled.div`
     transform: translateX(-50%);
     padding-top: 100px;
     padding-bottom: 100px;
+    @media screen and (min-width: 1200px) {
+        padding-top: 20px;
+    }
    
 `;
 
@@ -208,3 +213,7 @@ const AllWrapper = styled.div `
         }
     }
 `;
+
+const ImgCon = styled.div`
+    border-radius: 50%;
+`

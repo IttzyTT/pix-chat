@@ -71,8 +71,9 @@ function ChatFunction({ post }) {
                             value={chat.content}
                             onChange={handleChange}
                             type="text"
-                            placeholder="type message..."
+                            placeholder="Type message..."
                             name='content'
+                            autocomplete="off"
                         />
                     </MessageInput>
                         <IWrapper>
