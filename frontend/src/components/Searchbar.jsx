@@ -3,12 +3,25 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import Postcard from './Postcard';
 import { motion } from "framer-motion";
+import fetchAllPosts from '../reusable-functions/fetchAllPosts';
+import { useNamedContext } from 'react-easier';
 
-function Searchbar({ allPosts }) {
+function Searchbar() {
+    let globalStore = useNamedContext('global');
+    
+    const [allPosts, setAllPosts] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [dropdownValue, setDropdownValue] = useState('tag');
 
     const params = useParams()
+
+    useEffect(async () => {
+        try {
+            setAllPosts(await fetchAllPosts(globalStore.apiUrl));
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
 
     useEffect(() => {
         //For when somebody clicks a tag or a city from another page
@@ -21,7 +34,7 @@ function Searchbar({ allPosts }) {
             setDropdownValue('city')
             setSearchInput(params.query.substring(5));
         }
-    },[])
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
