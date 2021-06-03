@@ -44,6 +44,7 @@ const Wrapper = styled.div`
 function App() {
   const globalStore = useNamedContext('global');
   const [triggerPostsFetch, setTriggerPostsFetch] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   //the idea is to trigger a new "normal fetch" with the sse-message to avoid duplicates-bug
   useEffect(() => {
@@ -57,25 +58,39 @@ function App() {
     globalStore.allUsers = await allUsers;
   }, [])
 
+  //Loading 
+  useEffect(() => {
+      setTimeout(() => setLoading(false), 6000)
+  }, [])
+
   return (
+    <>
+    {loading === false ? (
     <Router>
-      {globalStore.currentUserId ? 
-        <Wrapper className="App">
-          <Topbar />
-          <Switch>
-            <Route path="/" exact>
-              <Home triggerPostsFetch={triggerPostsFetch} />
-            </Route>
-            <Route path="/search/:showSearch/:query?" render={props => <Home {...props} sse={sse} />} />
-            <Route path="/camera"                     render={props => <Camera {...props} sse={sse} globalStore={globalStore} />} />
-            <Route path="/chats"                      render={props => <Chats {...props} sse={sse} />} />
-            <Route path="/chat/:id"                   render={props => <PostChat {...props} sse={sse} />} />
-            <Route path="/profile/:id"                render={props => <Profile {...props} sse={sse} />} />
-            <Route path="/editProfile/:id"            render={props => <EditProfile {...props} sse={sse} />} />
-          </Switch>
-          <Navbar />
-        </Wrapper>
-      : <Login />}
-    </Router>
+    {globalStore.currentUserId ? 
+      <Wrapper className="App">
+        <Topbar />
+        <Switch>
+          <Route path="/" exact>
+            <Home triggerPostsFetch={triggerPostsFetch} />
+          </Route>
+          <Route path="/search/:showSearch/:query?" render={props => <Home {...props} sse={sse} />} />
+          <Route path="/camera"                     render={props => <Camera {...props} sse={sse} globalStore={globalStore} />} />
+          <Route path="/chats"                      render={props => <Chats {...props} sse={sse} />} />
+          <Route path="/chat/:id"                   render={props => <PostChat {...props} sse={sse} />} />
+          <Route path="/profile/:id"                render={props => <Profile {...props} sse={sse} />} />
+          <Route path="/editProfile/:id"            render={props => <EditProfile {...props} sse={sse} />} />
+        </Switch>
+        <Navbar />
+      </Wrapper>
+    : <Login />}
+  </Router>
+
+    ) : (
+      <SplashScreen />
+    )}
+  
+    </>
+
   );
 }
