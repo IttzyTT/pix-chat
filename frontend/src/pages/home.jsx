@@ -62,7 +62,7 @@ function Home({ triggerPostsFetch }) {
                             post={ post }
                         />
                     ))}
-                    { paginatedPosts.length >= totalPosts ?
+                    { paginatedPosts.length === 0 || paginatedPosts.length >= totalPosts ?
                         null :
                         <div id={'load-more'} onClick={loadMorePosts}>
                             <p id={'load-more-text'}>Load more</p>
