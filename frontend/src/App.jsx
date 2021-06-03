@@ -60,7 +60,7 @@ function App() {
 
   //Loading 
   useEffect(() => {
-      setTimeout(() => setLoading(false), 6000)
+      setTimeout(() => setLoading(false), 5000)
   }, [])
 
   return (
