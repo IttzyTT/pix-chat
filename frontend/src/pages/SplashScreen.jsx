@@ -100,7 +100,7 @@ const Container = styled.div`
   width: 200px;
   margin-left: 20px;
 }
-
+/*
 @keyframes circle1 {
   from {
     height: 50rem;
@@ -156,7 +156,7 @@ const Container = styled.div`
     height: 19rem;
     width: 19rem;
   }
-}
+}*/
 `;
 
 const LogoDiv = styled.div`

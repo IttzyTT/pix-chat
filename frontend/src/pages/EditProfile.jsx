@@ -52,24 +52,24 @@ function EditProfile({ match }) {
         <Wrapper>
             <SettingTitle>Settings</SettingTitle>
             <form onSubmit={updateUser}>
-            <Poo>
+            <Profile>
                 <ChangePicture>
                     <Icon className='material-icons'>account_circle</Icon>
-                    <Btn>Change profile picture</Btn>
+                    {/* <Btn>Change profile picture</Btn> */}
                 </ChangePicture>
-                <Con>
+                {/* <Con>
                     <Con2>
                         <ChangeInfoText type="text" name='name' onChange={handleUpdate} value={user.name} placeholder="Username" />
-                        {/* <ChangeInfoText type="password" name='password' onChange={handleUpdate} value={user.password} placeholder='Password' /> */}
+                        <ChangeInfoText type="password" name='password' onChange={handleUpdate} value={user.password} placeholder='Password' />
                     </Con2>
                     <Con3>
                         <SaveBtn>Save</SaveBtn>
                     </Con3>
-                </Con>
-                </Poo>
+                </Con> */}
+                </Profile>
             </form>
             
-            <Toggler>
+            {/* <Toggler>
                 <TogglerSettingText>Notifications</TogglerSettingText>
                 <div className="switch">
                     <label>
@@ -77,7 +77,7 @@ function EditProfile({ match }) {
                     <span className="lever"></span>
                     </label>
                 </div>
-            </Toggler>
+            </Toggler> */}
             <ConBtn>
                 <LogOut onClick={handleLogout} className='btn-flat'>Log out</LogOut>
             </ConBtn>
@@ -87,7 +87,7 @@ function EditProfile({ match }) {
 
 export default EditProfile
 
-const Poo = styled.div`
+const Profile = styled.div`
     border-bottom: 1px solid white;
     padding: 24px;
 `
