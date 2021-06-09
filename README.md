@@ -1,4 +1,4 @@
-# pix-chat
+# pix-chat PWA
 
 
 Is a PWA app that Igor, Kevin, Sofia, Nandjatt, Bryan, Oscar developed as a React project in school.
