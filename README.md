@@ -5,7 +5,7 @@ Is a PWA app that Igor, Kevin, Sofia, Nandjatt, Bryan, Oscar developed as a Reac
 
 
 To start server: 
-- npm server
+- npm start
 
 To start dev server (vite):
 - npm run dev
